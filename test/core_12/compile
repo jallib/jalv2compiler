@@ -1,0 +1,13 @@
+#!/bin/bash
+# Script for compiling versions for released compilers.
+../compilers/jalv24q6-i686 10f222_blink_intosc.jal
+mv 10f222_blink_intosc.hex 10f222_blink_intosc_jalv24q6_linux_32.hex
+../compilers/jalv24q6-x86-64 10f222_blink_intosc.jal
+mv 10f222_blink_intosc.hex 10f222_blink_intosc_jalv24q6_linux_64.hex
+../compilers/jalv25-i686 10f222_blink_intosc.jal
+mv 10f222_blink_intosc.hex 10f222_blink_intosc_jalv25_linux_32.hex
+../compilers/jalv25-x86-64 10f222_blink_intosc.jal
+mv 10f222_blink_intosc.hex 10f222_blink_intosc_jalv25_linux_64.hex
+rm *.asm
+rm *.cod
+

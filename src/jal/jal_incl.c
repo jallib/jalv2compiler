@@ -2,7 +2,7 @@
  **
  ** jal_incl.c : JAL include and pragma definitions
  **
- ** Copyright (c) 2004-2006, Kyle A. York
+ ** Copyright (c) 2004-2006, Kyle A. York; 2018, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -228,6 +228,11 @@ static void jal_parse_pragma_target_bank(pfile_t *pf)
   jal_pragma_variable_assign(pf, "target_bank_size");
 }
 
+static void jal_parse_pragma_target_bank_count(pfile_t *pf)
+{
+	jal_pragma_variable_assign(pf, "target_bank_count");
+}
+
 static void jal_parse_pragma_target_page(pfile_t *pf)
 {
   jal_pragma_variable_assign(pf, "target_page_size");
@@ -284,7 +289,8 @@ static void jal_parse_pragma_target(pfile_t *pf)
     {"fuses",         jal_parse_pragma_target_fuses},
     {"cpu",           jal_parse_pragma_target_cpu},
     {"bank",          jal_parse_pragma_target_bank},
-    {"page",          jal_parse_pragma_target_page}
+	{"numbanks",      jal_parse_pragma_target_bank_count},
+	{"page",          jal_parse_pragma_target_page}
   };
   size_t cmd;
 

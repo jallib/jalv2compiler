@@ -1,6 +1,6 @@
 #
 # JALv2 Makefile
-# Copyright (c) 2008, Kyle A. York
+# Copyright (c) 2008, Kyle A. York; 2018, Rob Jansen
 # All rights reserved
 #
 # Usage:
@@ -17,6 +17,10 @@ default: project
 #PROFILE=-pg
 DEBUG=-g
 
+ifeq ($(ARCH),)
+  ARCH=i686
+endif
+
 ifeq ($(ARCH),x86-64)
   MARCH = -m64
 else ifeq ($(ARCH),i686)
@@ -25,8 +29,10 @@ else
   $(error Unknown or unset ARCH)
 endif
 
-CFLAGS=-O0 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE)
-LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm
+#Note: -Werror flag temporary disabled. No impact on operation of compiler.
+#CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+CFLAGS=-O2 -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm -fPIC
 
 OBJ_DIR=.obj-$(ARCH)
 
@@ -66,7 +72,7 @@ ifneq ($(PROGRAM),)
 project: $(PROGRAM)
 
 $(PROGRAM): $(OBJS) $(LIBS)
-	$(CC) $(LFLAGS) -o $@ $(OBJS) $(LIBS)
+	$(CC) -o $@ $(OBJS) $(LIBS) $(LFLAGS)
 
 clean::
 	-rm $(PROGRAM)

@@ -1,0 +1,5 @@
+#!/bin/bash
+# Make JAL Compiler for 64 bits
+make clean
+env ARCH=x86-64 make project jal
+

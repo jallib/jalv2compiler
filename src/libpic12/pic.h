@@ -154,6 +154,7 @@ boolean_t        pic_in_isr(pfile_t *pf); /* TRUE when generating ISR code */
 value_t          pic_indirect_get(pfile_t *pf, pfile_log_t plog, size_t which);
 variable_sz_t    pic_pointer_size_get(pfile_t *pf);
 unsigned         pic_code_gen_pass_get(pfile_t *pf);
+boolean_t        pic_use_64bit_movlb_get(pfile_t *pf);
 /* the _reentrant block is a temporary holding area for re-entrant functions */
 
 #define PIC_FLAG_NONE       0x0000

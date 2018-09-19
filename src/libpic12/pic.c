@@ -2,7 +2,7 @@
  **
  ** pic.c : pic code generation definitions
  **
- ** Copyright (c) 2004-2007, Kyle A. York
+ ** Copyright (c) 2004-2007, Kyle A. York; 2018, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -49,6 +49,8 @@ static unsigned         pic_target_page_size; /* code page size  */
 static unsigned         pic_target_bank_size; /* data bank size  */
 static boolean_t        pic_in_isr_flag;      /* TRUE when generating ISR */
 static unsigned         pic_code_gen_pass;
+boolean_t               pic_use_64bank_movlb; /* TRUE to use the 64 bank
+                                                 movlb instruction. */
 
 const char *pic_opcode_str(pic_opcode_t op)
 {
@@ -4381,6 +4383,21 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
     value_release(chipdef);
   }
 
+  if (pic_target_cpu == PIC_TARGET_CPU_14HBIT) {
+	  chipdef = pfile_value_find(pf, PFILE_LOG_NONE, "target_bank_count");
+	  if (VALUE_NONE == chipdef) {
+		  pic_use_64bank_movlb = BOOLEAN_FALSE;
+	  }
+	  else {
+		  if (value_const_get(chipdef) > 32) {
+			  pic_use_64bank_movlb = BOOLEAN_TRUE;
+		  }
+		  else {
+			  pic_use_64bank_movlb = BOOLEAN_FALSE;
+		  }
+	  }
+  }
+  
   chipdef = pfile_value_find(pf, PFILE_LOG_NONE, "target_page_size");
   if ((VALUE_NONE == chipdef) && (PIC_TARGET_CPU_16BIT != pic_target_cpu)) {
     pfile_log(pf, PFILE_LOG_WARN,
@@ -4777,6 +4794,13 @@ variable_sz_t pic_pointer_size_get(pfile_t *pf)
     }
   }
   return (pic_is_16bit(pf)) ? 3 : 2;
+}
+
+boolean_t pic_use_64bit_movlb_get(pfile_t *pf)
+{
+  UNUSED(pf);
+
+  return pic_use_64bank_movlb;
 }
 
 void pic_init(pfile_t *pf)

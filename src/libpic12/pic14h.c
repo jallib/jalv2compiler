@@ -72,7 +72,11 @@ boolean_t pic14h_code_to_pcode(pfile_t *pf, pic_code_t code,
     case PIC_OPCODE_XORLW:  pcode = 0x3a00 | lit8; break;
     case PIC_OPCODE_SUBLW:  pcode = 0x3c00 | lit8; break;
     case PIC_OPCODE_ADDLW:  pcode = 0x3e00 | lit8; break;
-    case PIC_OPCODE_MOVLB:  pcode = 0x0020 | (lit8 & 0x1f); break;
+    case PIC_OPCODE_MOVLB:
+      pcode = (pic_use_64bit_movlb_get(pf))
+        ? (0x0140 | (lit8 & 0x3f))
+        : (0x0020 | (lit8 & 0x1f));
+      break;
     case PIC_OPCODE_MOVLP:  pcode = 0x3180 | (lit8 & 0x7f); break;
     /* branching (10 bit literal) */
     case PIC_OPCODE_CALL:   pcode = 0x2000 | lit10; break;
