@@ -73,7 +73,8 @@ project: $(PROGRAM)
 
 $(PROGRAM): $(OBJS) $(LIBS)
 	$(CC) -o $@ $(OBJS) $(LIBS) $(LFLAGS)
-
+	strip $(PROGRAM)
+	
 clean::
 	-rm $(PROGRAM)
 
