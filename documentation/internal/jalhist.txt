@@ -2,8 +2,8 @@ History & Technical Information for PICJAL
 
 
 
-History
-=======
+History (of Kyle York)
+======================
   In the beginning I purchased a MarkIII (http://www.junun.org) which is
   a small PIC based robot, and way cool. The full kit comes with a license
   for CHBasic (http://www.celestialhorizons.com). I've been programming
