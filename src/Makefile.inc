@@ -17,16 +17,12 @@ default: project
 #PROFILE=-pg
 DEBUG=-g
 
-ifeq ($(ARCH),)
-  ARCH=i686
-endif
-
 ifeq ($(ARCH),x86-64)
   MARCH = -m64
 else ifeq ($(ARCH),i686)
   MARCH = -m32
 else
-  $(error Unknown or unset ARCH)
+  ARCH = native
 endif
 
 #Note: -Werror flag temporary disabled. No impact on operation of compiler.

@@ -12,8 +12,8 @@ The 64-bit version is renamed to jalv2_64.
 
 Remarks for building the JALV2 compiler under Linux
 ---------------------------------------------------
-Standard make the project with 'make project jal'. This will make the 32-bit
-version of the jal compiler (jalv2-i686).
+Standard make the project with 'make project jal'. This will make the native
+version of the jal compiler (jalv2-native), depending on your OS.
 
 There are two linux scripts:
 1) make_32 will make the - default - 32 bit version of the compiler (jalv2-i686)
@@ -25,6 +25,3 @@ Due to some makefile problems the original Makefile.inc has been adapted as foll
 
 The generated compile errors do not seem to have a negative effect on the operation of the compiler.
 
-
-2018-09-19
-Rob Jansen
