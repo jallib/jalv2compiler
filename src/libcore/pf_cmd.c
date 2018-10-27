@@ -2,7 +2,7 @@
  **
  ** pf_cmd.c : p-code cmd list functions
  **
- ** Copyright (c) 2005, Kyle A. York
+ ** Copyright (c) 2005, Kyle A. York; 2018, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -183,6 +183,10 @@ static cmd_t pfile_cmd_block_dup(pfile_t *pf, pfile_proc_t *proc,
     /* this is the entry into the procedure. go ahead & make the
      * necessary assignments */
     size_t ii;
+#if 0
+	printf("number of assigned variables: %u\n",
+		pfile_proc_param_ct_get(proc));
+#endif
 
     for (ii = 0; ii < pfile_proc_param_ct_get(proc); ii++) {
       if (proc_params[ii]) {
@@ -408,7 +412,8 @@ static void pfile_cmd_proc_inline_param_replacements_get(
       } else if (write_ct 
         && !value_dflag_test(pval, VARIABLE_DEF_FLAG_OUT)) {
         /* cannot write to a non-OUT parameter */
-        replaceable = BOOLEAN_FALSE;
+		/* RJ: Removing the following assignment fixes issue #2 the mempointer parameter problem for inline peusdo variables/procedure. */
+        /*   replaceable = BOOLEAN_FALSE; */
       } else if (value_is_volatile(rparam)
         && ((read_ct > 1) || (write_ct > 1))) {
         /* if the passed-in value is volatile, it can only be read
@@ -464,6 +469,10 @@ static void pfile_cmd_branch_add_inline(pfile_t *pf,
   size_t         param_ct;
 
   param_ct = pfile_proc_param_ct_get(proc);
+#if 0
+  printf("parameter count: %u\n", param_ct);
+#endif
+
   /* i need to dup these so I can release them later; the
    * param replacements function zeros out the original
    * params array when replacement occurs
