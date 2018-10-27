@@ -2,7 +2,7 @@
  **
  ** variable.c : manipulators for variable_t
  **
- ** Copyright (c) 2004-2005, Kyle A. York
+ ** Copyright (c) 2004-2005, Kyle A. York; 2018, Rob Jansen
  ** All rights reserved
  **
  ***********************************************************/
@@ -165,6 +165,7 @@ variable_t variable_alloc(tag_t tag, variable_def_t def)
       ptr->ctr_assign = 0;
       ptr->ctr_use    = 0;
       ptr->master     = VARIABLE_NONE;
+	  ptr->val        = VALUE_NONE; 
       ptr->proc       = PFILE_PROC_NONE;
       ptr->lbl        = LABEL_NONE;
       ptr->name       = tag_name_get(tag);
