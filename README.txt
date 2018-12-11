@@ -20,7 +20,9 @@ For device files and include files visit: https://github.com/jallib/jallib/tree/
 
 History
 =======
-2.5r1 -- 13 October 2018 (not yet released)
+2.5r1 -- 11 December 2018 (not yet released)
+         * fixed #1:Compiler generates incorrect error when using 'whereis()' 
+		            if variable optimization is set to 'yes'
          * fixed #2: Compiler passes incorrect parameter when adding a constant 
 		             to a variable in combination with inline (thanks Kyle!)
 		 * fixed an uninitialized variable problem in the compiler code (effect unknown)

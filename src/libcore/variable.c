@@ -2,7 +2,8 @@
  **
  ** variable.c : manipulators for variable_t
  **
- ** Copyright (c) 2004-2005, Kyle A. York; 2018, Rob Jansen
+ ** Copyright (c) 2004-2005, Kyle A. York 
+ **               2018-2018, Rob Jansen
  ** All rights reserved
  **
  ***********************************************************/
@@ -1006,8 +1007,9 @@ boolean_t variable_is_assigned(const variable_t var)
        tvar && !rc;
        tvar = variable_master_get(tvar)) {
     rc = 0 != variable_assign_ct_get(tvar);
-    if (!rc && variable_is_volatile(tvar)) {
-      rc = 0 != variable_use_ct_get(tvar);
+	/*RJ: When volatile and referenced (ref count > 1) it should not be optimized away. This fixes compiler issue #1. */
+	if (!rc && variable_is_volatile(tvar)) {
+		rc = 1 != variable_ref_ct_get(tvar);
     }
   }
   return rc;
