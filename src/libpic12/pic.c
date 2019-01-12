@@ -1825,9 +1825,11 @@ void pic_cmd_out(pfile_t *pf, cmd_t *cmd_ptr)
         pic_last_values_reset();
         pic_proc_leave(pf, cmd_proc_get(cmd));
         break;
-      case CMD_TYPE_BLOCK_START:
-      case CMD_TYPE_BLOCK_END:
-      case CMD_TYPE_STATEMENT_END:
+	  case CMD_TYPE_BLOCK_END:
+		pic_last_values_reset(); /* RJ: This fixes problem #6. */
+		break;
+	  case CMD_TYPE_BLOCK_START:
+	  case CMD_TYPE_STATEMENT_END:
       case CMD_TYPE_LABEL:
       case CMD_TYPE_COMMENT:
       case CMD_TYPE_LOG:
@@ -3673,8 +3675,8 @@ static void pic_variable_counters_clear(pfile_t *pf)
 void pic_variable_counters_set(pfile_t *pf)
 {
   pic_code_t code;
-
-  pic_variable_counters_clear(pf);
+ 
+  pic_variable_counters_clear(pf); 
   for (code = pic_code_list_head_get(pf);
        code;
        code = pic_code_next_get(code)) {
@@ -4463,7 +4465,7 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
      will have to address both PCLATH bits. brnachbits_remove() will notice
      the smaller size and remove all PCLATH<4> instructions. When these
      instructions are removed, the code size could fall below 2K in which
-     case there is no reason to have *any* PCLATH instructions */
+     case there is no reason to have *any* PCLATH instructions */ 
   if (pic_is_12bit(pf) || pic_is_14bit(pf)) {
     pic_code_branchbits_remove(pf);
     do {
@@ -4487,7 +4489,7 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
   {
     char *chip_name;
 
-    chip_name = pic_chip_name_get(pf);
+    chip_name = pic_chip_name_get(pf); 
     pic_variable_counters_set(pf);
     pic_asm_header_write(pf, chip_name);
     FREE(chip_name);

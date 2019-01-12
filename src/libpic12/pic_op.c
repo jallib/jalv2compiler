@@ -1359,20 +1359,27 @@ static void pic_assign_from_value(pfile_t *pf, value_t dst, value_t src)
   src = variable_value_get(var);
 
   if (value_is_const(src)) {
-    if (pic_code_gen_pass_get(pf) == 1) {
-      label_t lbl;
+	  if (pic_code_gen_pass_get(pf) == 1) {
+		  label_t lbl;
 
-      lbl = pic_lookup_label_find(pf,
-        value_variable_get(variable_value_get(var)),
-        (pic_is_16bit(pf))
-          ? PIC_LOOKUP_LABEL_FIND_FLAG_DATA
-          : PIC_LOOKUP_LABEL_FIND_FLAG_NONE);
-      if (!lbl) {
-        pfile_log(pf, PFILE_LOG_ERR, "Cannot use whereis() on a constant");
-      } else {
-        pic_assign_from_label2(pf, dst, lbl);
-        label_release(lbl);
-      }
+		  /* RJ: In case of a constant array we need to use the function assign_from_lookup 
+		  if (value_is_array(src)) {  This check is right 
+			 pic_assign_from_lookup(pf, dst, src);  But this does not work. 
+		  } else {
+		  Original code. */
+		  lbl = pic_lookup_label_find(pf,
+			  value_variable_get(variable_value_get(var)),
+			  (pic_is_16bit(pf))
+			  ? PIC_LOOKUP_LABEL_FIND_FLAG_DATA
+			  : PIC_LOOKUP_LABEL_FIND_FLAG_NONE);
+		  if (!lbl) {
+			  pfile_log(pf, PFILE_LOG_ERR, "Cannot use whereis() on a constant");
+		  }
+		  else {
+			  pic_assign_from_label2(pf, dst, lbl);
+			  label_release(lbl);
+		  }		  
+	  /* } RJ: End Original Code. */
     }
   } else {
     pic_indirect_setup3(pf, dst, VALUE_NONE, VALUE_NONE, 0, &ipos);
