@@ -20,6 +20,9 @@ For device files and include files visit: https://github.com/jallib/jallib/tree/
 
 History
 =======
+2.5r3 -- 02 september 2019 (not yet officially released)
+         * fixed #8: Compiler generated unexplainable skip-error problem
+
 2.5r2 -- 12 January 2019
          * fixed #6: Compiler handles index in constant array of records incorrectly 
 
@@ -36,7 +39,7 @@ History
 		   (new compiler pragma 'numbanks' added) 
 
 -------- 12 September 2018: Kyle York retiring after a job well done,  
-         compiler maintenance taken over by Rob Jansen
+                            compiler maintenance taken over by Rob Jansen
 
 2.4q6 -- 25 October 2016
          * create 32 & 64 bit linux files

@@ -4449,15 +4449,17 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
     }
   }
 
+  /*RJ 2019-07-20: For debugging purposes it is sometimes handy to disable these optimizations.
+    If you remove pic_code_bsr_optimize() you get data errors, seen when compiling for PIC_14H. */
   pic_w_value_optimize(pf);
-  pic_code_branch_optimize(pf);
+  pic_code_branch_optimize(pf); 
   pic_code_return_literal_optimimze(pf);
-  pic_code_branch_optimize(pf);
+  pic_code_branch_optimize(pf); 
   pic_code_bsr_optimize(pf);
-  pic_code_free_unused(pf);
+  pic_code_free_unused(pf); 
   pic_code_skip_cond_optimize(pf);
-  pic_code_databits_optimize(pf);
-  pic_code_databits_remove(pf);
+  pic_code_databits_optimize(pf); 
+  pic_code_databits_remove(pf); 
   pic_w_value_optimize1(pf);
   /* each time something is removed, we must again go through the branchbits
      optimization. otherwise the code could be larger than necessary.

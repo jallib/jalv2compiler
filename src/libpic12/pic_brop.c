@@ -425,7 +425,7 @@ pic_code_t pic_code_brnext_get(pfile_t *pf, pic_code_t code, label_t *dst_lbl)
   return brdst;
 }
 
-void pic_code_branch_optimize(pfile_t *pf)
+void pic_code_branch_optimize_org(pfile_t *pf)
 {
   pic_code_t code;
   unsigned   goto_return         = 0;
@@ -596,6 +596,208 @@ void pic_code_branch_optimize(pfile_t *pf)
   pfile_log(pf, PFILE_LOG_DEBUG,
       "...return follows call(%u) total freed(%u)",
       return_follows_call, total_freed);
+}
+
+/* RJ: Version to fix skip-error problem. */
+void pic_code_branch_optimize(pfile_t* pf)
+{
+	pic_code_t code;
+	unsigned   goto_return = 0;
+	unsigned   call_dst_return = 0;
+	unsigned   return_follows_call = 0;
+	unsigned   branch_goto = 0;
+	unsigned   total_freed = 0;
+	boolean_t  prev_cond; /* true if the previous instruction is conditional */
+	unsigned   page_sz;
+	value_t    code_sz;
+	variable_const_t n_code_sz;
+
+	/* set some flags based on code size */
+	page_sz = pic_target_page_size_get(pf);
+	code_sz = pfile_value_find(pf, PFILE_LOG_ERR, "_code_size");
+	n_code_sz = value_const_get(code_sz);
+	value_release(code_sz);
+	if (n_code_sz <= page_sz) {
+		pic_flag_set(pf, PIC_FLAG_NO_PCLATH3);
+		pic_flag_set(pf, PIC_FLAG_NO_PCLATH4);
+	}
+	else if (n_code_sz <= 2 * page_sz) {
+		pic_flag_set(pf, PIC_FLAG_NO_PCLATH4);
+	}
+
+	prev_cond = BOOLEAN_FALSE;
+
+	pfile_log(pf, PFILE_LOG_DEBUG, "optimizing branches...");
+	code = pic_code_list_head_get(pf);
+	while (code) {
+		pic_code_t next;
+
+		next = pic_code_next_get(code);
+		if (!pic_opcode_is_pseudo_op(pic_code_op_get(code))) {
+			boolean_t code_cond;
+
+			code_cond = pic_opcode_is_conditional(pic_code_op_get(code));
+
+			if (!pic_code_flag_test(code, PIC_CODE_FLAG_NO_OPTIMIZE)
+				&& !prev_cond
+				&& ((PIC_OPCODE_GOTO == pic_code_op_get(code))
+					|| (PIC_OPCODE_CALL == pic_code_op_get(code)))) {
+				pic_code_t brdst;
+				label_t    brlbl;
+
+				for (brdst = next;
+					brdst
+					&& (PIC_OPCODE_NONE == pic_code_op_get(brdst))
+					&& (pic_code_label_get(brdst) != pic_code_brdst_get(code));
+					brdst = pic_code_next_get(brdst))
+					; /* empty */
+				if ((PIC_OPCODE_GOTO == pic_code_op_get(code))
+					&& (pic_code_label_get(brdst) == pic_code_brdst_get(code))) {
+					/* GOTO label
+					   label: */
+					pic_code_list_remove(pf, code);
+					pic_code_free(code);
+				}
+				else {
+					pic_code_t brnext;
+
+					/* brnext is required to detect infinite loops */
+					brdst = pic_code_brnext_get(pf, code, &brlbl);
+					brnext = pic_code_brnext_get(pf, brdst, 0);
+					while (brdst
+						&& (PIC_OPCODE_GOTO == pic_code_op_get(brdst))
+						&& (brdst != brnext)) {
+						brdst = pic_code_brnext_get(pf, brdst, &brlbl);
+						brnext = pic_code_brnext_get(pf, brnext, 0);
+					}
+					if (brnext == brdst) {
+						pfile_log(pf, PFILE_LOG_DEBUG, "loop detected: %s",
+							label_name_get(brlbl));
+					}
+#if 0
+					do {
+						brlbl = pic_code_brdst_get(brdst);
+						brdst = pic_code_label_find(pf, brlbl);
+						/* let's figure out what the destination *really* is */
+						while (brdst
+							&& (pic_opcode_is_branch_bit(pic_code_op_get(brdst))
+								|| (PIC_OPCODE_NONE == pic_code_op_get(brdst)))) {
+							brdst = pic_code_next_get(brdst);
+						}
+					} while (brdst && (PIC_OPCODE_GOTO == pic_code_op_get(brdst)));
+#endif
+					/* brlbl is the last label we've found and brdst is the first
+					 * instruction past the last label */
+					if (brlbl != pic_code_brdst_get(code)) {
+						/* change any branch bit destinations */
+						pic_code_t brbits;
+
+						brbits = pic_code_prev_get(code);
+						while ((pic_code_brdst_get(brbits) == pic_code_brdst_get(code))
+							&& pic_opcode_is_branch_bit(pic_code_op_get(brbits))) {
+							pic_code_brdst_set(brbits, brlbl);
+							brbits = pic_code_prev_get(brbits);
+						}
+					}
+					if ((PIC_OPCODE_RETURN == pic_code_op_get(brdst))
+						|| (PIC_OPCODE_RETFIE == pic_code_op_get(brdst))
+						|| (PIC_OPCODE_RETLW == pic_code_op_get(brdst))) {
+						pic_code_t code_tmp;
+
+						if (PIC_OPCODE_GOTO == pic_code_op_get(code)) {
+							/* GOTO a RETURN ; replace the GOTO */
+							/* RJ: It can happen that before the GOTO we have a MOVLP instruction.
+								   If we replace the GOTO by a RETURN we also need to remove this
+								   MOVLP otherwise we may run into skip-error problems.
+								   Next to that the MOVLP instruction has become obsolete.
+							*/
+							code_tmp = pic_code_prev_get(code);
+							if (PIC_OPCODE_MOVLP == pic_code_op_get(code_tmp)) {
+								pic_code_list_remove(pf, code_tmp);
+								pic_code_free(code_tmp);
+								code_tmp = pic_code_prev_get(code);
+							}
+				
+							pic_code_op_set(code, pic_code_op_get(brdst));
+							pic_code_literal_set(code, pic_code_literal_get(brdst));
+							pic_code_brdst_set(code, LABEL_NONE);
+							goto_return++;
+							code = pic_code_prev_get(code);
+						}
+						else {
+							/* CALL a RETURN ; remove the CALL */
+							call_dst_return++;
+							code_tmp = pic_code_prev_get(code);
+							/* if this is call --> retlw, replace with movlw
+							   otherwise remove this instruction */
+							if (PIC_OPCODE_RETLW == pic_code_op_get(brdst)) {
+								pic_code_t rcode; /* replacement code */
+
+								rcode = pic_code_alloc(
+									pic_code_label_get(code),
+									PIC_OPCODE_MOVLW,
+									pic_code_flag_get_all(code));
+								pic_code_literal_set(rcode, pic_code_literal_get(brdst));
+								pic_code_cmd_set(rcode, pic_code_cmd_get(code));
+								pic_code_list_insert(pf, code_tmp, rcode);
+							}
+							else {
+								total_freed++;
+							}
+							/* RJ: It can happen that before the CALL we have a MOVLP instruction.
+								   If we delete the CALL we also need to remove this MOVLP otherwise
+								   we may run into skip-error problems. Next to that the MOVLP
+								   instruction has become obsolete.
+							*/
+							code_tmp = pic_code_prev_get(code);
+							if (PIC_OPCODE_MOVLP == pic_code_op_get(code_tmp)) {
+								pic_code_list_remove(pf, code_tmp);
+								pic_code_free(code_tmp);
+								code_tmp = pic_code_prev_get(code);
+							}
+							pic_code_list_remove(pf, code);
+							pic_code_free(code);
+							code = code_tmp;
+						}
+						while (code && pic_opcode_is_branch_bit(pic_code_op_get(code))) {
+							code_tmp = pic_code_prev_get(code);
+							pic_code_list_remove(pf, code);
+							pic_code_free(code);
+							total_freed++;
+							code = code_tmp;
+						}
+					}
+					else if (pic_code_brdst_get(code) != brlbl) {
+						pic_code_brdst_set(code, brlbl);
+						branch_goto++;
+					}
+					if (PIC_OPCODE_CALL == pic_code_op_get(code)) {
+						/* is this call followed by return? if yes, make it a goto */
+						pic_code_t code_tmp;
+
+						code_tmp = pic_code_next_get(code);
+						while (code_tmp
+							&& (PIC_OPCODE_NONE == pic_code_op_get(code_tmp))) {
+							code_tmp = pic_code_next_get(code_tmp);
+						}
+						if (PIC_OPCODE_RETURN == pic_code_op_get(code_tmp)) {
+							return_follows_call++;
+							pic_code_op_set(code, PIC_OPCODE_GOTO);
+							next = pic_code_next_get(code_tmp);
+						}
+					}
+				}
+			}
+			prev_cond = code_cond;
+		}
+		code = next;
+	}
+	pfile_log(pf, PFILE_LOG_DEBUG,
+		"...goto/return(%u) call/return(%u) branch/goto(%u)",
+		goto_return, call_dst_return, branch_goto);
+	pfile_log(pf, PFILE_LOG_DEBUG,
+		"...return follows call(%u) total freed(%u)",
+		return_follows_call, total_freed);
 }
 
 /*
