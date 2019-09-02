@@ -42,12 +42,12 @@ if (platform_name == "Linux"):
     base = os.path.join("/", "home", "rob", "Documents", "Compilertest")
     devdir = os.path.join("/", "home", "rob", "Documents", "Jallib", "lib")
     cmpdir = os.path.join(base, "Compiler_Linux")
-    baseline_compiler = "jalv2-i686"
+    baseline_compiler = "Baseline"
 elif (platform_name == "Windows"):
     base = os.path.join("D:\\", "PIC", "Compiler", "Compilertest")
     devdir = os.path.join("C:\\", "Jallib", "lib")
     cmpdir = os.path.join(base, "Compiler_Windows")
-    baseline_compiler = "jalv2.exe"
+    baseline_compiler = "Baseline.exe"
 else:
     sys.write.stderr("Please add proper environment settings for this platform\n")
 
@@ -108,7 +108,7 @@ def create_baseline():
                 os.remove(os.path.join(srcdir, sample))
                 continue
             try:
-                print("Compiling and baselining:", sample)
+                print("Compiling and baselining sample: ", smpcount, " for sample:", sample)
                 sample = os.path.join(srcdir, sample)
                 log = subprocess.check_output(cmdlist + [sample],
                                         stderr=subprocess.STDOUT,
@@ -148,74 +148,76 @@ def verify_baseline():
     fl = open(difflog, "w")
     smpcount = 0
     errcount = 0
-    # Compile all samples with various compilers and compare the output with theb baseline.
+    # Compile all samples with various compilers and compare the output with the baseline. Exclude the
+    # baseline compiler.
     for compiler in os.listdir(cmpdir):
-        cmdlist = [os.path.join(cmpdir, compiler), "-no-asm", "-no-codfile", "-s", devdir]
+        if (compiler != baseline_compiler):
+            cmdlist = [os.path.join(cmpdir, compiler), "-no-asm", "-no-codfile", "-s", devdir]
 #        cmdlist = [os.path.join(cmpdir, compiler), "-no-codfile", "-s", devdir]
-        print("Compiling for", compiler)
-        fl.write("Compiler results for " + compiler + "\n")
-        fl.write("-----------------------------\n")
-        for sample in os.listdir(srcdir):
-            flog = sample[:-4] + "_" + compiler + ".txt"         # Add compiler name to the log textfile.
-            hexfile = sample[:-3] + "hex"                        # .jal -> .hex
-            newfile = sample[:-4] + "_" + compiler + ".hex"      # Add compiler name to the hexfile.
-            # When the file is not a jal file do not try to compile it but remove it
-            if (sample[-3:] != "jal"):
-                os.remove(os.path.join(srcdir, sample))
-                continue
-            if os.path.exists(os.path.join(basedir,hexfile)):    # A baseline hexfile must be present.
-                if os.path.exists(os.path.join(srcdir,flog)):
-                    os.remove(os.path.join(srcdir,flog))
-                try:
-                    print("Compiling and verifying:", sample)
-                    sample = os.path.join(srcdir, sample)
-                    log = subprocess.check_output(cmdlist + [sample],
-                                              stderr=subprocess.STDOUT,
-                                              universal_newlines=True,
-                                              shell=False)
-                    loglist = log.split()                              # make it a list of strings
-                    numerrors = int(loglist[-4])                       # get number of errors
-                    numwarnings = int(loglist[-2])                     # and warnings
-                    if ((numerrors == 0) and (numwarnings == 0)):
-                        smpcount += 1                                   # OK! (zero errors, zero warnings)
-                        if os.path.exists(os.path.join(srcdir,hexfile)):
-                            newfile = os.path.join(outdir,newfile)
-                            shutil.copy(os.path.join(srcdir,hexfile), newfile)
-                            fl.write("File: " + newfile + "\n")
-                            if (compare_files(os.path.join(basedir, hexfile), newfile) == False):
-                                fl.write("   --> Error, hex files do not match. \n")
-                                print("   --> Error, hex files do not match.")
-                                errcount += 1
-                            else:
-                                fl.write("   --> OK. \n")
-                                print("   --> OK.")
-                            os.remove(os.path.join(srcdir,hexfile))
-                    else:
-                        errcount += 1                                   # issue
+            print("Compiling for", compiler)
+            fl.write("Compiler results for " + compiler + "\n")
+            fl.write("-----------------------------\n")
+            for sample in os.listdir(srcdir):
+                flog = sample[:-4] + "_" + compiler + ".txt"         # Add compiler name to the log textfile.
+                hexfile = sample[:-3] + "hex"                        # .jal -> .hex
+                newfile = sample[:-4] + "_" + compiler + ".hex"      # Add compiler name to the hexfile.
+                # When the file is not a jal file do not try to compile it but remove it
+                if (sample[-3:] != "jal"):
+                    os.remove(os.path.join(srcdir, sample))
+                    continue
+                if os.path.exists(os.path.join(basedir,hexfile)):    # A baseline hexfile must be present.
+                    if os.path.exists(os.path.join(srcdir,flog)):
+                        os.remove(os.path.join(srcdir,flog))
+                    try:
+                        print("Compiling and verifying sample:", smpcount, " for sample:", sample)
+                        sample = os.path.join(srcdir, sample)
+                        log = subprocess.check_output(cmdlist + [sample],
+                                                  stderr=subprocess.STDOUT,
+                                                  universal_newlines=True,
+                                                  shell=False)
+                        loglist = log.split()                              # make it a list of strings
+                        numerrors = int(loglist[-4])                       # get number of errors
+                        numwarnings = int(loglist[-2])                     # and warnings
+                        if ((numerrors == 0) and (numwarnings == 0)):
+                            smpcount += 1                                   # OK! (zero errors, zero warnings)
+                            if os.path.exists(os.path.join(srcdir,hexfile)):
+                                newfile = os.path.join(outdir,newfile)
+                                shutil.copy(os.path.join(srcdir,hexfile), newfile)
+                                fl.write("File: " + newfile + "\n")
+                                if (compare_files(os.path.join(basedir, hexfile), newfile) == False):
+                                    fl.write("   --> Error, hex files do not match. \n")
+                                    print("   --> Error, hex files do not match.")
+                                    errcount += 1
+                                else:
+                                    fl.write("   --> OK. \n")
+                                    print("   --> OK.")
+                                    os.remove(os.path.join(srcdir,hexfile))
+                        else:
+                            errcount += 1                                   # issue
+                            with open(os.path.join(logdir,flog), "w") as fp:
+                                fp.write(log)                                # store compiler output
+                            fl.write("Error compiling: "+ newfile + "\n")
+                            print(sample, numerrors, "errors", numwarnings, "warnings")
+                            print("See", flog, "for compiler output")
+                    except subprocess.CalledProcessError as e:            # compilation failure
+                        errcount += 1                                      # error(s)
                         with open(os.path.join(logdir,flog), "w") as fp:
-                            fp.write(log)                                # store compiler output
-                        fl.write("Error compiling: "+ newfile + "\n")
-                        print(sample, numerrors, "errors", numwarnings, "warnings")
-                        print("See", flog, "for compiler output")
-                except subprocess.CalledProcessError as e:            # compilation failure
-                    errcount += 1                                      # error(s)
-                    with open(os.path.join(logdir,flog), "w") as fp:
-                        fp.write(e.output)                              # store compiler output
-                    fl.write("Error compiling: " + newfile + "\n")
-                    print("Compiler reports returncode", e.returncode, "with sample", sample)
-                    print("See", flog, "for details")
-                    fl.write("\n")
-                    print("")
+                            fp.write(e.output)                              # store compiler output
+                        fl.write("Error compiling: " + newfile + "\n")
+                        print("Compiler reports returncode", e.returncode, "with sample", sample)
+                        print("See", flog, "for details")
+                        fl.write("\n")
+                        print("")
+                else:
+                    fl.write("No baseline exists for " + hexfile + "\n")
+                    print("No baseline available for", hexfile)
+            if (smpcount == 0):
+                print("No samples available to verify against baseline.")
+                print("")
+                fl.write("\n")
             else:
-                fl.write("No baseline exists for " + hexfile + "\n")
-                print("No baseline available for", hexfile)
-        if (smpcount == 0):
-            print("No samples available to verify against baseline.")
-        print("")
-        fl.write("\n")
-    else:
-        print("Samples compiled and verified successfully:", smpcount, ", failed:", errcount)
-        fl.write("Samples compiled and verified successfully: " + str(smpcount) +  ", failed: " + str(errcount) + "\n")
+                print("Samples compiled and verified successfully:", smpcount, ", failed:", errcount)
+                fl.write("Samples compiled and verified successfully: " + str(smpcount) +  ", failed: " + str(errcount) + "\n")
     fl.close()
 
 # ======== M A I N ===============================================
