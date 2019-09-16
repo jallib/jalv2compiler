@@ -14,9 +14,6 @@ jalv2_64.exe  : Windows 64-bit binary
 jalv2-i686    : Linux 32-bit binary
 jalv2-x86-64  : Linux 64-bit binary
 
-Temporary Windows compilers for beta testing:
-jalv2-i686.exe    : Newly created Windows 32-bit binary, see history.
-jalv2-x86-64.exe  : Newly created Windows 64-bit binary, see history.
 
 Compiler issues can be registered and found at: https://github.com/jallib/jalv2compiler/issues
 
@@ -24,12 +21,14 @@ For device files and include files visit: https://github.com/jallib/jallib/tree/
 
 History
 =======
-2.5r3 -- 10 september 2019 (not yet officially released)
+2.5r3 -- 15 september 2019 
          * fixed #8: Compiler generated unexplainable skip-error problem
-		 * Created Windows compilers using a different compiler. This because the 32-bit JAL Windows Compiler
-		   created from Visual Studio shows random (but still correct) behavior in allocation variables to 
-		   data space. The newly created JAL Windows compilers (both 32-bit and 64-bit) were created with
-		   another compiler outside of Visual Studio. This fixes the random behavior of the 32-bit JAL compiler.
+		 * Created the JAL Windows compilers using a different compiler. This because the 32-bit version of the
+		   JAL Windows Compiler created via Visual Studio showed a random - but still correct - behavior in 
+		   allocation variables to data space. The newly created JAL Windows compilers (both 32-bit and 64-bit) 
+		   were created using the TDM-GCC compiler instead of the Visual Studio (2019) compiler. 
+		   This fixes the random behavior of the 32-bit JAL Windows compiler. Both the Linux compilers and Windows
+		   compilers now create the exact same output.
 
 2.5r2 -- 12 January 2019
          * fixed #6: Compiler handles index in constant array of records incorrectly 
