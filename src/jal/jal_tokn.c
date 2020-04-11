@@ -3,6 +3,8 @@
  ** jal_tokn.c : JAL token parsing bits
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ ** Revision: 2020-2020, Rob Jansen
+ **
  ** All rights reserved
  **
  ***********************************************************/
@@ -235,7 +237,9 @@ const char *jal_token_get(pfile_t *pf, pf_token_get_t which)
                 } mode;
                 char val;     /* value if processing hex or oct */
 
-                val = 0;
+				/*RJ: Fix for compiler issue #10. */
+				char count;
+
                 mode = ch_type_normal;
 
                 do {
@@ -281,10 +285,12 @@ const char *jal_token_get(pfile_t *pf, pf_token_get_t which)
                           case 'x': 
                             mode = ch_type_hex; /* 1 or 2 hex digits */
                             val  = 0;
+							count = 0;
                             break;
                           case 'z':
                             mode = ch_type_bin; /* 1 - 8 binary digits */
                             val = 0;
+							count = 0;
                             break;
                           default:
                             if ((EOF != ch) && ('\n' != ch)) {
@@ -306,24 +312,30 @@ const char *jal_token_get(pfile_t *pf, pf_token_get_t which)
                       }
                       break;
                     case ch_type_hex:
-                      if (ISXDIGIT(ch)) {
+					  /* RJ: Fix compiler issue #10 but only accept at most 2 hex digits. */
+					  if (ISXDIGIT(ch) && (2 != count)) {
+						count = count + 1;
                         val = val * 16 + (strchr(xdig, TOLOWER(ch)) - xdig);
                       } else {
                         pf_token_ch_append(pf, val & 0xff);
                         mode = ch_type_normal;
                         pfile_ch_unget(pf, ch);
                         ch = 0;
+						count = 0;
                       }
                       break;
                     case ch_type_bin:
-                      if (ISBINDIGIT(ch)) {
-                        val = val * 2 + (ch - '0');
+						/* RJ: Not mentioned as compiler issue #10 but only accept at most 8 bits. Note: Underscore is not allowed here! */
+						if (ISBINDIGIT(ch) && (8 != count)) {
+						  count = count + 1;
+						  val = val * 2 + (ch - '0');
                       } else {
                         pf_token_ch_append(pf, val & 0xff);
                         mode = ch_type_normal;
                         pfile_ch_unget(pf, ch);
                         ch = 0;
-                      }
+						count = 0;
+					  }
                       break;
                   }
                 } while ((EOF != ch) && ('\n' != ch) && ('"' != ch));
