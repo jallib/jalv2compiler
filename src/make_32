@@ -1,5 +1,0 @@
-#!/bin/bash
-# Make JAL Compiler for 32 bits
-env ARCH=i686 make clean
-env ARCH=i686 make project jal
-
