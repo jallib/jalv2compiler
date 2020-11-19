@@ -31,7 +31,7 @@ The script has some hard-coded paths in it so adapt them to your situation befor
 ======================================================================================
 
 Note that because of a bug fixes in the jal compiler, the baseline compiler version must be equal to or higher 
-than or equal to jalv25r3.  
+than or equal to jalv25r4.  
 
 Rob Jansen
-2019-09-02
+2020-11-19
