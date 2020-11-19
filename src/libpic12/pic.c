@@ -2,7 +2,8 @@
  **
  ** pic.c : pic code generation definitions
  **
- ** Copyright (c) 2004-2007, Kyle A. York; 2018, Rob Jansen
+ ** Copyright (c) 2004-2007, Kyle A. York
+ **               2018-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -44,13 +45,12 @@
 #define STRINGIZE2(x) #x
 #define STRINGIZE(x) STRINGIZE2(x)
 
-static pic_target_cpu_t pic_target_cpu;       /* target CPU type */
-static unsigned         pic_target_page_size; /* code page size  */
-static unsigned         pic_target_bank_size; /* data bank size  */
-static boolean_t        pic_in_isr_flag;      /* TRUE when generating ISR */
-static unsigned         pic_code_gen_pass;
-boolean_t               pic_use_64bank_movlb; /* TRUE to use the 64 bank
-                                                 movlb instruction. */
+static pic_target_cpu_t       pic_target_cpu;       /* target CPU type */
+static unsigned               pic_target_page_size; /* code page size  */
+static unsigned               pic_target_bank_size; /* data bank size  */
+static boolean_t              pic_in_isr_flag;      /* TRUE when generating ISR */
+static unsigned               pic_code_gen_pass;
+static pic_target_instr_set_t pic_target_instr_set; /* target instruction set type */
 
 const char *pic_opcode_str(pic_opcode_t op)
 {
@@ -1009,6 +1009,8 @@ static void pic_branch_cond(pfile_t *pf, cmd_t cmd)
     const char  *flag;
     pic_opcode_t brop;
 
+    /* RJ: In jalv25r4: Added initialization of brop due to compiler warning. */
+    brop = PIC_OPCODE_NOP;
     flag = 0;
     if (dst) {
       tmp = dst;
@@ -4384,22 +4386,20 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
     pic_target_bank_size = value_const_get(chipdef);
     value_release(chipdef);
   }
-
-  if (pic_target_cpu == PIC_TARGET_CPU_14HBIT) {
-	  chipdef = pfile_value_find(pf, PFILE_LOG_NONE, "target_bank_count");
-	  if (VALUE_NONE == chipdef) {
-		  pic_use_64bank_movlb = BOOLEAN_FALSE;
-	  }
-	  else {
-		  if (value_const_get(chipdef) > 32) {
-			  pic_use_64bank_movlb = BOOLEAN_TRUE;
-		  }
-		  else {
-			  pic_use_64bank_movlb = BOOLEAN_FALSE;
-		  }
-	  }
+ 
+  /* RJ: Fixing issue #14*/
+  chipdef = pfile_value_find(pf, PFILE_LOG_NONE, "target_instruction_set");
+  if (VALUE_NONE == chipdef) {
+      pic_target_instruction_set_set(pf, PIC_TARGET_INSTR_SET_NONE);
+  } else {
+    pic_target_instruction_set_set(pf, value_const_get(chipdef));
+    if ((PIC_TARGET_INSTR_SET_P16F1_V1 != pic_target_instr_set)
+        && (PIC_TARGET_INSTR_SET_PIC18F_V6 != pic_target_instr_set)) {
+        pfile_log(pf, PFILE_LOG_ERR, "Unsupported instruction set: %u", pic_target_instr_set);
+    }
+    value_release(chipdef);
   }
-  
+
   chipdef = pfile_value_find(pf, PFILE_LOG_NONE, "target_page_size");
   if ((VALUE_NONE == chipdef) && (PIC_TARGET_CPU_16BIT != pic_target_cpu)) {
     pfile_log(pf, PFILE_LOG_WARN,
@@ -4448,9 +4448,8 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
       pic_variable_alloc(pf);
     }
   }
-
-  /*RJ 2019-07-20: For debugging purposes it is sometimes handy to disable these optimizations.
-    If you remove pic_code_bsr_optimize() you get data errors, seen when compiling for PIC_14H. */
+  /* RJ: For debugging purposes it is sometimes handy to disable these optimizations.
+     If you remove pic_code_bsr_optimize() you get data errors, seen when compiling for PIC_14H. */
   pic_w_value_optimize(pf);
   pic_code_branch_optimize(pf); 
   pic_code_return_literal_optimimze(pf);
@@ -4468,16 +4467,25 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
      the smaller size and remove all PCLATH<4> instructions. When these
      instructions are removed, the code size could fall below 2K in which
      case there is no reason to have *any* PCLATH instructions */ 
-  if (pic_is_12bit(pf) || pic_is_14bit(pf)) {
-    pic_code_branchbits_remove(pf);
+if (pic_is_12bit(pf) || pic_is_14bit(pf)) {
+    /* RJ: The following function also calls pic_code_skip_cond_optimize(pf) */
+    pic_code_branchbits_remove(pf); 
     do {
       pic_code_branchbits_optimize(pf);
     } while (pic_code_branchbits_remove(pf));
   } else if (pic_is_14bit_hybrid(pf)) {
+    /* RJ: The following function removes the not needed movlp HIGH instructions. 
+            This part of the code has the problem mentioned in compiler issue #12. 
+            No solution for that yet but only occurs when the loop is empty. */
     pic_code_movlp_optimize(pf);
+    /* RJ: The following code solves issue #12 but introduces a branch warning.
+    if (pic_code_skip_cond_optimize(pf)) {
+        pic_branchbits_pc_set(pf, PIC_BRANCHBITS_PC_SET_FLAG_NONE);
+    }
+    */
   } else {
     pic_branchbits_pc_set(pf, PIC_BRANCHBITS_PC_SET_FLAG_NONE);
-  }
+  }  
   /*
    * finally, let's verify that the optimizations worked!
    */
@@ -4707,6 +4715,7 @@ void pic_target_bank_size_set(pfile_t *pf, unsigned sz)
   pic_target_bank_size = sz;
 }
 
+
 unsigned pic_target_page_size_get(pfile_t *pf)
 {
   UNUSED(pf);
@@ -4722,6 +4731,20 @@ void pic_target_page_size_set(pfile_t *pf, unsigned sz)
     pfile_log(pf, PFILE_LOG_ERR, "Page size must be a power of 2");
   }
   pic_target_page_size = sz;
+}
+
+pic_target_instr_set_t pic_target_instruction_set_get(pfile_t* pf)
+{
+    UNUSED(pf);
+
+    return pic_target_instr_set;
+}
+
+void pic_target_instruction_set_set(pfile_t* pf, pic_target_instr_set_t instruction_set)
+{
+    UNUSED(pf);
+
+    pic_target_instr_set = instruction_set;
 }
 
 boolean_t pic_is_12bit(pfile_t *pf)
@@ -4742,6 +4765,16 @@ boolean_t pic_is_14bit_hybrid(pfile_t *pf)
 boolean_t pic_is_16bit(pfile_t *pf)
 {
   return (PIC_TARGET_CPU_16BIT == pic_target_cpu_get(pf));
+}
+
+boolean_t instruction_set_is_p16f1_v1(pfile_t* pf)
+{
+    return (PIC_TARGET_INSTR_SET_P16F1_V1 == pic_target_instruction_set_get(pf));
+}
+
+boolean_t instruction_set_is_pic18f_v6(pfile_t* pf)
+{
+    return (PIC_TARGET_INSTR_SET_PIC18F_V6 == pic_target_instruction_set_get(pf));
 }
 
 boolean_t pic_in_isr(pfile_t *pf)
@@ -4798,13 +4831,6 @@ variable_sz_t pic_pointer_size_get(pfile_t *pf)
     }
   }
   return (pic_is_16bit(pf)) ? 3 : 2;
-}
-
-boolean_t pic_use_64bit_movlb_get(pfile_t *pf)
-{
-  UNUSED(pf);
-
-  return pic_use_64bank_movlb;
 }
 
 void pic_init(pfile_t *pf)

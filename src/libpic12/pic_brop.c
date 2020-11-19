@@ -881,6 +881,6 @@ boolean_t pic_code_branchbits_remove(pfile_t *pf)
     }
     pfile_log(pf, PFILE_LOG_DEBUG, "...unneeded branch bits(%u)", 
         total);
-  return pic_code_skip_cond_optimize(pf) || (0 != total);  
+  return pic_code_skip_cond_optimize(pf) || (0 != total);
 }
 

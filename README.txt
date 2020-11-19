@@ -21,8 +21,9 @@ For device files and include files visit: https://github.com/jallib/jallib/tree/
 
 History
 =======
-2.5r4 -- 11 April 2020 (not yet released)
+2.5r4 -- 19 November 2020 (not yet released)
 		 * Fixed #10: JAL Compiler does not process hexadecimal ASCII constant escaping correctly
+		 * Fixed #14: Compiler does not handle access to data area correct for some PICs
 		 
 2.5r3 -- 15 september 2019 
          * fixed #8: Compiler generated unexplainable skip-error problem

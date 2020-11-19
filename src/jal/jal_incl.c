@@ -2,7 +2,8 @@
  **
  ** jal_incl.c : JAL include and pragma definitions
  **
- ** Copyright (c) 2004-2006, Kyle A. York; 2018, Rob Jansen
+ ** Copyright (c) 2004-2006, Kyle A. York
+**                2018-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -18,6 +19,7 @@
 #include "jal_tokn.h"
 #include "jal_vdef.h"
 #include "jal_incl.h"
+#include "../libpic12/pic.c"
 
 typedef struct jal_pragma_fuses_entry_
 {
@@ -228,9 +230,12 @@ static void jal_parse_pragma_target_bank(pfile_t *pf)
   jal_pragma_variable_assign(pf, "target_bank_size");
 }
 
-static void jal_parse_pragma_target_bank_count(pfile_t *pf)
+/* RJ: For solving issue #14*/
+/* The PIC instruction set is normalized in the device file to a number. 
+   only special cases are handled by the compiler, not all. */
+static void jal_parse_pragma_target_instruction_set(pfile_t* pf)
 {
-	jal_pragma_variable_assign(pf, "target_bank_count");
+    jal_pragma_variable_assign(pf, "target_instruction_set");
 }
 
 static void jal_parse_pragma_target_page(pfile_t *pf)
@@ -284,13 +289,13 @@ static void jal_parse_pragma_target(pfile_t *pf)
     const char *tag;
     void      (*action)(pfile_t *);
   } targets[] = {
-    {"chip",          jal_parse_pragma_target_chip},
-    {"clock",         jal_parse_pragma_target_clock},
-    {"fuses",         jal_parse_pragma_target_fuses},
-    {"cpu",           jal_parse_pragma_target_cpu},
-    {"bank",          jal_parse_pragma_target_bank},
-	{"numbanks",      jal_parse_pragma_target_bank_count},
-	{"page",          jal_parse_pragma_target_page}
+    {"chip",  jal_parse_pragma_target_chip},
+    {"clock", jal_parse_pragma_target_clock},
+    {"fuses", jal_parse_pragma_target_fuses},
+    {"cpu",   jal_parse_pragma_target_cpu},
+    {"bank",  jal_parse_pragma_target_bank},
+    {"inst",  jal_parse_pragma_target_instruction_set},
+    {"page",  jal_parse_pragma_target_page}
   };
   size_t cmd;
 

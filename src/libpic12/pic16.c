@@ -146,8 +146,14 @@ boolean_t pic16_code_to_pcode(pfile_t *pf, pic_code_t code,
         base = value_base_get(bval)
               + value_const_get(value_baseofs_get(bval))
               + pic_code_ofs_get(code);
-        pcode_lo = 0xee00 | (pic_code_fsr_n_get(code) << 4) | (base >> 8);
-        pcode_hi = 0xf000 | (base & 0x00ff);
+        /* Some PICs use another instruction for LFSR. */
+        if (instruction_set_is_pic18f_v6(pf)) {
+           pcode_lo = 0xee00 | (pic_code_fsr_n_get(code) << 4) | (base >> 10);
+           pcode_hi = 0xf000 | (base & 0x03ff);
+        } else {
+           pcode_lo = 0xee00 | (pic_code_fsr_n_get(code) << 4) | (base >> 8);
+           pcode_hi = 0xf000 | (base & 0x00ff);
+        }
         ct = 2;
       }
       break;

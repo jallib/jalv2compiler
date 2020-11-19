@@ -3,6 +3,7 @@
  ** pic.h : PIC code generation definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ **               2020-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -29,6 +30,37 @@ typedef enum {
   PIC_TARGET_CPU_SX_12,
   PIC_TARGET_CPU_14HBIT
 } pic_target_cpu_t;
+
+/* The compiler needs to handle some PICs that use a different
+   encoding for the same instruction. This is determined by the
+   instruction set. In the device file a pragma is used to
+   select the correct instruction set given below. Instruction
+   set names are determined by Microchip from MPLABX. The
+   compiler does not use all but only the ones that create an
+   issue for code generation. */
+typedef enum {
+    PIC_TARGET_INSTR_SET_NONE = 0,
+    PIC_TARGET_INSTR_SET_P16F1_V1,     /* 1 Used by compiler. */
+    PIC_TARGET_INSTR_SET_PIC18F_V6     /* 2 Used by compiler. */
+/*    PIC_TARGET_INSTR_SET_PIC12C5XX,     3 Not used yet. */
+/*    PIC_TARGET_INSTR_SET_PIC16F77,      4 Not used yet. */
+/*    PIC_TARGET_INSTR_SET_CPU_MID_V10,   5 Not used yet. */ 
+/*    PIC_TARGET_INSTR_SET_PIC18,         6 Not used yet. */
+/*    PIC_TARGET_INSTR_SET_EGG            7 Not used yet. */
+} pic_target_instr_set_t;
+
+/* These are the actual names of the instruction set. This
+   defintion is not used by the compiler but for info purposes
+   only. */
+static const char instruction_sets[][14] = {
+    {"pic12c5xx"},
+    {"pic16f77"},
+    {"cpu_mid_v10"},
+    {"cpu_p16f1_v1"},   /* Used by compiler. */
+    {"cpu_pic18f_v6"},  /* Used by compiler. */
+    {"pic18"},
+    {"egg"}
+};
 
 #include "../libcore/pfile.h"
 #include "pic_code.h"
@@ -140,10 +172,14 @@ unsigned         pic_target_bank_size_get(pfile_t *pf);
 void             pic_target_bank_size_set(pfile_t *pf, unsigned sz);
 unsigned         pic_target_page_size_get(pfile_t *pf);
 void             pic_target_page_size_set(pfile_t *pf, unsigned sz);
+pic_target_instr_set_t pic_target_instruction_set_get(pfile_t* pf);
+void             pic_target_instruction_set_set(pfile_t* pf, pic_target_instr_set_t instruction_set);
 boolean_t        pic_is_12bit(pfile_t *pf);
 boolean_t        pic_is_14bit(pfile_t *pf);
 boolean_t        pic_is_14bit_hybrid(pfile_t *pf);
 boolean_t        pic_is_16bit(pfile_t *pf);
+boolean_t        instruction_set_is_p16f1_v1(pfile_t* pf);
+boolean_t        instruction_set_is_pic18f_v6(pfile_t* pf);
 
 value_t pic_fsr_get(pfile_t *pf);
 void    pic_fsr_setup(pfile_t *pf, value_t val);
@@ -154,7 +190,6 @@ boolean_t        pic_in_isr(pfile_t *pf); /* TRUE when generating ISR code */
 value_t          pic_indirect_get(pfile_t *pf, pfile_log_t plog, size_t which);
 variable_sz_t    pic_pointer_size_get(pfile_t *pf);
 unsigned         pic_code_gen_pass_get(pfile_t *pf);
-boolean_t        pic_use_64bit_movlb_get(pfile_t *pf);
 /* the _reentrant block is a temporary holding area for re-entrant functions */
 
 #define PIC_FLAG_NONE       0x0000

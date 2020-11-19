@@ -73,9 +73,13 @@ boolean_t pic14h_code_to_pcode(pfile_t *pf, pic_code_t code,
     case PIC_OPCODE_SUBLW:  pcode = 0x3c00 | lit8; break;
     case PIC_OPCODE_ADDLW:  pcode = 0x3e00 | lit8; break;
     case PIC_OPCODE_MOVLB:
-      pcode = (pic_use_64bit_movlb_get(pf))
-        ? (0x0140 | (lit8 & 0x3f))
-        : (0x0020 | (lit8 & 0x1f));
+        /* Some PICs have 64 banks and use a diffent instruction set. */
+        if (instruction_set_is_p16f1_v1(pf)) {
+            pcode = (0x0140 | (lit8 & 0x3f));
+        }
+        else {
+            pcode = (0x0020 | (lit8 & 0x1f));
+        }
       break;
     case PIC_OPCODE_MOVLP:  pcode = 0x3180 | (lit8 & 0x7f); break;
     /* branching (10 bit literal) */
