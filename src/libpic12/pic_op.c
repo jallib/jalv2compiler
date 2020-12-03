@@ -3,6 +3,8 @@
  ** pic_op.c : PIC operator generation definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ **           (c) 2020-2020, Rob Jansen
+ **
  ** All rights reserved
  **
  ************************************************************/
@@ -1708,7 +1710,7 @@ static void pic_assign_to_float(pfile_t *pf, value_t dst, value_t src)
     value_t tmp;
 
     tmp = pfile_constant_float_get(pf, value_const_get(src), 
-      value_def_get(src));
+      value_def_get(dst));
     pic_op(pf, OPERATOR_ASSIGN, dst, tmp, VALUE_NONE);
     value_release(tmp);
   } else {
