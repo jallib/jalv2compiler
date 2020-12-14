@@ -1009,7 +1009,7 @@ static void pic_branch_cond(pfile_t *pf, cmd_t cmd)
     const char  *flag;
     pic_opcode_t brop;
 
-    /* RJ: In jalv25r4: Added initialization of brop due to compiler warning. */
+    /* RJ jalv25r4: Added initialization of brop due to compiler warning. */
     brop = PIC_OPCODE_NOP;
     flag = 0;
     if (dst) {
@@ -3520,25 +3520,38 @@ static void pic_code_mark_used(pfile_t *pf, pic_code_t code)
 
       next_is_cond = BOOLEAN_FALSE;
       switch (pic_code_op_get(code)) {
-        case PIC_OPCODE_BTFSC:
-        case PIC_OPCODE_BTFSS:
-        case PIC_OPCODE_INCFSZ:
-        case PIC_OPCODE_DECFSZ:
+      case PIC_OPCODE_BTFSC:
+      case PIC_OPCODE_BTFSS:
+      case PIC_OPCODE_INCFSZ:
+      case PIC_OPCODE_DECFSZ:
           next_is_cond = BOOLEAN_TRUE;
           break;
-        case PIC_OPCODE_RETFIE:
-        case PIC_OPCODE_RETLW:
-        case PIC_OPCODE_RETURN:
+      case PIC_OPCODE_RETFIE:
+      case PIC_OPCODE_RETLW:
+      case PIC_OPCODE_RETURN:
           if (!code_is_cond) {
-            next = 0;
+              next = 0;
           }
           break;
-        case PIC_OPCODE_GOTO:
+      case PIC_OPCODE_GOTO:
+          /* RJ jalv25r4: Suppressing fallthrough message. */
+          /* Original code.
           if (!code_is_cond && !pic_code_is_suspend(pf, code)) {
-            next = pic_code_label_find(pf, pic_code_brdst_get(code));
-            break;
+          next = pic_code_label_find(pf, pic_code_brdst_get(code));
+          break;
+        } */
+        /* a conditional goto will act like a call */
+
+        /* RJ jalv25r4: New code*/
+          if (!code_is_cond && !pic_code_is_suspend(pf, code)) {
+              next = pic_code_label_find(pf, pic_code_brdst_get(code));
           }
-          /* a conditional goto will act like a call */
+          else {
+            /* a conditional goto will act like a call */
+            pic_code_mark_used(pf,
+              pic_code_label_find(pf, pic_code_brdst_get(code)));
+          }
+          break;
         case PIC_OPCODE_CALL:
           pic_code_mark_used(pf,
             pic_code_label_find(pf, pic_code_brdst_get(code)));

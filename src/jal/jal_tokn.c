@@ -3,8 +3,7 @@
  ** jal_tokn.c : JAL token parsing bits
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- ** Revision: 2020-2020, Rob Jansen
- **
+ **               2020-2020, Rob Jansen
  ** All rights reserved
  **
  ***********************************************************/

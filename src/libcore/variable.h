@@ -3,6 +3,7 @@
  ** variable.h : variable declarations
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ **               2020-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -41,7 +42,10 @@ struct varlist_ {
   size_t     ct;
 };
 
-typedef unsigned short variable_base_t;
+/* RJ jalv25r4: Changed type from unsigned short to unsigned. 
+                It does not fix issue#16 but still OK to change. */
+typedef unsigned variable_base_t;
+
 typedef unsigned long  variable_const_t;
 
 #define VARIABLE_BASE_UNKNOWN ((variable_base_t) -1)

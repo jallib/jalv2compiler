@@ -26,8 +26,8 @@ else
 endif
 
 #Note: -Werror flag temporary disabled. No impact on operation of compiler.
-#CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
-CFLAGS=-O2 -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+#CFLAGS=-O2 -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
 LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm -fPIC
 
 OBJ_DIR=.obj-$(ARCH)

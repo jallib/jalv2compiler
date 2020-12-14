@@ -1,5 +1,6 @@
 Echo off
 Echo Bulding JAL 64-bit compiler for Windows
+Echo This version does not have -Werror enabled
 
 Echo Clean up old stuff
 if exist libutils\.obj-x86-64 rmdir /s /q libutils\.obj-x86-64

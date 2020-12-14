@@ -3,7 +3,7 @@
  ** jal_incl.c : JAL include and pragma definitions
  **
  ** Copyright (c) 2004-2006, Kyle A. York
-**                2018-2020, Rob Jansen
+ **               2018-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/

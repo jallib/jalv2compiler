@@ -3,6 +3,7 @@
  ** label.c : manipulators for label_t
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ **               2020-2020, Rob Jansen
  ** All rights reserved
  **
  ***********************************************************/
@@ -183,7 +184,9 @@ void label_list_reset(lbllist_t *lst)
     lbl = lst->head;
     if (label_refct_get(lbl) > 1) {
       fprintf(stderr, "label leak: 0x%lx %s\n", 
-        (ulong) lbl, label_name_get(lbl));
+         /* RJ: This should be (uintptr_t) lbl for 64-bit machines but results in 
+            other -Werrors about formatting 0x%llx or 0x%llu.*/
+         (ulong) lbl, label_name_get(lbl));
     }
     lst->head = label_link_get(lbl);
     if (!lst->head) {

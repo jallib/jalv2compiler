@@ -3,6 +3,7 @@
  ** pf_proc.c : pfile procedure definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ **               2020-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -518,6 +519,8 @@ size_t pfile_proc_param_ct_get(const pfile_proc_t *proc)
  *     variables
  *     temporaries
  */
+/* RJ: This function was already disabled but has apparently an infinite loop. 
+       It seems to be replaced by a dummy pfile_proc_block_dump later. */
 #if 0
 static void pfproc_variable_def_dump(pfile_t *pf, variable_def_t def, 
     int indent)
@@ -527,11 +530,20 @@ static void pfproc_variable_def_dump(pfile_t *pf, variable_def_t def,
 
   tstr = "???";
   switch (variable_def_type_get(def)) {
+/* RJ: These are no longer valid
     case variable_def_type_bit:      tstr = "bit";       break;
-    case VARIABLE_DEF_TYPE_BOOLEAN:  tstr = "bool";      break;
     case variable_def_type_unsigned: tstr = "unsigned";  break;
     case variable_def_type_signed:   tstr = "signed";    break;
-    case VARIABLE_DEF_TYPE_FLOAT:    tstr = "float";     break;
+*/
+/* RJ: Added the following five missing types: */
+    case VARIABLE_DEF_TYPE_INTEGER:  tstr = "integer";   break;
+    case VARIABLE_DEF_TYPE_REFERENCE:tstr = "reference"; break;
+    case VARIABLE_DEF_TYPE_ARRAY:    tstr = "array";     break;
+	case VARIABLE_DEF_TYPE_LABEL:    tstr = "label";     break;
+	case VARIABLE_DEF_TYPE_VALUE:    tstr = "value";     break;
+/* RJ*/
+	case VARIABLE_DEF_TYPE_BOOLEAN:  tstr = "bool";      break;
+	case VARIABLE_DEF_TYPE_FLOAT:    tstr = "float";     break;
     case VARIABLE_DEF_TYPE_POINTER:  tstr = "pointer";   break;
     case VARIABLE_DEF_TYPE_FUNCTION: tstr = "function";  break;
     case VARIABLE_DEF_TYPE_STRUCTURE:tstr = "struct";    break;
@@ -728,14 +740,18 @@ static void pfproc_label_list_dump(pfile_block_t *blk, pfile_t *pf, int indent)
   }
 }
 
+
+/* RJ: Is a replacement of the function declared above but does nothing. */
+#if 1
 static void pfproc_variable_def_dump(pfile_block_t *blk, pfile_t *pf, 
     int indent)
 {
   UNUSED(blk);
   UNUSED(pf);
   UNUSED(indent);
-  /*variable_def_dump(pfile_block_variable_def_head(blk), pf, indent);*/
+ /* variable_def_dump(pfile_block_variable_def_head(blk), pf, indent); */
 }
+#endif
 
 static void pfile_proc_block_dump(pfile_block_t *blk, pfile_t *pf, int indent)
 {
@@ -744,6 +760,8 @@ static void pfile_proc_block_dump(pfile_block_t *blk, pfile_t *pf, int indent)
   indent += 2;
   pfile_write(pf, pfile_write_lst,
       ";%*s%s\n", indent, "", "--- records ---");
+  /* RJ: The next statement could be removed since it calls a function that does nothing or we 
+         need to fix the procedure defined earlier. */
   pfproc_variable_def_dump(blk, pf, indent);
   pfile_write(pf, pfile_write_lst,
       ";%*s%s\n", indent, "", "--- variables ---");

@@ -3,6 +3,7 @@
  ** pic_brop.c : PIC branch optimization definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ **               2019-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -113,6 +114,9 @@ static pic_code_gop_rc_t pic_code_brop_analyze(pfile_t *pf, pic_code_t code,
   } else {
     bbits.pclath3 = PIC_BITSTATE_UNKNOWN;
     bbits.pclath4 = PIC_BITSTATE_UNKNOWN;
+    /* RJ jalv25r4: Added initializaion of cbitstate .*/
+    cbitstate.before.pclath3 = PIC_BITSTATE_UNKNOWN;
+    cbitstate.before.pclath4 = PIC_BITSTATE_UNKNOWN;
   }
   rc = PIC_CODE_GOP_RC_CONTINUE;
 

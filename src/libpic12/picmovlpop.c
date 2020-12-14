@@ -2,7 +2,8 @@
  **
  ** picmovlpop.c : PIC data optimization definitions
  **
- ** Copyright (c) 2010, Kyle A. York
+ ** Copyright (c) 2010-2010, Kyle A. York
+ **               2020-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -36,6 +37,9 @@ static pic_code_gop_rc_t pic_code_pclath_analyze(pfile_t *pf, pic_code_t code,
     pic_code_pclath_get(code, &cpclath_state);
   } else {
     pclath = PIC_PCLATH_UNKNOWN;
+    /* RJ jalv25r4: Added initialization.*/
+    cpclath_state.before = PIC_PCLATH_UNKNOWN;
+    cpclath_state.action = PIC_PCLATH_UNKNOWN;
   }
   rc = PIC_CODE_GOP_RC_CONTINUE;
 
@@ -108,8 +112,13 @@ static pic_code_gop_rc_t pic_code_pclath_analyze(pfile_t *pf, pic_code_t code,
 
         cpclath_state.action = pclath;
         pic_code_pclath_set(code, &cpclath_state);
-        break;
+
+        /* RJ jalv25r4: This one removed here because of -Werror fallthrough. */
+        /* break; */
       }
+      /* RJ jalv25r4: Instead to prevent fallthrough the break statement must be here. */
+      break;
+
     case PIC_CODE_GOP_WHICH_POST:
       if (pic_code_is_suspend(pf, code)
         || (PIC_OPCODE_CALL == pic_code_op_get(code))) {

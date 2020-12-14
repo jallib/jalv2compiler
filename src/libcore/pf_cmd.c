@@ -2,7 +2,8 @@
  **
  ** pf_cmd.c : p-code cmd list functions
  **
- ** Copyright (c) 2005, Kyle A. York; 2018, Rob Jansen
+ ** Copyright (c) 2005-2005, Kyle A. York; 
+ **               2018-2018, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
