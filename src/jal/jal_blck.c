@@ -379,6 +379,7 @@ void jal_block_process(pfile_t *pf, flag_t flags)
   }
 }
 
+/* Start of the processing of the source file. */
 void jal_source_process(pfile_t *pf)
 {
   label_t     lbl;

@@ -413,7 +413,8 @@ static void pfile_cmd_proc_inline_param_replacements_get(
       } else if (write_ct 
         && !value_dflag_test(pval, VARIABLE_DEF_FLAG_OUT)) {
         /* cannot write to a non-OUT parameter */
-		/* RJ: Removing the following assignment fixes issue #2 the mempointer parameter problem for inline peusdo variables/procedure. */
+		/* Removing the following assignment fixes issue #2. 
+           So an empty body remains. */
         /*   replaceable = BOOLEAN_FALSE; */
       } else if (value_is_volatile(rparam)
         && ((read_ct > 1) || (write_ct > 1))) {

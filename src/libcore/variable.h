@@ -42,9 +42,9 @@ struct varlist_ {
   size_t     ct;
 };
 
-/* RJ jalv25r4: Changed type from unsigned short to unsigned. 
-                It does not fix issue#16 but still OK to change. */
-typedef unsigned variable_base_t;
+/* RJ: We can keep unsigned short since data space is not 64k. 
+   If needed it could be changed to unsigned. */
+typedef unsigned short variable_base_t; 
 
 typedef unsigned long  variable_const_t;
 

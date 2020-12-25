@@ -150,9 +150,9 @@ static void pic_code_bsr_post_analyze(pfile_t *pf)
       rem_ct, ins_ct);
 }
 
-/* RJ: Removes unneeded movlb instructions. Normally the compiler generates movlb instructions
-       before each instruction to set the right data bank but if a data bank does not change 
-	   that instruction can be removed. */
+/* Removes unneeded movlb instructions. Normally the compiler generates movlb instructions
+   before each instruction to set the right data bank but if a data bank does not change 
+   that instruction can be removed. */
 void pic_code_bsr_optimize(pfile_t *pf)
 {
   pic_code_bsr_data_t data;

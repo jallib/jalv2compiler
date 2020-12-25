@@ -3,6 +3,7 @@
  ** pic_opfn.c : PIC built-in function generation
  **
  ** Copyright (c) 2004-2005, Kyle A. York
+ **               2020-2020, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -137,7 +138,7 @@ void pic_multiply_create_fn(pfile_t *pf, label_t lbl,
   if (LABEL_NONE != lbl) {
     pic_instr_append_label(pf, lbl);
   }
-  if (pic_is_16bit(pf)) {
+if (pic_is_16bit(pf)) { 
     pic_multiply_create_fn16(pf, mresult, multiplier, multiplicand);
   } else {
     label_t       top;
@@ -1580,8 +1581,19 @@ static void pic_float_multiply_create(pfile_t *pf)
     } else {
       strcpy(mul_name, PIC_LABEL_MULTIPLY);
     }
+    /* RJ jalv25r4: Fixing issue#16, original code.
     lbl = pic_label_find(pf, mul_name, BOOLEAN_TRUE);
     pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
+    */
+    /* RJ jalv25r4: New code for fixing issue #16. */
+    lbl = pic_label_find(pf, mul_name, BOOLEAN_FALSE);
+    if (lbl == LABEL_NONE) {
+        lbl = pic_label_find(pf, mul_name, BOOLEAN_TRUE);
+        pic_multiply_create(pf);
+    }
+    else {
+        pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
+    }
     label_release(lbl);
 
     lbl = pfile_label_alloc(pf, 0);
@@ -1700,8 +1712,22 @@ static void pic_float_divide_create(pfile_t *pf)
     pic_instr_append_f_d(pf, PIC_OPCODE_RRF, flt.fval1, 0, PIC_OPDST_W);
     pic_instr_append_f(pf, PIC_OPCODE_MOVWF, divs.dividend, 3);
     pic_op(pf, OPERATOR_ASSIGN, divs.divisor, dval2, VALUE_NONE);
+
+    /* RJ jalv25r4 : Fixed as part of issue#16 but there was no problem. 
     lbl = pic_label_find(pf, PIC_LABEL_DIVIDE, BOOLEAN_TRUE);
     pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
+    */
+
+    /* RJ jalv25r4: New code. */
+    lbl = pic_label_find(pf, PIC_LABEL_DIVIDE, BOOLEAN_FALSE);
+    if (lbl == LABEL_NONE) {
+        lbl = pic_label_find(pf, PIC_LABEL_DIVIDE, BOOLEAN_TRUE);
+        pic_multiply_create(pf);
+    }
+    else
+    {
+        pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
+    }
     label_release(lbl);
 
     lbl_done = pfile_label_alloc(pf, 0);

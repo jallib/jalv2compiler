@@ -1009,7 +1009,6 @@ static void pic_branch_cond(pfile_t *pf, cmd_t cmd)
     const char  *flag;
     pic_opcode_t brop;
 
-    /* RJ jalv25r4: Added initialization of brop due to compiler warning. */
     brop = PIC_OPCODE_NOP;
     flag = 0;
     if (dst) {
@@ -1828,7 +1827,7 @@ void pic_cmd_out(pfile_t *pf, cmd_t *cmd_ptr)
         pic_proc_leave(pf, cmd_proc_get(cmd));
         break;
 	  case CMD_TYPE_BLOCK_END:
-		pic_last_values_reset(); /* RJ: This fixes problem #6. */
+		pic_last_values_reset(); 
 		break;
 	  case CMD_TYPE_BLOCK_START:
 	  case CMD_TYPE_STATEMENT_END:
@@ -4400,7 +4399,6 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
     value_release(chipdef);
   }
  
-  /* RJ: Fixing issue #14*/
   chipdef = pfile_value_find(pf, PFILE_LOG_NONE, "target_instruction_set");
   if (VALUE_NONE == chipdef) {
       pic_target_instruction_set_set(pf, PIC_TARGET_INSTR_SET_NONE);
@@ -4461,7 +4459,7 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
       pic_variable_alloc(pf);
     }
   }
-  /* RJ: For debugging purposes it is sometimes handy to disable these optimizations.
+  /* For debugging purposes it is sometimes handy to disable these optimizations.
      If you remove pic_code_bsr_optimize() you get data errors, seen when compiling for PIC_14H. */
   pic_w_value_optimize(pf);
   pic_code_branch_optimize(pf); 
@@ -4481,7 +4479,7 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
      instructions are removed, the code size could fall below 2K in which
      case there is no reason to have *any* PCLATH instructions */ 
 if (pic_is_12bit(pf) || pic_is_14bit(pf)) {
-    /* RJ: The following function also calls pic_code_skip_cond_optimize(pf) */
+    /* The following function also calls pic_code_skip_cond_optimize(pf) */
     pic_code_branchbits_remove(pf); 
     do {
       pic_code_branchbits_optimize(pf);

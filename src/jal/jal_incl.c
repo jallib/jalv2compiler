@@ -230,7 +230,6 @@ static void jal_parse_pragma_target_bank(pfile_t *pf)
   jal_pragma_variable_assign(pf, "target_bank_size");
 }
 
-/* RJ: For solving issue #14*/
 /* The PIC instruction set is normalized in the device file to a number. 
    only special cases are handled by the compiler, not all. */
 static void jal_parse_pragma_target_instruction_set(pfile_t* pf)

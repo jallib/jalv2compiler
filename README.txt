@@ -1,19 +1,17 @@
-JalV2 readme
+JalV2 README
 ============
-
 Included in this archive:
 
-README.txt    : this file
+README.txt       : this file
 
-jalv2.txt       & jalv2.pdf        : JALv2 language documentation
-jalv2opt.txt    & jalv2opt.pdf     : JALv2 compiler options
-jalv2pragma.txt & jalv2pragmal.pdf : JALv2 pragmas
+jalv2.pdf        : JALv2 language documentation
+jalv2opt.pdf     : JALv2 compiler options
+jalv2pragmal.pdf : JALv2 pragmas
 
-jalv2.exe     : Windows 32-bit binary 
-jalv2_64.exe  : Windows 64-bit binary 
-jalv2-i686    : Linux 32-bit binary
-jalv2-x86-64  : Linux 64-bit binary
-
+jalv2.exe        : Windows 32-bit binary 
+jalv2_64.exe     : Windows 64-bit binary 
+jalv2-i686       : Linux 32-bit binary
+jalv2-x86-64     : Linux 64-bit binary
 
 Compiler issues can be registered and found at: https://github.com/jallib/jalv2compiler/issues
 
@@ -21,12 +19,14 @@ For device files and include files visit: https://github.com/jallib/jallib/tree/
 
 History
 =======
-2.5r4 -- 14 December 2020 (not yet released)
+2.5r4 -- 25 December 2020 
 		 * Fixed Issue#10: JAL Compiler does not process hexadecimal ASCII constant escaping correctly
 		 * Fixed Issue#14: Compiler does not handle access to data area correct for some PICs
 		                  (compiler pragma 'numbanks' replaced by pragma 'inst') 
-		 * Fixed Issue#15: Segmenation fault (with help of Kyle, thanks!)
-		 * Fixed several -Werror compiler warnings. Still some warnings generated only for Windows 64-bit compiler.
+		 * Fixed Issue#15: Segmenation fault (fixed with help of Kyle, thanks!)
+		 * Fixed all -Werror compiler build warnings for Windows 32-bit compiler plus 32-bit & 64-bit Linux compilers. 
+		   Still some -Werror compiler build warnings left for Windows 64-bit compiler.
+		 * Fixed Issue#16: Curious warnings (fixed again with help of Kyle, thanks!)
 		 
 2.5r3 -- 15 september 2019 
          * fixed Issue#8: Compiler generated unexplainable skip-error problem

@@ -537,10 +537,11 @@ void pic_code_branch_optimize(pfile_t* pf)
 
 						if (PIC_OPCODE_GOTO == pic_code_op_get(code)) {
 							/* GOTO a RETURN ; replace the GOTO */
-							/* RJ: It can happen that before the GOTO we have a MOVLP instruction.
-								   If we replace the GOTO by a RETURN we also need to remove this
-								   MOVLP otherwise we may run into skip-error problems.
-								   Next to that the MOVLP instruction has become obsolete.
+
+							/* It can happen that before the GOTO we have a MOVLP instruction.
+							   If we replace the GOTO by a RETURN we also need to remove this
+						       MOVLP otherwise we may run into skip-error problems.
+							   Next to that the MOVLP instruction has become obsolete.
 							*/
 							code_tmp = pic_code_prev_get(code);
 							if (PIC_OPCODE_MOVLP == pic_code_op_get(code_tmp)) {
@@ -575,11 +576,10 @@ void pic_code_branch_optimize(pfile_t* pf)
 							else {
 								total_freed++;
 							}
-							/* RJ: It can happen that before the CALL we have a MOVLP instruction.
-								   If we delete the CALL we also need to remove this MOVLP otherwise
-								   we may run into skip-error problems. Next to that the MOVLP
-								   instruction has become obsolete.
-							*/
+							/* It can happen that before the CALL we have a MOVLP instruction.
+							   If we delete the CALL we also need to remove this MOVLP otherwise
+							   we may run into skip-error problems. Next to that the MOVLP
+							   instruction has become obsolete. */
 							code_tmp = pic_code_prev_get(code);
 							if (PIC_OPCODE_MOVLP == pic_code_op_get(code_tmp)) {
 								pic_code_list_remove(pf, code_tmp);

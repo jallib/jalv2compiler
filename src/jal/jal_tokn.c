@@ -236,9 +236,7 @@ const char *jal_token_get(pfile_t *pf, pf_token_get_t which)
                 } mode;
                 char val;     /* value if processing hex or oct */
 
-				/*RJ: Fix for compiler issue #10. */
 				char count;
-
                 mode = ch_type_normal;
 
                 do {
@@ -311,7 +309,6 @@ const char *jal_token_get(pfile_t *pf, pf_token_get_t which)
                       }
                       break;
                     case ch_type_hex:
-					  /* RJ: Fix compiler issue #10 but only accept at most 2 hex digits. */
 					  if (ISXDIGIT(ch) && (2 != count)) {
 						count = count + 1;
                         val = val * 16 + (strchr(xdig, TOLOWER(ch)) - xdig);
@@ -324,7 +321,8 @@ const char *jal_token_get(pfile_t *pf, pf_token_get_t which)
                       }
                       break;
                     case ch_type_bin:
-						/* RJ: Not mentioned as compiler issue #10 but only accept at most 8 bits. Note: Underscore is not allowed here! */
+						/* Not mentioned as compiler issue #10 but only accept at most 8 bits. 
+                           Note: Underscore is not allowed here! */
 						if (ISBINDIGIT(ch) && (8 != count)) {
 						  count = count + 1;
 						  val = val * 2 + (ch - '0');

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>D:\pic\compiler\test\Issue#16\18f27q43_128k_word.jal -s "C:\Jallib\lib" </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>D:\pic\compiler\test\Issue#16\18f27q43_float.jal -s "C:\Jallib\lib" </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommand>d:\PIC\Compiler\jalv25r4_test\bin\jalv2d.exe</LocalDebuggerCommand>
   </PropertyGroup>
