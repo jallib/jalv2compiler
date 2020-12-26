@@ -1591,9 +1591,7 @@ static void pic_float_multiply_create(pfile_t *pf)
         lbl = pic_label_find(pf, mul_name, BOOLEAN_TRUE);
         pic_multiply_create(pf);
     }
-    else {
-        pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
-    }
+    pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
     label_release(lbl);
 
     lbl = pfile_label_alloc(pf, 0);
@@ -1713,21 +1711,8 @@ static void pic_float_divide_create(pfile_t *pf)
     pic_instr_append_f(pf, PIC_OPCODE_MOVWF, divs.dividend, 3);
     pic_op(pf, OPERATOR_ASSIGN, divs.divisor, dval2, VALUE_NONE);
 
-    /* RJ jalv25r4 : Fixed as part of issue#16 but there was no problem. 
     lbl = pic_label_find(pf, PIC_LABEL_DIVIDE, BOOLEAN_TRUE);
     pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
-    */
-
-    /* RJ jalv25r4: New code. */
-    lbl = pic_label_find(pf, PIC_LABEL_DIVIDE, BOOLEAN_FALSE);
-    if (lbl == LABEL_NONE) {
-        lbl = pic_label_find(pf, PIC_LABEL_DIVIDE, BOOLEAN_TRUE);
-        pic_multiply_create(pf);
-    }
-    else
-    {
-        pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
-    }
     label_release(lbl);
 
     lbl_done = pfile_label_alloc(pf, 0);

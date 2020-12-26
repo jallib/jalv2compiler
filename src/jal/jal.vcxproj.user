@@ -3,7 +3,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommandArguments>D:\pic\compiler\test\Issue#16\18f27q43_float.jal -s "C:\Jallib\lib" </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommand>d:\PIC\Compiler\jalv25r4_test\bin\jalv2d.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>d:\PIC\Compiler\jalv25r4\bin\jalv2d.exe</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommandArguments>D:\pic\compiler\test\constant_array_lookup_problem\constant_array_lookup_problem.jal -s "C:\Jallib\lib" </LocalDebuggerCommandArguments>

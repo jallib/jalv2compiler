@@ -19,7 +19,7 @@ For device files and include files visit: https://github.com/jallib/jallib/tree/
 
 History
 =======
-2.5r4 -- 25 December 2020 
+2.5r4 -- 26 December 2020 
 		 * Fixed Issue#10: JAL Compiler does not process hexadecimal ASCII constant escaping correctly
 		 * Fixed Issue#14: Compiler does not handle access to data area correct for some PICs
 		                  (compiler pragma 'numbanks' replaced by pragma 'inst') 
