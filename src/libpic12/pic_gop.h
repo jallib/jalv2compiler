@@ -3,6 +3,8 @@
  ** pic_gop.h : PIC general optimization declarations
  **
  ** Copyright (c) 2010, Kyle A. York
+ **               2021, Rob Jansen
+ **
  ** All rights reserved
  **
  ************************************************************/
@@ -12,8 +14,10 @@
 #include "../libcore/pfile.h"
 #include "pic_code.h"
 
-/* this is the maximum depth the optimizer should reach! */
-#define PIC_CODE_GOP_DEPTH 128
+/* This is the maximum depth the optimizer should reach! 
+   It is an artbitrary choice. Changed from 128 to 256 in 
+   jalv25r5, fixing issue #19.*/
+#define PIC_CODE_GOP_DEPTH 256
 
 typedef enum {
   PIC_CODE_GOP_WHICH_ENTER, /* analyze fn entered */
