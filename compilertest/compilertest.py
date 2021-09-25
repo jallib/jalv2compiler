@@ -2,9 +2,9 @@
 """
 Title: Test the compiler output by compiling and verifying various sample programs.
 
-Author: Rob Jansen, Copyright (c) 2018..2018, all rights reserved.
+Author: Rob Jansen, Copyright (c) 2018..2021, all rights reserved.
 
-Adapted-by: Rob Jansen, Copyright (c) 2018..2018, all rights reserved.
+Adapted-by:
 
 Compiler: N/A
 
@@ -33,7 +33,7 @@ import subprocess
 import shutil
 import platform
 
-scriptversion   = "0.1"
+scriptversion   = "0.2"
 scriptauthor    = "Rob Jansen"
 
 platform_name = platform.system()
@@ -95,13 +95,15 @@ def create_baseline():
     # Remove previous baseline.
     for f in os.listdir(basedir):
         os.remove(os.path.join(basedir, f))
-    cmdlist = [os.path.join(cmpdir, baseline_compiler), "-no-asm", "-no-codfile", "-s", devdir]
+    # cmdlist = [os.path.join(cmpdir, baseline_compiler), "-no-asm", "-no-codfile", "-s", devdir]
+    cmdlist = [os.path.join(cmpdir, baseline_compiler), "-no-codfile", "-s", devdir]
     smpcount = 0
     errcount = 0
     if os.path.exists(os.path.join(cmpdir, baseline_compiler)):
         print("Creating baseline hex files of samples using compiler", baseline_compiler)
         for f in os.listdir(srcdir):
             sample = f
+            asmfile = sample[:-3] + "asm"  # .jal -> .asm
             hexfile = sample[:-3] + "hex"  # .jal -> .hex
             # When the file is not a jal file do not try to compile it but remove it
             if (sample[-3:] != "jal"):
@@ -122,6 +124,9 @@ def create_baseline():
                     if (os.path.exists(os.path.join(srcdir, hexfile))):
                         shutil.copy2(os.path.join(srcdir, hexfile), os.path.join(basedir, hexfile))
                         os.remove(os.path.join(srcdir, hexfile))
+                        # Also copy the create asm file for later comparison.
+                        shutil.copy2(os.path.join(srcdir, asmfile), os.path.join(basedir, asmfile))
+                        os.remove(os.path.join(srcdir, asmfile))
                 else:
                     errcount += 1  # issue
                     print(sample, numerrors, "errors", numwarnings, "warnings")
@@ -152,15 +157,17 @@ def verify_baseline():
     # baseline compiler.
     for compiler in os.listdir(cmpdir):
         if (compiler != baseline_compiler):
-            cmdlist = [os.path.join(cmpdir, compiler), "-no-asm", "-no-codfile", "-s", devdir]
-#        cmdlist = [os.path.join(cmpdir, compiler), "-no-codfile", "-s", devdir]
+#            cmdlist = [os.path.join(cmpdir, compiler), "-no-asm", "-no-codfile", "-s", devdir]
+            cmdlist = [os.path.join(cmpdir, compiler), "-no-codfile", "-s", devdir]
             print("Compiling for", compiler)
             fl.write("Compiler results for " + compiler + "\n")
             fl.write("-----------------------------\n")
             for sample in os.listdir(srcdir):
                 flog = sample[:-4] + "_" + compiler + ".txt"         # Add compiler name to the log textfile.
                 hexfile = sample[:-3] + "hex"                        # .jal -> .hex
-                newfile = sample[:-4] + "_" + compiler + ".hex"      # Add compiler name to the hexfile.
+                asmfile = sample[:-3] + "asm"                        # .jal -> .asm
+                newhexfile = sample[:-4] + "_" + compiler + ".hex"      # Add compiler name to the hexfile.
+                newasmfile = sample[:-4] + "_" + compiler + ".asm"       # Add compiler name to the hex
                 # When the file is not a jal file do not try to compile it but remove it
                 if (sample[-3:] != "jal"):
                     os.remove(os.path.join(srcdir, sample))
@@ -181,10 +188,13 @@ def verify_baseline():
                         if ((numerrors == 0) and (numwarnings == 0)):
                             smpcount += 1                                   # OK! (zero errors, zero warnings)
                             if os.path.exists(os.path.join(srcdir,hexfile)):
-                                newfile = os.path.join(outdir,newfile)
-                                shutil.copy(os.path.join(srcdir,hexfile), newfile)
-                                fl.write("File: " + newfile + "\n")
-                                if (compare_files(os.path.join(basedir, hexfile), newfile) == False):
+                                newhexfile = os.path.join(outdir,newhexfile)
+                                shutil.copy(os.path.join(srcdir,hexfile), newhexfile)
+                                # Also copy the asm file.
+                                newasmfile = os.path.join(outdir, newasmfile)
+                                shutil.copy(os.path.join(srcdir, asmfile), newasmfile)
+                                fl.write("File: " + newhexfile + "\n")
+                                if (compare_files(os.path.join(basedir, hexfile), newhexfile) == False):
                                     fl.write("   --> Error, hex files do not match. \n")
                                     print("   --> Error, hex files do not match.")
                                     errcount += 1
@@ -192,6 +202,7 @@ def verify_baseline():
                                     fl.write("   --> OK. \n")
                                     print("   --> OK.")
                                     os.remove(os.path.join(srcdir,hexfile))
+                                    os.remove(os.path.join(srcdir,asmfile))
                         else:
                             errcount += 1                                   # issue
                             with open(os.path.join(logdir,flog), "w") as fp:
@@ -230,10 +241,14 @@ if (__name__ == "__main__"):
        print("Specify CREATE or VERIFY as first argument")
        sys.exit(1)
 
+    print("Output will be in the Output directory")
+    print("Results will be logged in the file Testresults.txt in the Log directory ")
     if (runtype == "CREATE"):
+        print("Creating baseline ASM and HEX files")
         create_baseline()
         sys.exit(1)
     elif (runtype == "VERIFY"):
+        print("Creating new ASM and HEX files and verifying HEX files with the baseline.")
         verify_baseline()
         sys.exit(1)
     else:

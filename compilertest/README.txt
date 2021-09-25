@@ -1,4 +1,4 @@
-This script compiles sample files using various compilers and verifies the results.
+The compilertest.py script compiles sample files using various compilers and verifies the results.
 
 It has two options for use:
 1) It creates (parameter 'create') a baseline of hex files to compare compiler outputs.
@@ -17,21 +17,24 @@ a) Have the baseline compiler in the compiler directory (Windows and Linux have 
    So in order to compile all sources with the right compiler, always rename it to this fixed name.
 b) Store all sample files that compile without any errors in the 'Sample' directory.
 c) Create the baseline by running the Python script with the parameter 'Create'. It will use the
-   baseline compiler to create all hex files for the sample programs. All created hex files will be 
-   stored in the directory 'Baseline'.
+   baseline compiler to create all hex files and asm filesfor the sample programs. All created hex files 
+   and asm files will be stored in the directory 'Baseline'.
 d) Verify the operation of the other compilers by running the Python script with the parameter 'Verify'
    All sample files will be re-compiled with all compilers in the compiler directory (excluding the
    baseline compiler) and will compare all newly created hex files. They are stored in the 
    directory 'Output'. If there are differences, this will be mentioned. In the end the total result
    will be given about succesful and failed samples. 
    Results of the verification activity is stored in the file 'Testresults.txt' in the directory 'Log'.
+   
+The created asm files can be used for comparison in situations where the hex files do not match.
 
 ======================================================================================
 The script has some hard-coded paths in it so adapt them to your situation before use.
 ======================================================================================
 
 Note that because of a bug fixes in the jal compiler, the baseline compiler version must be equal to or higher 
-than or equal to jalv25r4.  
+than or equal to jalv25r5 (build of september 23rd, 2021). This because of fixes that where made and that
+have influenced the code generation. Always use the latest stable version as new baseline.
 
 Rob Jansen
-2020-11-19
+2021-09-25
