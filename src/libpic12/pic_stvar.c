@@ -3,6 +3,8 @@
  ** pic_stvar.c : pic state variable maintainence
  **
  ** Copyright (c) 2005, Kyle A. York
+ **               2021..2021, Rob Jansen
+ **
  ** All rights reserved
  **
  ************************************************************/
@@ -520,6 +522,7 @@ void pic_var_isr_release(pfile_t *pf, pic_var_isr_t *dst)
   value_release(dst->w);
 }
 
+
 /*
  * NAME
  *   pic_stvar_fixup
@@ -536,124 +539,140 @@ void pic_var_isr_release(pfile_t *pf, pic_var_isr_t *dst)
  *
  * NOTES
  */
-void pic_stvar_fixup(pfile_t *pf)
+void pic_stvar_fixup(pfile_t* pf)
 {
-  variable_sz_t pic_state_sz;
-  variable_sz_t pic_isr_state_sz;
-  variable_t    state_var;
-  variable_t    var;
-  /* this is used to create _pic_state */
-  static const struct {
-    unsigned    pos;
-    const char *tag;
-    unsigned    flag;
-  } varinfo[] = {
-    {0, "_pic_temp",         PIC_STVAR_FLAG_NONE},
+    variable_sz_t pic_state_sz;
+    variable_sz_t pic_isr_state_sz;
+    variable_t    state_var;
+    variable_t    var;
+    unsigned index;
 
-    {0, "_pic_memcpy_src",   PIC_STVAR_FLAG_MEMCPY},
-    {1, "_pic_memcpy_dst",   PIC_STVAR_FLAG_MEMCPY},
-    {2, "_pic_loop_tmp",     PIC_STVAR_FLAG_MEMCPY},
+    /* this is used to create _pic_state
+     RJ: The idea here is to set the base addressess of these
+         variables but since not everything is used at the 
+         same time they can be overlayed. Note that this is
+         not true for _pic_temp which should not be overlayed.
+         This is handled later in the routine and solves the
+         problem reported in issue#23. */
+    static const struct {
+        unsigned    pos;
+        const char* tag;
+        unsigned    flag;
+    } varinfo[] = {
+      {0, "_pic_temp",         PIC_STVAR_FLAG_NONE},
 
-    {0, "_pic_divaccum",     PIC_STVAR_FLAG_DIVIDE},
-    {0, "_pic_dividend",     PIC_STVAR_FLAG_DIVIDE},
-    {1, "_pic_remainder",    PIC_STVAR_FLAG_DIVIDE},
-    {2, "_pic_divisor",      PIC_STVAR_FLAG_DIVIDE},
-    {3, "_pic_quotient",     PIC_STVAR_FLAG_DIVIDE},
+      {0, "_pic_memcpy_src",   PIC_STVAR_FLAG_MEMCPY},
+      {1, "_pic_memcpy_dst",   PIC_STVAR_FLAG_MEMCPY},
+      {2, "_pic_loop_tmp",     PIC_STVAR_FLAG_MEMCPY},
 
-    {0, "_pic_multiplier",   PIC_STVAR_FLAG_MULTIPLY},
-    {1, "_pic_multiplicand", PIC_STVAR_FLAG_MULTIPLY},
-    {2, "_pic_mresult",      PIC_STVAR_FLAG_MULTIPLY},
+      {0, "_pic_divaccum",     PIC_STVAR_FLAG_DIVIDE},
+      {0, "_pic_dividend",     PIC_STVAR_FLAG_DIVIDE},
+      {1, "_pic_remainder",    PIC_STVAR_FLAG_DIVIDE},
+      {2, "_pic_divisor",      PIC_STVAR_FLAG_DIVIDE},
+      {3, "_pic_quotient",     PIC_STVAR_FLAG_DIVIDE},
 
-  };
-  /* these are internal variables that are not in pic_state */
-  static const char *util_vars[] = {
-    /* these need to be saved & restored during a context switch          */
-    "_pic_isr_status",
-    "_pic_isr_pclath",
-    "_pic_loop",
-    "_pic_isr_loop",
-    "_pic_isr_accum",
-    "_pic_sign",
-    "_pic_isr_sign",
-    "_pic_pointer",
-    "_pic_isr_pointer",
-    "_pic_isr_fsr",
-    "_pic_isr_tblptr",
-    "_pic_fval1",
-    "_pic_fexp1",
-    "_pic_fval2",
-    "_pic_fexp2",
-    "_pic_fconv",
-    /* these do *not* need to be saved & restored during a context switch */
-    "_pic_stkptr",
-    "_pic_task_ptr"
-  };
-  unsigned pic_state_pos[COUNT(varinfo)];
-  size_t   ii;
+      {0, "_pic_multiplier",   PIC_STVAR_FLAG_MULTIPLY},
+      {1, "_pic_multiplicand", PIC_STVAR_FLAG_MULTIPLY},
+      {2, "_pic_mresult",      PIC_STVAR_FLAG_MULTIPLY},
+    };
+    /* these are internal variables that are not in pic_state */
+    static const char* util_vars[] = {
+        /* these need to be saved & restored during a context switch          */
+        "_pic_isr_status",
+        "_pic_isr_pclath",
+        "_pic_loop",
+        "_pic_isr_loop",
+        "_pic_isr_accum",
+        "_pic_sign",
+        "_pic_isr_sign",
+        "_pic_pointer",
+        "_pic_isr_pointer",
+        "_pic_isr_fsr",
+        "_pic_isr_tblptr",
+        "_pic_fval1",
+        "_pic_fexp1",
+        "_pic_fval2",
+        "_pic_fexp2",
+        "_pic_fconv",
+        /* these do *not* need to be saved & restored during a context switch */
+        "_pic_stkptr",
+        "_pic_task_ptr"
+    };
+    unsigned pic_state_pos[COUNT(varinfo)];
+    size_t   ii;
 
-  /* first, set the positions of the pic_state union members (see above)
-   * while calculating pic_state_sz *and* pic_isr_state_sz */
-  pic_state_sz     = 0;
-  pic_isr_state_sz = isr_info.temp_size;
-  for (ii = 0; ii < COUNT(pic_state_pos); ii++) {
-    pic_state_pos[ii] = 0;
-  }
-  state_var = pic_var_state_var_get(pf);
-  for (ii = 0; ii < COUNT(varinfo); ii++) {
-    unsigned pos;
-
-    var = pfile_variable_find(pf, PFILE_LOG_NONE, varinfo[ii].tag, 0);
-    pos = varinfo[ii].pos;
-    pic_state_pos[pos] = (pos) ? pic_state_pos[pos-1] : 0;
-    if (var) {
-      variable_base_set(var, (variable_base_t) pic_state_pos[pos], 0);
-      variable_master_set(var, state_var);
-      pic_state_pos[pos] += variable_sz_get(var);
-      if (pic_state_pos[pos] > pic_state_sz) {
-        pic_state_sz = (variable_sz_t) pic_state_pos[pos];
-      } if ((isr_info.var_flags & varinfo[ii].flag)
-        && (pic_state_pos[pos] > pic_isr_state_sz)) {
-        pic_isr_state_sz = (variable_sz_t) pic_state_pos[pos];
-      }
-      variable_release(var);
+    /* first, set the positions of the pic_state union members (see above)
+     * while calculating pic_state_sz *and* pic_isr_state_sz */
+    pic_state_sz = 0;
+    index        = 0;
+    pic_isr_state_sz = isr_info.temp_size;
+    for (ii = 0; ii < COUNT(pic_state_pos); ii++) {
+        pic_state_pos[ii] = 0;
     }
-  }
-  /* state var exists and has a size, allocate pic_isr_state
-   * as necessary */
-  if (state_var && pic_state_sz) {
-    variable_def_t def;
+    state_var = pic_var_state_var_get(pf);
 
-    def = variable_def_alloc(0, VARIABLE_DEF_TYPE_INTEGER,
-          VARIABLE_DEF_FLAG_NONE, pic_state_sz);
-    variable_def_set(state_var, def);
-    pic_variable_alloc_one(pf, PFILE_PROC_NONE, 
-      state_var); /* allocate this space */
-    if (pic_isr_state_sz) {
-      def = variable_def_alloc(0, VARIABLE_DEF_TYPE_INTEGER,
-        VARIABLE_DEF_FLAG_VOLATILE, pic_isr_state_sz);
-      pfile_variable_alloc(pf, PFILE_VARIABLE_ALLOC_GLOBAL,
-        "_pic_isr_state", def, VARIABLE_NONE, &var);
-      pic_variable_alloc_one(pf, PFILE_PROC_NONE, var);
-      variable_use_ct_set(var, 1);
-      variable_assign_ct_set(var, 1);
-      variable_release(var);
+    for (ii = 0; ii < COUNT(varinfo); ii++) {
+        unsigned pos;
+
+        var = pfile_variable_find(pf, PFILE_LOG_NONE, varinfo[ii].tag, 0);
+        if (var) {
+            pos = varinfo[ii].pos + index;
+            /* RJ: Never use the same base address as _pic_temp when
+                   _pic_temp is present. */
+            if (0 == ii) {
+                index = 1;
+            }
+            pic_state_pos[pos] = (pos) ? pic_state_pos[pos - 1] : 0;
+            variable_base_set(var, (variable_base_t)pic_state_pos[pos], 0);
+            variable_master_set(var, state_var);
+            pic_state_pos[pos] += variable_sz_get(var);
+            if (pic_state_pos[pos] > pic_state_sz) {
+                pic_state_sz = (variable_sz_t)pic_state_pos[pos];
+            } 
+            if ((isr_info.var_flags & varinfo[ii].flag)
+                && (pic_state_pos[pos] > pic_isr_state_sz)) {
+                pic_isr_state_sz = (variable_sz_t)pic_state_pos[pos];
+            }
+            variable_release(var);
+        }
     }
-  }
-  variable_release(state_var);
-  /* finally, allocate any other variables as necessary */
-  for (ii = 0; ii < COUNT(util_vars); ii++) {
-    var = pfile_variable_find(pf, PFILE_LOG_NONE, util_vars[ii], 0);
-    if (var) {
-      /* printf("Allocating...%s\n", variable_name_get(var)); */
-      pic_variable_alloc_one(pf, PFILE_PROC_NONE, var);
-      variable_use_ct_set(var, 1);
-      variable_assign_ct_set(var, 1);
-      variable_release(var);
+    /* state var exists and has a size, allocate pic_isr_state
+     * as necessary */
+    if (state_var && pic_state_sz) {
+        variable_def_t def;
+
+        def = variable_def_alloc(0, VARIABLE_DEF_TYPE_INTEGER,
+            VARIABLE_DEF_FLAG_NONE, pic_state_sz);
+        variable_def_set(state_var, def);
+        pic_variable_alloc_one(pf, PFILE_PROC_NONE,
+            state_var); /* allocate this space */
+        if (pic_isr_state_sz) {
+            def = variable_def_alloc(0, VARIABLE_DEF_TYPE_INTEGER,
+                VARIABLE_DEF_FLAG_VOLATILE, pic_isr_state_sz);
+            pfile_variable_alloc(pf, PFILE_VARIABLE_ALLOC_GLOBAL,
+                "_pic_isr_state", def, VARIABLE_NONE, &var);
+            pic_variable_alloc_one(pf, PFILE_PROC_NONE, var);
+            variable_use_ct_set(var, 1);
+            variable_assign_ct_set(var, 1);
+            variable_release(var);
+        }
     }
-  }
-  pfile_log(pf, PFILE_LOG_DEBUG, "isr(%04x, %u)", 
-    isr_info.var_flags, isr_info.temp_size);
+    variable_release(state_var);
+    /* finally, allocate any other variables as necessary */
+    for (ii = 0; ii < COUNT(util_vars); ii++) {
+        var = pfile_variable_find(pf, PFILE_LOG_NONE, util_vars[ii], 0);
+        if (var) {
+            /* printf("Allocating...%s\n", variable_name_get(var)); */
+            pic_variable_alloc_one(pf, PFILE_PROC_NONE, var);
+            variable_use_ct_set(var, 1);
+            variable_assign_ct_set(var, 1);
+            variable_release(var);
+        }
+    }
+    pfile_log(pf, PFILE_LOG_DEBUG, "isr(%04x, %u)",
+        isr_info.var_flags, isr_info.temp_size);
 }
+
 
 void pic_stvar_tblptr_mark(pfile_t *pf)
 {

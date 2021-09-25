@@ -113,10 +113,7 @@ static pic_code_gop_rc_t pic_code_pclath_analyze(pfile_t *pf, pic_code_t code,
         cpclath_state.action = pclath;
         pic_code_pclath_set(code, &cpclath_state);
 
-        /* RJ jalv25r4: This one removed here because of -Werror fallthrough. */
-        /* break; */
       }
-      /* RJ jalv25r4: Instead to prevent fallthrough the break statement must be here. */
       break;
 
     case PIC_CODE_GOP_WHICH_POST:

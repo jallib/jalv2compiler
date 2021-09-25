@@ -3533,15 +3533,7 @@ static void pic_code_mark_used(pfile_t *pf, pic_code_t code)
           }
           break;
       case PIC_OPCODE_GOTO:
-          /* RJ jalv25r4: Suppressing fallthrough message. */
-          /* Original code.
-          if (!code_is_cond && !pic_code_is_suspend(pf, code)) {
-          next = pic_code_label_find(pf, pic_code_brdst_get(code));
-          break;
-        } */
         /* a conditional goto will act like a call */
-
-        /* RJ jalv25r4: New code*/
           if (!code_is_cond && !pic_code_is_suspend(pf, code)) {
               next = pic_code_label_find(pf, pic_code_brdst_get(code));
           }
@@ -4446,6 +4438,7 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
          code = pic_code_next_get(code)) {
       pic_code_cmd_set(code, cmd);
     }
+    /* RJ: Here we generate all PIC commands (if I am right). */
     for (cmd_ptr = cmd; cmd_ptr; cmd_ptr = cmd_link_get(cmd_ptr)) {
       if (cmd_is_reachable(cmd_ptr)) {
         pic_cmd_out(pf, &cmd_ptr);
@@ -4459,7 +4452,7 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
       pic_variable_alloc(pf);
     }
   }
-  /* For debugging purposes it is sometimes handy to disable these optimizations.
+  /* RJ: For debugging purposes it is sometimes handy to disable these optimizations.
      If you remove pic_code_bsr_optimize() you get data errors, seen when compiling for PIC_14H. */
   pic_w_value_optimize(pf);
   pic_code_branch_optimize(pf); 
@@ -4471,6 +4464,7 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
   pic_code_databits_optimize(pf); 
   pic_code_databits_remove(pf); 
   pic_w_value_optimize1(pf);
+
   /* each time something is removed, we must again go through the branchbits
      optimization. otherwise the code could be larger than necessary.
      For example, say the code is 2K + 1 byte. The first branchbits_optimize

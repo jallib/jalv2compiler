@@ -1380,6 +1380,7 @@ static void pic_assign_from_value(pfile_t *pf, value_t dst, value_t src)
     pic_indirect_setup3(pf, dst, VALUE_NONE, VALUE_NONE, 0, &ipos);
     pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, value_base_get(src));
     pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, 0);
+
     if (value_sz_get(dst) > 1) {
       variable_sz_t ii;
 
@@ -1881,109 +1882,112 @@ static void pic_unary_fixup(pfile_t *pf, operator_t op,
  *      addwfc val2+n, w
  *      movwf  dst
  */
-static void pic_add_sub_16bit(pfile_t *pf, operator_t op, value_t dst,
-  value_t val1, value_t val2, variable_sz_t sz)
+static void pic_add_sub_16bit(pfile_t* pf, operator_t op, value_t dst,
+    value_t val1, value_t val2, variable_sz_t sz)
 {
-  pic_opdst_t   pop_dst;
-  pic_opcode_t  pop;      /* opcode for first byte      */
-  pic_opcode_t  pop_cont; /* opcode for remaining bytes */
-  variable_sz_t ii;
-  value_t       val1_sign;
-  value_t       val2_sign;
-  boolean_t     release_val;
-  boolean_t     result_is_signed;
-  value_t       tmp;
-  variable_sz_t ipos;
+    pic_opdst_t   pop_dst;
+    pic_opcode_t  pop;      /* opcode for first byte      */
+    pic_opcode_t  pop_cont; /* opcode for remaining bytes */
+    variable_sz_t ii;
+    value_t       val1_sign;
+    value_t       val2_sign;
+    boolean_t     release_val;
+    boolean_t     result_is_signed;
+    value_t       tmp;
+    variable_sz_t ipos;
 
-  /*
-   * This is called by both 16 bit and 14 bit hybrid. The
-   * former changes status<c> on increment decrement, so
-   * cannot work with indirect variables. The later doesn't
-   * have this restriction
-   */
-  if (pic_is_16bit(pf)) {
-    assert(!value_is_indirect(dst));
-    assert(!value_is_indirect(val1));
-    assert(!value_is_indirect(val2));
-  }
+    /*
+     * This is called by both 16 bit and 14 bit hybrid. The
+     * former changes status<c> on increment decrement, so
+     * cannot work with indirect variables. The later doesn't
+     * have this restriction
+     */
+    if (pic_is_16bit(pf)) {
+        assert(!value_is_indirect(dst));
+        assert(!value_is_indirect(val1));
+        assert(!value_is_indirect(val2));
+    }
 
-  result_is_signed = pic_result_is_signed(pf, val1, val2);
-  /* nb: we always want the const to be in val1! */
-  release_val = BOOLEAN_FALSE;
-  if ((OPERATOR_SUB == op) && value_is_const(val2)) {
-    /* var - const = (-const) + var */
-    val2 = pfile_constant_get(pf, -value_const_get(val2), VARIABLE_DEF_NONE);
-    release_val = BOOLEAN_TRUE;
-    op = OPERATOR_ADD;
-  }
-  if (value_is_const(val2)
-    || ((OPERATOR_ADD == op) && value_is_same(val1, dst))) {
-    tmp  = val1;
-    val1 = val2;
-    val2 = tmp;
-  }
-  assert(!value_is_const(val2));
-  pop_dst = (value_is_same(val2, dst)) ? PIC_OPDST_F : PIC_OPDST_W;
-  if (OPERATOR_ADD == op) {
-    pop      = PIC_OPCODE_ADDWF;
-    pop_cont = PIC_OPCODE_ADDWFc;
-  } else {
-    pop      = PIC_OPCODE_SUBFWB;
-    pop_cont = PIC_OPCODE_SUBFWB;
-  }
-  val1_sign = val1;
-  val2_sign = val2;
-  if (OPERATOR_SUB == op) {
-    pic_instr_append_reg_flag(pf, PIC_OPCODE_BSF, "_status", "_c");
-  }
-  pic_indirect_setup3(pf, dst, val1, val2, 0, &ipos);
-  for (ii = 0; ii < sz; ii++) {
-    pic_indirect_bump3(pf, dst, val1, val2, ii, &ipos);
-    if (ii == value_sz_get(val1) && !value_is_const(val1)) {
-      tmp = pic_var_temp_get(pf, VARIABLE_DEF_FLAG_NONE, 1);
-      val1_sign = pic_value_sign_get(pf, val1, tmp);
-      if (VALUE_NONE == val1_sign) {
-        /*val1_sign = pic_var_accum_get(pf);*/
-        val1_sign = tmp;
-        pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, 0);
-        pic_instr_append_f(pf, PIC_OPCODE_MOVWF, val1_sign, 0);
-      }
-    } else if (ii == value_sz_get(val2)) {
-      tmp = pic_var_temp_get(pf, VARIABLE_DEF_FLAG_NONE, 1);
-      val2_sign = pic_value_sign_get(pf, val2, tmp);
-      if (VALUE_NONE == val2_sign) {
-        /*val2_sign = pic_var_accum_get(pf);*/
-        val2_sign = tmp;
-        pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, 0);
-        pic_instr_append_f(pf, PIC_OPCODE_MOVWF, val2_sign, 0);
-      }
+    result_is_signed = pic_result_is_signed(pf, val1, val2);
+    /* nb: we always want the const to be in val1! */
+    release_val = BOOLEAN_FALSE;
+    if ((OPERATOR_SUB == op) && value_is_const(val2)) {
+        /* var - const = (-const) + var */
+        val2 = pfile_constant_get(pf, -value_const_get(val2), VARIABLE_DEF_NONE);
+        release_val = BOOLEAN_TRUE;
+        op = OPERATOR_ADD;
     }
-    if (value_is_const(val1)) {
-      pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, 
-        pic_value_const_byte_get(val1, ii));
-    } else {
-      pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, val1_sign, 
-        (val1_sign == val1) ? ii : 0, PIC_OPDST_W);
+    if (value_is_const(val2)
+        || ((OPERATOR_ADD == op) && value_is_same(val1, dst))) {
+        tmp = val1;
+        val1 = val2;
+        val2 = tmp;
     }
-    pic_instr_append_f_d(pf, pop, val2_sign,
-      (val2_sign == val2) ? ii : 0, pop_dst);
-    if (PIC_OPDST_W == pop_dst) {
-      pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
+    assert(!value_is_const(val2));
+    pop_dst = (value_is_same(val2, dst)) ? PIC_OPDST_F : PIC_OPDST_W;
+    if (OPERATOR_ADD == op) {
+        pop = PIC_OPCODE_ADDWF;
+        pop_cont = PIC_OPCODE_ADDWFc;
     }
-    pop = pop_cont;
-  }
-  if (val1_sign && (val1_sign != val1)) {
-    /* pic_var_accum_release(pf, val1_sign); */
-    pic_var_temp_release(pf, val1_sign);
-  }
-  if (val2_sign && (val2_sign != val2)) {
-    /*pic_var_accum_release(pf, val2_sign);*/
-    pic_var_temp_release(pf, val2_sign);
-  }
-  if (release_val) {
-    value_release(val1);
-  }
-  pic_value_sign_extend(pf, dst, ii - 1, result_is_signed);
+    else {
+        pop = PIC_OPCODE_SUBFWB;
+        pop_cont = PIC_OPCODE_SUBFWB;
+    }
+    val1_sign = val1;
+    val2_sign = val2;
+    if (OPERATOR_SUB == op) {
+        pic_instr_append_reg_flag(pf, PIC_OPCODE_BSF, "_status", "_c");
+    }
+    pic_indirect_setup3(pf, dst, val1, val2, 0, &ipos);
+    for (ii = 0; ii < sz; ii++) {
+        pic_indirect_bump3(pf, dst, val1, val2, ii, &ipos);
+        if (ii == value_sz_get(val1) && !value_is_const(val1)) {
+            tmp = pic_var_temp_get(pf, VARIABLE_DEF_FLAG_NONE, 1);
+            val1_sign = pic_value_sign_get(pf, val1, tmp);
+            if (VALUE_NONE == val1_sign) {
+                /* val1_sign = pic_var_accum_get(pf); */
+                val1_sign = tmp;
+                pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, 0);
+                pic_instr_append_f(pf, PIC_OPCODE_MOVWF, val1_sign, 0);
+            }
+        }
+        else if (ii == value_sz_get(val2)) {
+            tmp = pic_var_temp_get(pf, VARIABLE_DEF_FLAG_NONE, 1);
+            val2_sign = pic_value_sign_get(pf, val2, tmp);
+            if (VALUE_NONE == val2_sign) {
+                /*val2_sign = pic_var_accum_get(pf);*/
+                val2_sign = tmp;
+                pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, 0);
+                pic_instr_append_f(pf, PIC_OPCODE_MOVWF, val2_sign, 0);
+            }
+        }
+        if (value_is_const(val1)) {
+            pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW,
+                pic_value_const_byte_get(val1, ii));
+        }
+        else {
+            pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, val1_sign,
+                (val1_sign == val1) ? ii : 0, PIC_OPDST_W);
+        }
+        pic_instr_append_f_d(pf, pop, val2_sign,
+            (val2_sign == val2) ? ii : 0, pop_dst);
+        if (PIC_OPDST_W == pop_dst) {
+            pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
+        }
+        pop = pop_cont;
+    }
+    if (val1_sign && (val1_sign != val1)) {
+        /* pic_var_accum_release(pf, val1_sign); */
+        pic_var_temp_release(pf, val1_sign);
+    }
+    if (val2_sign && (val2_sign != val2)) {
+        /*pic_var_accum_release(pf, val2_sign);*/
+        pic_var_temp_release(pf, val2_sign);
+    }
+    if (release_val) {
+        value_release(val1);
+    }
+    pic_value_sign_extend(pf, dst, ii - 1, result_is_signed);
 }
 
 /* the simplest of all cases */

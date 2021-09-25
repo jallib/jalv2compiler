@@ -480,7 +480,7 @@ result_t cmd_op_reduction(cmd_t cmd, value_t value_zero, value_t value_one)
       case OPERATOR_EQ:
       case OPERATOR_NE:
         if (value_is_const(val2)) {
-          if (0 == value_const_get(val2)) {
+           if (0 == value_const_get(val2)) {
             /* x == 0, or x != 0 */
             val2 = VALUE_NONE;
             op = (OPERATOR_EQ == op)

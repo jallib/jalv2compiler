@@ -2,7 +2,9 @@
  **
  ** pic_wopt.c : W value optimization definitions
  **
- ** Copyright (c) 2006, Kyle A. York
+ ** Copyright (c) 2006..2006, Kyle A. York
+ **               2021..2021, Rob Jansen
+ **
  ** All rights reserved
  **
  ************************************************************/
@@ -150,6 +152,7 @@ static boolean_t pic_code_z_changed(pic_opcode_t op)
  *     movwf x
  *     movf  x,w
  *     btfss _status, _z
+ * 
  *   will be broken if the movwf/movf set is removed. To avoid
  *   this, determine if _status:_z is used before it is changed
  *   by another code. If so, change the movwf/movf to iorlw 0
@@ -167,7 +170,7 @@ static boolean_t pic_code_z_used(pfile_t *pf, pic_code_t code)
 
   if (!pic_code_z_changed(pic_code_op_get(code))) {
     if ((PIC_OPCODE_BTFSS == pic_code_op_get(code))
-      || (PIC_OPCODE_BTFSC == pic_code_op_get(code))) {
+       || (PIC_OPCODE_BTFSC == pic_code_op_get(code))) {
       if (value_is_same(pic_code_value_get(code), status)
           && (value_const_get(status_z) 
             == value_const_get(pic_code_literal_get(code)))) {
@@ -534,7 +537,7 @@ void pic_w_value_optimize1(pfile_t *pf)
       && (pic_code_ofs_get(code_pv) == pic_code_ofs_get(code))
       && value_is_same(pic_code_value_get(code), 
         pic_code_value_get(code_pv))) {
-      pic_code_t next;
+      pic_code_t next, next_next;
 
       for (next = pic_code_next_get(code);
             ((pic_code_op_get(next) == PIC_OPCODE_BRANCHLO_SET)
@@ -546,12 +549,66 @@ void pic_w_value_optimize1(pfile_t *pf)
           || (pic_code_op_get(next) == PIC_OPCODE_MOVLP));
           next = pic_code_next_get(next))
         ; /* null body */
-      if (!pic_code_z_used(pf, next)) {
+
+      /* RJ jalv25r5: Also look one instruction further to solve issue#24. 
+             It may be that a bit is set or cleared before an
+             actual bit test and skip instruction is executed. */
+      for (next_next = pic_code_next_get(next);
+                ((pic_code_op_get(next_next) == PIC_OPCODE_BRANCHLO_SET)
+              || (pic_code_op_get(next_next) == PIC_OPCODE_BRANCHLO_CLR)
+              || (pic_code_op_get(next_next) == PIC_OPCODE_BRANCHLO_NOP)
+              || (pic_code_op_get(next_next) == PIC_OPCODE_BRANCHHI_SET)
+              || (pic_code_op_get(next_next) == PIC_OPCODE_BRANCHHI_CLR)
+              || (pic_code_op_get(next_next) == PIC_OPCODE_BRANCHHI_NOP));
+          next_next = pic_code_next_get(next_next))
+          ; /* null body */
+
+      /* It the z flag is not used by the next instruction and the instruction
+         after that then we can safely remove the movf instruction. */
+      if (!pic_code_z_used(pf, next) && 
+          !pic_code_z_used(pf, next_next)) {
         /* make sure the next operation doesn't rely on <status:z> */
         pic_code_list_remove(pf, code);
         code = code_pv;
       }
     }
   }
+}
+
+void pic_w_value_optimize1_org(pfile_t* pf)
+{
+    pic_code_t code;
+    pic_code_t code_pv;
+
+    for (code_pv = PIC_CODE_NONE, code = pic_code_list_head_get(pf);
+        code;
+        code_pv = code, code = pic_code_next_get(code)) {
+        if (!pic_code_flag_test(code, PIC_CODE_FLAG_NO_OPTIMIZE)
+            && !pic_code_flag_test(code_pv, PIC_CODE_FLAG_NO_OPTIMIZE)
+            && (PIC_OPCODE_MOVWF == pic_code_op_get(code_pv))
+            && (PIC_OPCODE_MOVF == pic_code_op_get(code))
+            && (PIC_OPDST_W == pic_code_dst_get(code))
+            && (pic_code_ofs_get(code_pv) == pic_code_ofs_get(code))
+            && value_is_same(pic_code_value_get(code),
+                pic_code_value_get(code_pv))) {
+            pic_code_t next;
+
+            for (next = pic_code_next_get(code);
+                ((pic_code_op_get(next) == PIC_OPCODE_BRANCHLO_SET)
+                    || (pic_code_op_get(next) == PIC_OPCODE_BRANCHLO_CLR)
+                    || (pic_code_op_get(next) == PIC_OPCODE_BRANCHLO_NOP)
+                    || (pic_code_op_get(next) == PIC_OPCODE_BRANCHHI_SET)
+                    || (pic_code_op_get(next) == PIC_OPCODE_BRANCHHI_CLR)
+                    || (pic_code_op_get(next) == PIC_OPCODE_BRANCHHI_NOP)
+                    || (pic_code_op_get(next) == PIC_OPCODE_MOVLP));
+                next = pic_code_next_get(next))
+                ; /* null body */
+            if (!pic_code_z_used(pf, next)) {
+                /* make sure the next operation doesn't rely on <status:z> */
+                pic_code_list_remove(pf, code);
+                code = code_pv;
+            }
+        }
+    }
 }
 

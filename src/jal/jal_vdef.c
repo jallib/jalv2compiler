@@ -4,6 +4,7 @@
  **
  ** Copyright (c) 2004-2005, Kyle A. York
  **               2021-2021, Rob Jansen
+ **
  ** All rights reserved
  **
  ***********************************************************/
@@ -1119,7 +1120,7 @@ void jal_parse_var_common(pfile_t *pf,
               value_const_set(dval, value_const_get(sval));
             } else if (value_is_array(sval) && (1 == value_sz_get(sval)) && value_is_number(dval)) {
                 /* If the source is a single character (array) element then this is still a valid
-                   number. Allowing this fixes issue #20 in jalv25r5. */
+                   number. Allowing this fixes issue#20 in jalv25r5. */
                 value_const_set(dval, value_const_get(sval));
             } else {
               pfile_log(pf, PFILE_LOG_ERR, "type mismatch");

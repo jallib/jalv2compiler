@@ -4,6 +4,7 @@
  **
  ** Copyright (c) 2004-2005, Kyle A. York
  **               2020-2020, Rob Jansen
+ **
  ** All rights reserved
  **
  ************************************************************/
@@ -1581,11 +1582,6 @@ static void pic_float_multiply_create(pfile_t *pf)
     } else {
       strcpy(mul_name, PIC_LABEL_MULTIPLY);
     }
-    /* RJ jalv25r4: Fixing issue#16, original code.
-    lbl = pic_label_find(pf, mul_name, BOOLEAN_TRUE);
-    pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
-    */
-    /* RJ jalv25r4: New code for fixing issue #16. */
     lbl = pic_label_find(pf, mul_name, BOOLEAN_FALSE);
     if (lbl == LABEL_NONE) {
         lbl = pic_label_find(pf, mul_name, BOOLEAN_TRUE);
