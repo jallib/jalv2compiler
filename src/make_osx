@@ -1,0 +1,5 @@
+#!/bin/bash
+# Make JAL Compiler for MacOS
+env ARCH=osx make clean
+env ARCH=osx make project jal
+

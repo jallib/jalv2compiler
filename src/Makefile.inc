@@ -1,6 +1,8 @@
 #
 # JALv2 Makefile
-# Copyright (c) 2008, Kyle A. York; 2018, Rob Jansen
+# Copyright (c) 2008, Kyle A. York
+#               2018..2021, Rob Jansen
+#
 # All rights reserved
 #
 # Usage:
@@ -17,18 +19,28 @@ default: project
 #PROFILE=-pg
 DEBUG=-g
 
+# Compiler flags different for Window and macOS. Kept makefile as much in line as the original and added MacOS.
+# Since MacOS also has a x86-64 architecture version we use osx.
 ifeq ($(ARCH),x86-64)
-  MARCH = -m64
+   # 64-bit Windows and Linux
+   MARCH = -m64
+   CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+   LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm -fPIC
 else ifeq ($(ARCH),i686)
-  MARCH = -m32
+   MARCH = -m32
+   # 32-bit Windows and Linux
+   CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+   LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm -fPIC
+else ifeq ($(ARCH),osx)
+   #Darwin (MacOS), 64-bit
+   CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -arch x86_64 $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+   LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) -arch x86_64 -lm -fPIC
 else
-  ARCH = native
-endif
-
-#Note: -Werror flag temporary disabled. No impact on operation of compiler.
-CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
-#CFLAGS=-O2 -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -Wcast-align -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
-LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm -fPIC
+   # Native
+   ARCH = native
+   CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual  -march=$(ARCH) $(MARCH) $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
+   LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm -fPIC
+endif 
 
 OBJ_DIR=.obj-$(ARCH)
 

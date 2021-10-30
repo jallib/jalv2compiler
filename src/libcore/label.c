@@ -3,10 +3,14 @@
  ** label.c : manipulators for label_t
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **               2020-2020, Rob Jansen
+ **               2020-2021, Rob Jansen
+ **
  ** All rights reserved
  **
  ***********************************************************/
+/* RJ jalv25r6 for uintptr_t */
+#include <stdint.h>
+
 #include "label.h"
 #include "labelmap.h"
 
@@ -184,10 +188,9 @@ void label_list_reset(lbllist_t *lst)
     lbl = lst->head;
     if (label_refct_get(lbl) > 1) {
       fprintf(stderr, "label leak: 0x%lx %s\n", 
-         /* RJ: This should be (uintptr_t) lbl for 64-bit machines but results in 
-            other -Werrors about formatting 0x%llx or 0x%llu.*/
-         (ulong) lbl, label_name_get(lbl));
-    }
+      /* RJ jalv25r6 org code removed to prevent -Werror: (ulong) lbl, label_name_get(lbl)); */
+      (ulong)(uintptr_t) lbl, label_name_get(lbl));
+      }
     lst->head = label_link_get(lbl);
     if (!lst->head) {
       lst->tail = lst->head;

@@ -788,7 +788,7 @@ boolean_t pfile_cmd_remove_unreachable(pfile_t *pf)
       ct++;
       was_last_eos = BOOLEAN_TRUE;
     } else if (CMD_TYPE_LABEL != cmd_type_get(cmd)) {
-      was_last_eos = CMD_TYPE_STATEMENT_END == cmd_type_get(cmd);
+      was_last_eos = (CMD_TYPE_STATEMENT_END == cmd_type_get(cmd));
     }
     cmd_pv = cmd;
     cmd = cmd_link_get(cmd);

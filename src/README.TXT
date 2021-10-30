@@ -43,8 +43,21 @@ Standard you can make the project with 'make project jal'. This will make the na
 version of the JAL compiler (jalv2-native), depending on your OS.
 
 There are two Linux scripts used for making the two version of the JAL Linux compiler:
-1) 'bash make_32' will create the 32-bit version of the Linux compiler called jalv2-i686
-2) 'bash make_64' will create the 64-bit version of the Linux compiler called jalv2-x86-64
+1) 'bash make_32' or './make_32' in the src directory will create the 32-bit version of the 
+    Linux compiler called jalv2-i686
+2) 'bash make_64' or './make_64' in the scr directory will create the 64-bit version of the 
+    Linux compiler called jalv2-x86-64
+
+Building the JALV2 compiler for MacOS
+=====================================
+For this the available cc compiler in XCode was used. MacOS Big Sur 64-bit was running from a Virtual Box.
+
+Standard you can make the project with 'make project jal'. This will make the native
+version of the JAL compiler (jalv2-native), depending on your OS.
+
+There is a Linux script used for making the JAL MacOS compiler:
+-) 'bash make_osx' or ./make_osx' in the src directory will create the 64-bit version of the 
+    MacOS Linux compiler called jalv2-osx
 
 Other info
 ==========
@@ -53,14 +66,10 @@ contains the JAL compiler version and when it has been built. Under Windows it s
 Windows compiler. An alternative way to deal with this is to first compile the Linux version, copy the newly created 
 'jal_build.h' file to the 'src' directory and then compile the Windows version.
 
-Due to some makefile problems after jalv24q6 was taken over, the original Makefile.inc has been adapted as follows:
-*) The -Werror has been commented out because of compile errors
-The generated compile errors do not seem to have a negative effect on the operation of the compiler.
+Since compiler version jalv25r6 all -Werrors where resolved for all compiler versions.
 
-During compiling some warning are given but thes can be ignored (although it would be cleaner to fix them).
+All created compiler versions (Windows,  Linux and MacOS) should be stored in the 'bin' directory.
 
-All created compiler versions (Windows and Linux) should be stored in the 'bin' directory.
-
-2019-09-15
+2021-10-28
 Rob Jansen
 

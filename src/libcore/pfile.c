@@ -3,10 +3,13 @@
  ** pfile.c : p-code file definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **               2020-2020, Rob Jansen
+ **               2020-2021, Rob Jansen
+ **
  ** All rights reserved
  **
  ************************************************************/
+/* RJ jalv25r6 for uintptr_t */
+#include <stdint.h>
 
 #include <stdarg.h>
 #include <string.h>
@@ -221,10 +224,11 @@ void pfile_close(pfile_t *pf)
     pf->tag_list = tag_link_get(tag);
 
     if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
-      if (tag_ref_ct_get(tag) != 1) {
+        if (tag_ref_ct_get(tag) != 1) {
             fprintf(stderr, "!!! tag 0x%lx: %s(%u) ct = %u\n",
-             (ulong) tag, tag_name_get(tag),
-             tag_n_get(tag), tag_ref_ct_get(tag));
+            /* RJ jalv25r6 org code removed to prevent -Werror: (ulong)tag, tag_name_get(tag), */
+            (ulong)(uintptr_t) tag, tag_name_get(tag),
+            tag_n_get(tag), tag_ref_ct_get(tag));
       }
     }
     tag_release(tag);
@@ -3201,9 +3205,8 @@ static void pfile_label_list_dump(pfile_t *pf, lbllist_t *lst, const char *name)
        lbl;
        lbl = label_next_get(lbl)) {
     pfile_write(pf, pfile_write_lst, ";%lx:%s(use=%u:ref=%u:pc=%04x)", 
-        /* RJ: This should be (uintptr_t) lbl for 64-bit machines but results in other -Werror messages*/
-        (ulong) lbl,
-        label_name_get(lbl), label_usage_get(lbl),
+        /* RJ jalv25r6 org code removed to prevent -Werror: (ulong) lbl, */
+        (ulong)(uintptr_t) lbl,
         label_ref_ct_get(lbl), label_pc_get(lbl));
     pfile_write(pf, pfile_write_lst, "\n");
   }

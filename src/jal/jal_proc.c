@@ -3,6 +3,8 @@
  ** jal_proc.c : JAL proc parsing
  **
  ** Copyright (c) 2005, Kyle A. York
+ **               2021..2021, Rob Jansen
+ **
  ** All rights reserved
  **
  ***********************************************************/
@@ -148,7 +150,7 @@ void jal_parse_procedure_common(pfile_t *pf, jal_parse_proc_type type,
       } else {
         char *ptr;
         /* no variable, look for a corresponding _get or _put */
-
+		/* RJ Put breakpoint here to see the name of the procedure for debugging. */
         ptr = proc_name_ptr + strlen(proc_name_ptr);
         strcpy(ptr, (JAL_PARSE_PROCEDURE == type) ? "_get" : "_put");
         proc_name_ptr[-1] = '_';
@@ -1129,7 +1131,8 @@ value_t jal_parse_call(pfile_t *pf, value_t call_val, flag_t flags)
                   ct_val = pfile_value_find(pf, PFILE_LOG_NONE, ct_name);
                   if (!ct_val) {
                     ct_val = pfile_constant_get(pf, value_ct_get(val),
-                      VARIABLE_DEF_TYPE_NONE);
+ /* RJ jalv25r6                     VARIABLE_DEF_TYPE_NONE); */
+                      VARIABLE_DEF_NONE);
                   }
                   parms[ii - 1] = ct_val;
                   FREE(ct_name);

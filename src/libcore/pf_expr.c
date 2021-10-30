@@ -734,8 +734,9 @@ static void pfile_cmd_op_add_binary(pfile_t *pf, operator_t op,
 
     dst = *pdst;
     if ((!value_is_number(val1) || !value_is_number(val2))
-      && ((OPERATOR_EQ != op) || (OPERATOR_NE != op))) {
-      pfile_log(pf, PFILE_LOG_ERR, "invalid operation");
+/* RJ Jalv25r6  && ((OPERATOR_EQ != op) || (OPERATOR_NE != op))) { */
+        && ((OPERATOR_EQ != op) && (OPERATOR_NE != op))) {
+        pfile_log(pf, PFILE_LOG_ERR, "invalid operation");
     } else {
       variable_def_t rdef; /* result */
       cmd_t          cmd;
