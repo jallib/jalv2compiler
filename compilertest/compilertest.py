@@ -33,7 +33,7 @@ import subprocess
 import shutil
 import platform
 
-scriptversion   = "0.2"
+scriptversion   = "0.3"
 scriptauthor    = "Rob Jansen"
 
 platform_name = platform.system()
@@ -48,6 +48,11 @@ elif (platform_name == "Windows"):
     devdir = os.path.join("C:\\", "Jallib", "lib")
     cmpdir = os.path.join(base, "Compiler_Windows")
     baseline_compiler = "Baseline.exe"
+elif (platform_name == "Darwin"):
+    base = os.path.join("/", "Users", "rob", "Documents", "Compilertest")
+    devdir = os.path.join("/", "Users", "rob", "Documents", "Jallib", "lib")
+    cmpdir = os.path.join(base, "Compiler_Mac")
+    baseline_compiler = "Baseline"
 else:
     sys.write.stderr("Please add proper environment settings for this platform\n")
 
