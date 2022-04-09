@@ -249,8 +249,7 @@
 
     <p><sup>5</sup>Keep in mind that multiplication and division, even between
     integer types are very expensive operations in both code size and data
-    size (see Chapter: <xref format="html" href="built_in_functions.dita"
-    scope="local">Built-in Functions</xref>).</p>
+    size (see Chapter: Built-in Functions).</p>
 
     <p><sup>6</sup>The result of WHEREIS depends upon the identifier used:</p>
 
