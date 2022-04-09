@@ -81,7 +81,7 @@
     <p>AT <i>cexpr</i> [ ':' bit ]</p>
 
     <lq>Places the new variable at location <i>cexpr</i>. If it is a BIT
-    variable, [ ':' <i>bit </i>] defines the bit offset with the location. Any
+    variable, [ ':' <i>bit</i>] defines the bit offset with the location. Any
     location uses for explicit placement will not be allocated to another
     variable.</lq>
 
@@ -111,10 +111,10 @@
 
     <p>AT '{' <i>cexpr</i>1[',' <i>cexpr</i>2...] '}'</p>
 
-    <div>Places the new variable at multiple locations. On the PIC, many of
-    the special purpose registers are mirrored in two or more data banks.
-    Telling the compiler which locations hold the variable allows it to
-    optimize the data access bits.</div>
+    <lq>Places the new variable at multiple locations. On the PIC, many of the
+    special purpose registers are mirrored in two or more data banks. Telling
+    the compiler which locations hold the variable allows it to optimize the
+    data access bits.</lq>
 
     <p>IS <i>var</i></p>
 
