@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e26" xml:lang="en-US">
+  <title>[no-]asm</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -asm name
+          -no-asm</codeblock>
+
+    <p>Set the name of the generated assembly file to `name'. The default is
+    the program name with `.jal' replaced by `.asm', or `.asm' appended if the
+    program name doesn't end in `.jal'.</p>
+
+    <p>If '-no-asm' is specified, no '.asm' file will be generated.</p>
+
+    <p>The assembly file can be compiled by the MPASM and hopefully generate
+    the same HEX file as JALv2.</p>
+  </body>
+</topic>

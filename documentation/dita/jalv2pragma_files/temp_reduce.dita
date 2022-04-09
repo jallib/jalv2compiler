@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e467" xml:lang="en-US">
+  <title>TEMP_REDUCE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA OPT TEMP_REDUCE { YES | NO | }</codeblock>
+
+    <p>YES -- Perform temporary variable reduction</p>
+
+    <p>* NO -- Do not perform temporary variable reduction</p>
+
+    <p>Temporary reduction effects complex instructions. For example, without
+    temporary reduction the expression:</p>
+
+    <codeblock>          a = b + c * d + e</codeblock>
+
+    <p>will use three temporary variables. With reduction, it will only use
+    one.</p>
+  </body>
+</topic>

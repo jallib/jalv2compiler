@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e451" xml:lang="en-US">
+  <title>LOAD_REDUCE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA OPT LOAD_REDUCE { YES | NO | }</codeblock>
+
+    <p>YES -- Perform load reduction</p>
+
+    <p>* NO -- Do not perform load reduction</p>
+
+    <p>Load reduction tracks the value in W and attempts to remove any load
+    into W of a value it already holds.</p>
+
+    <p>nb: this is still considered experimental!</p>
+  </body>
+</topic>

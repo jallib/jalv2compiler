@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e882" xml:lang="en-US">
+  <title>PCODE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA DEBUG PCODE { YES | NO | }</codeblock>
+
+    <p>YES -- show the pcode in the asm file</p>
+
+    <p>* NO -- don't show the pcode in the asm file</p>
+  </body>
+</topic>

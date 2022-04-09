@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e212" xml:lang="en-US">
+  <title>EEDATA</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA EEDATA expr;[','expr;1...]</codeblock>
+
+    <p>Places data into the EEPROM (defined with PRAGMA EEPROM..). The first
+    time this statement is executed, the data are placed into location 0 of
+    the EEPROM. Each time after the data are placed in consecutive
+    locations.</p>
+  </body>
+</topic>

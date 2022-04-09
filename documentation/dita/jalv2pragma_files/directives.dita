@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e561" xml:lang="en-US">
+  <title>DIRECTIVES</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA WARN DIRECTIVES { YES | NO | }</codeblock>
+
+    <p>YES -- enable directive warnings</p>
+
+    <p>* NO -- disable directive warnings</p>
+
+    <p>The JAL language has a peculiar feature : the construct:</p>
+
+    <codeblock>          IF <i>cexpr</i> THEN ... END IF</codeblock>
+
+    <p>is actually a compiler directive. If <i>cexpr </i>evaluates to 0, the
+    compiler stops translating the code until it reaches the corresponding END
+    IF. This warning will simply shows where this construct is used.</p>
+  </body>
+</topic>

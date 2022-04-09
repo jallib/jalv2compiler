@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e376" xml:lang="en-US">
+  <title>KEEP</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA KEEP { BANK | PAGE } [ "," { BANK | PAGE } ... ]</codeblock>
+
+    <p>This guarantees the page and/or bank select bit manipulations will not
+    be removed. Normally, they are removed if analysis shows them to be
+    unnecessary. This is only useful to guarantee certain timings. This
+    effects the entire procedure or function in which it is declared (not just
+    from point of declaration).</p>
+  </body>
+</topic>

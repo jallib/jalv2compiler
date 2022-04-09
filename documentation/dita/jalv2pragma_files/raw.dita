@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e359" xml:lang="en-US">
+  <title>RAW</title>
+
+  <body>
+    <p>*None* of the normal pre-amble or cleanup code is generated. The user
+    is entirely responsible for the interrupt. The code is guaranteed to be
+    placed at the interrupt vector.</p>
+
+    <p>nb: this feature isn't yet available</p>
+  </body>
+</topic>

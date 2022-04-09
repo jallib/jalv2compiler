@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e825" xml:lang="en-US">
+  <title>TARGET PAGE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA TARGET PAGE <i>cexpr</i></codeblock>
+
+    <p>Analgous to:</p>
+
+    <codeblock>          CONST target_page_size = <i>cexpr</i></codeblock>
+
+    <p>Set the target's code page size. The default is 2048 words. This is not
+    used in the 16 bit cores.</p>
+  </body>
+</topic>

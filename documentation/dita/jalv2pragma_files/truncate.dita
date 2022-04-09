@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e626" xml:lang="en-US">
+  <title>TRUNCATE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA WARN TRUNCATE { YES | NO | }</codeblock>
+
+    <p>* YES -- enable the truncation warning</p>
+
+    <p>NO -- disable the truncation warning</p>
+
+    <p>Truncation can occur when a larger sized value is assigned to smaller
+    one.</p>
+  </body>
+</topic>

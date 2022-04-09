@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e130" xml:lang="en-US">
+  <title>clear</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]clear</codeblock>
+
+    <p>Clear data area on program entry. This does not clear user placed or
+    variables, or variables marked VOLATILE.</p>
+  </body>
+</topic>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e246" xml:lang="en-US">
+  <title>TASK</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA TASK <i>cexpr</i></codeblock>
+
+    <p>Set the maximum concurrent task count to <i>cexpr</i>. It is generally
+    better to set this in your program, instead of doing so with the compiler
+    option ("-tasks") as it is unlikely to change.</p>
+
+    <p>nb: When multiple tasks are used, the main task requires one task
+    slot.</p>
+  </body>
+</topic>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e313" xml:lang="en-US">
+  <title>FRAME</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA FRAME</codeblock>
+
+    <p>Used within a function or procedure, declares that all variables in the
+    function or procedure will be allocated into a single `frame'. This
+    guarantees that all local variables will be allocated in the same data
+    bank, so bank switching to access variables will be minimized. This can
+    also result in `out of data space' errors due to memory fragmentation when
+    plenty of space is otherwise available.</p>
+
+    <p>Normally variables are allocated at the lowest address into which they
+    will fit. This makes much better use of the memory, but can cause
+    variables in the same function to be allocated in separate banks which
+    results in bank switching overhead.</p>
+
+    <p>nb: Any re-entrant function, and any function called through a function
+    pointer (aka, pseudo-variable function) will allocate per-frame regardless
+    of this setting.</p>
+  </body>
+</topic>

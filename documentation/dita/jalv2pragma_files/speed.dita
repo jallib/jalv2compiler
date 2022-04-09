@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e298" xml:lang="en-US">
+  <title>SPEED</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA SPEED</codeblock>
+
+    <p>Anything physically following this pragma will be optimized for speed.
+    Currently this only affects the generation of the shift operators -- loops
+    will be unrolled for SPEED, but used for SIZE. In the future this could
+    affect other loop unrolling.</p>
+  </body>
+</topic>

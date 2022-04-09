@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e119" xml:lang="en-US">
+  <title>2.1. BOOTLOADER</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA BOOTLOADER { BLOADER | LONG_START | LOADER18 [ <i>cexpr</i> ] |
+                              RICKPIC }</codeblock>
+
+    <p>Set the user code preamble as follows:</p>
+  </body>
+</topic>

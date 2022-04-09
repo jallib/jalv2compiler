@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e181" xml:lang="en-US">
+  <title>3.1. bloader</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -bloader</codeblock>
+
+    <p>Using the screamer/bloader PIC loader. See "PRAGMA BOOTLOADER
+    BLOADER".</p>
+  </body>
+</topic>

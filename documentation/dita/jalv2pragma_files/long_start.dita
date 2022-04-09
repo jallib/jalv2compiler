@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e165" xml:lang="en-US">
+  <title>LONG_START</title>
+
+  <body>
+    <p>Pre-amble:</p>
+
+    <codeblock>          ORG 0x0000
+          BSF/BCF _pclath, 4
+          BSF/BCF _pclath, 3
+          GOTO _pic_pre_user
+          NOP</codeblock>
+  </body>
+</topic>

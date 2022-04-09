@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e516" xml:lang="en-US">
+  <title>Warning</title>
+
+  <body>
+    <p>Warning pragmas are in effect until changed (they can be turned on and
+    off at will).</p>
+  </body>
+</topic>

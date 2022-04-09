@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e510" xml:lang="en-US">
+  <title>variable reuse</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]variable-reuse</codeblock>
+
+    <p>enable/disable reusing variable space</p>
+
+    <p>Default: enabled</p>
+
+    <p>Purpose: If two variables, say X and Y, are never, `live,' at the same
+    time they can share the same data location. This leads to far more
+    efficient use of the data area, but currently can lead to extreme compile
+    times (on the order of hours).</p>
+  </body>
+</topic>

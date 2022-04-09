@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e18" xml:lang="en-US">
+  <title>Introduction</title>
+
+  <body>
+    <p>There are many extra things the compiler either needs to know to do its
+    job, or modify its behavior to suit a particular need. This information is
+    passed to the compiler with something called a PRAGMA. This file describes
+    every PRAGMA the compiler understands for JAL compiler version jalv25r4 or
+    higher.</p>
+
+    <p>See the JALv2 documentation for definitions and conventions. Any time
+    multiple options are allowed, the default option is preceded with a '*'.
+    An {empty} option is interpreted as the default option.</p>
+  </body>
+</topic>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e30" xml:lang="en-US">
+  <title>Target CHIP</title>
+
+  <body>
+    <p>Syntax:</p>
+
+    <codeblock>          PRAGMA TARGET CHIP chipname</codeblock>
+
+    <p>Analogous to:</p>
+
+    <codeblock>          CONST target_chip = <i>cexpr</i></codeblock>
+
+    <p>The compiler will look for a constant named `PIC_chipname' and assign
+    it to target_chip. This might be used by some libraries to modify their
+    behavior based on the chip in use. The compiler itself does not use this
+    information.</p>
+  </body>
+</topic>

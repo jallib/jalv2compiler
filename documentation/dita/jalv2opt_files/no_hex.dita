@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e62" xml:lang="en-US">
+  <title>[no-]hex</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -hex name
+          -no-hex</codeblock>
+
+    <p>Set the name of the generated HEX file to `name'. The default is the
+    program name with `.jal' replaced by `.hex', or `.hex' appended if the
+    program name doesn't end in `.jal'.</p>
+
+    <p>If '-no-hex' is used, no HEX file will be generated.</p>
+
+    <p>The HEX file is used by PIC programmers and bootloaders to load the
+    program onto the microcontroller.</p>
+  </body>
+</topic>

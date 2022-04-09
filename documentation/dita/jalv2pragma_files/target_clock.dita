@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e47" xml:lang="en-US">
+  <title>TARGET CLOCK</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA TARGET CLOCK <i>cexpr</i></codeblock>
+
+    <p>Analogous to:</p>
+
+    <codeblock>          CONST target_clock = <i>cexpr</i></codeblock>
+
+    <p>Set the target clock rate to <i>cexpr</i> in Hz. The compiler only
+    needs this if the _usec_delay statement is used.</p>
+  </body>
+</topic>

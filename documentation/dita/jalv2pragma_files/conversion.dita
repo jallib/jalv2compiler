@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e547" xml:lang="en-US">
+  <title>CONVERSION</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA WARN CONVERSION { YES | NO | }</codeblock>
+
+    <p>* YES -- enable conversion warnings</p>
+
+    <p>NO -- disable conversion warnings</p>
+
+    <p>Conversion warnings occur when assigning unsigned to signed, or signed
+    to unsigned.</p>
+  </body>
+</topic>

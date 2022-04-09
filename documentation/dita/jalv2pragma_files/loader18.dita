@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e143" xml:lang="en-US">
+  <title>LOADER18 [ <i>cexpr</i> ]</title>
+
+  <body>
+    <p>Pre-amble:</p>
+
+    <codeblock>          ORG <i>cexpr</i> -- (or 0x0800 if <i>cexpr</i> is not present)</codeblock>
+
+    <p>The interrupt vector, if used, is put at <i>cexpr</i> + 8</p>
+  </body>
+</topic>

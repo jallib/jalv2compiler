@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e657" xml:lang="en-US">
+  <title>DATA</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA [DATA | SHARED] <i>cexpr0</i>['-'<i>cexpr1</i>[',' ...]</codeblock>
+
+    <p>Defines a range allowed when allocating variables. DATA access is
+    assumed to require whatever banking method is needed for the target,
+    whereas SHARED is assumed to not require these bits.</p>
+
+    <p>Note that automatic variable allocation only uses the area denoted by
+    DATA, never the area denoted by SHARED, so these two can overlap.</p>
+  </body>
+</topic>

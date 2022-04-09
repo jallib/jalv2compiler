@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e339" xml:lang="en-US">
+  <title>INTERRUPT</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA INTERRUPT { FAST | RAW | NORMAL | }</codeblock>
+
+    <p>This must be used within a procedure that takes no parameters. It
+    defines the procedure as an interrupt entry point. Such a procedure is
+    added to a chain of procedures executed whenever an interrupt hits. Once a
+    procedure has been marked interrupt, it cannot be called directly by the
+    program.</p>
+  </body>
+</topic>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e419" xml:lang="en-US">
+  <title>CEXPR_REDUCE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA OPT CEXPR_REDUCE { YES | NO | }</codeblock>
+
+    <p>* YES -- constant expression reduction is performed</p>
+
+    <p>NO -- constant expression reduction is not performed</p>
+
+    <p>Constant expression reduction looks for operations on two constants
+    that can be evaluated at compile time, saving both time and memory.</p>
+
+    <p>nb: disabling this will cause the backend code generators to fail, so
+    only do so if `PRAGMA DEBUG CODEGEN OFF' is specified.</p>
+  </body>
+</topic>

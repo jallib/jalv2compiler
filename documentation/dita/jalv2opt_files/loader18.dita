@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e221" xml:lang="en-US">
+  <title>loader18</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -loader18 [ cexpr ]</codeblock>
+
+    <p>See "PRAGMA BOOTLOADER LOADER18".</p>
+  </body>
+</topic>

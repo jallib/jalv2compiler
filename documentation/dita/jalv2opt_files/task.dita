@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e164" xml:lang="en-US">
+  <title>task</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -task cexpr</codeblock>
+
+    <p>Sets the maximum number of concurrent tasks to cexpr. The default is 0.
+    Note this value must be one more than the number of concurrent tasks as
+    the main program counts as a task.</p>
+
+    <p>nb: It is better to use `PRAGMA TASK' in your program than setting the
+    value here. Doing so guarantees the value is correct even if you forget to
+    pass it during compilation.</p>
+  </body>
+</topic>

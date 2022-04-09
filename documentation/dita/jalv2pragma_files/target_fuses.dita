@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e69" xml:lang="en-US">
+  <title>TARGET FUSES</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA TARGET FUSES [ <i>cexpr0</i> ] <i>cexpr</i></codeblock>
+
+    <p>Analogous to:</p>
+
+    <codeblock>          CONST _config = <i>cexpr</i></codeblock>
+
+    <p>Or:</p>
+
+    <codeblock>          CONST _config[<i>cexpr0</i>] = <i>cexpr</i></codeblock>
+
+    <p><i>cexpr0</i> is only used when multiple config words exist in which
+    case 0 is the first config word, 1 the second, and so on.</p>
+
+    <p>The configuration words define how some parts of the destination chip
+    are used. While it is possible to set the fuses directly, it is generally
+    better to use the "TARGET opt tags" construct below.</p>
+  </body>
+</topic>

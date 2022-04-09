@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e191" xml:lang="en-US">
+  <title>fuse</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]fuse</codeblock>
+
+    <p>Put the `__config' line in the assembly or HEX files.</p>
+  </body>
+</topic>

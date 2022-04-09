@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e533" xml:lang="en-US">
+  <title>BACKEND</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA WARN BACKEND { YES | NO }</codeblock>
+
+    <p>* YES -- enable all warnings</p>
+
+    <p>NO -- disable all warnings</p>
+
+    <p>This turns on debugging of the code generator (currently the
+    translation from pcode --&gt; PIC).</p>
+  </body>
+</topic>

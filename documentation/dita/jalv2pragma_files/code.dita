@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e645" xml:lang="en-US">
+  <title>CODE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA CODE <i>cexpr</i></codeblock>
+
+    <p>Defines the code size for a device -- used to detect code too large.
+    For the 12 &amp; 14 bit cores, this number is in WORDs, for the 16 bit
+    cores, this number is in BYTEs. Blame MicroChip.</p>
+  </body>
+</topic>

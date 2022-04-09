@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e176" xml:lang="en-US">
+  <title>Bootloader</title>
+
+  <body>
+    <p>Booloaders are tiny programs that allow a chip to be reprogrammed over
+    the serial or USB ports, eliminating the need for extra programming
+    hardware. There are several variants, and each has slightly different
+    requirements of the program it hosts. These are the ones currently
+    defined.</p>
+  </body>
+</topic>

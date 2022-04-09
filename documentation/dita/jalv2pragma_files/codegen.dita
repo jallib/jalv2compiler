@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e868" xml:lang="en-US">
+  <title>CODEGEN</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA DEBUG CODEGEN { YES | NO | }</codeblock>
+
+    <p>* YES -- Enable the back_end code generation</p>
+
+    <p>NO -- Disable the back_end code generation</p>
+
+    <p>Allow the pcode to be generated without executing the PIC code
+    generator.</p>
+  </body>
+</topic>

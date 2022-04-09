@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e405" xml:lang="en-US">
+  <title>EXPR_REDUCE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA OPT EXPR_REDUCE { YES | NO | }</codeblock>
+
+    <p>* YES -- expression reduction is performed</p>
+
+    <p>NO -- expression reduction is not performed</p>
+
+    <p>Expression reduction looks for things like `x * 1' and replaces with
+    `x'. See `EXPRESSION REDUCTION' in jalopts.txt for details.</p>
+  </body>
+</topic>

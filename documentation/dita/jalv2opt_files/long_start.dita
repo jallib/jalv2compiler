@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e201" xml:lang="en-US">
+  <title>long start</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -long-start</codeblock>
+
+    <p>Force the first generated instruction to be a long jump. See "PRAGMA
+    BOOTLOADER LONG_START".</p>
+  </body>
+</topic>

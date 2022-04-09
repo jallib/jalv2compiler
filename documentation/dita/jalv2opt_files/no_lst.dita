@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e114" xml:lang="en-US">
+  <title>[no]-lst</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -lst filename
+          -no-lst</codeblock>
+
+    <p>Set the name of the listing file to filename, or prevent the generation
+    of a listing file. The default is no listing file. The listing file has
+    never been correctly generated, so this option is useless.</p>
+  </body>
+</topic>

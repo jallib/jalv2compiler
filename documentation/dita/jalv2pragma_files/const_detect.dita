@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e435" xml:lang="en-US">
+  <title>CONST_DETECT</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA OPT CONST_DETECT { YES | NO | }</codeblock>
+
+    <p>YES -- enable constant detection</p>
+
+    <p>* NO -- disable constant detection</p>
+
+    <p>Look for variables that are defined but are either only assigned once,
+    or are always assigned the same value. When this happens, replace all
+    occurrences of the variable with the constant.</p>
+
+    <p>nb : PRAGMA CLEAR will prevent this option from having any effect
+    unless the variable is only assigned the constant 0.</p>
+  </body>
+</topic>

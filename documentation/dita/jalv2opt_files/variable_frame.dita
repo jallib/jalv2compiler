@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e482" xml:lang="en-US">
+  <title>variable frame</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]variable-frame</codeblock>
+
+    <p>allocate variables into a full frame</p>
+
+    <p>Default: disabled</p>
+
+    <p>Purpose: Place all variables in a function into a single block instead
+    of using the first available space. This can minimize the number of bank
+    switching operations, but can also lead to less efficient use of the data
+    areas.</p>
+  </body>
+</topic>

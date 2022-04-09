@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e154" xml:lang="en-US">
+  <title>quiet</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]quiet</codeblock>
+
+    <p>Turns off the progress messages.</p>
+  </body>
+</topic>

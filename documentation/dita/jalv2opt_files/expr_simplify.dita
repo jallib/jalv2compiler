@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e440" xml:lang="en-US">
+  <title>expr simplify</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]expr-simplify</codeblock>
+
+    <p>enable/disable expression simplification</p>
+
+    <p>Default: disabled</p>
+
+    <p>Purpose: Combine common subexpressions.</p>
+  </body>
+</topic>

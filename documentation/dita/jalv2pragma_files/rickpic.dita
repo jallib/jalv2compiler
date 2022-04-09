@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e185" xml:lang="en-US">
+  <title>RICKPIC</title>
+
+  <body>
+    <p>Pre-amble:</p>
+
+    <codeblock>          ORG 0x0003
+          GOTO _pic_pre_user</codeblock>
+
+    <p>nb: if "PRAGMA INTERRUPT RAW" is used, the interrupt routine must not
+    exceed one page (minus a few bytes).</p>
+  </body>
+</topic>

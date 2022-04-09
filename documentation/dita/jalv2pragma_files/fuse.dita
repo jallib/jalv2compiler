@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e222" xml:lang="en-US">
+  <title>FUSE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA FUSES { YES | NO | }</codeblock>
+
+    <p>* YES -- The `__config' line is written to the assembly file</p>
+
+    <p>NO -- The `__config' line is not written to the assembly file</p>
+
+    <p>It is often convenient *not* to program the CONFIG word (for example,
+    when using a boot loader). This suppresses that programming.</p>
+  </body>
+</topic>

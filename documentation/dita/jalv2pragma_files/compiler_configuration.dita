@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e114" xml:lang="en-US">
+  <title>Compiler Configuration</title>
+
+  <body>
+    <p>Configure compiler code generation policies.</p>
+  </body>
+</topic>

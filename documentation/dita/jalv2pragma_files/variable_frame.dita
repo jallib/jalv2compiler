@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e486" xml:lang="en-US">
+  <title>VARIABLE_FRAME</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA OPT VARIABLE_FRAME { YES | NO | }</codeblock>
+
+    <p>YES -- allocate variables a frame at a time</p>
+
+    <p>* NO -- allocate variables individually</p>
+
+    <p>Normally, variables are allocated individually. This allows optimal use
+    of data memory, but means that variables in a given procedure might be
+    spread across multiple banks. Enabling this option will guarantee that all
+    variables in a procedure will reside in a single bank.</p>
+
+    <p>nb: unlike `PRAGMA FRAME' above, this affects the entire file.</p>
+  </body>
+</topic>

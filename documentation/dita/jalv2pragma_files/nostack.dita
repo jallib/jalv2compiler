@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e386" xml:lang="en-US">
+  <title>NOSTACK</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA NOSTACK</codeblock>
+
+    <p>Used within a procedure, the procedure will not be called using the
+    normal call/return instructions. Instead, the return address will be
+    stored in a procedure-local variable, '_return,' and the call will be
+    executed by jumping to the start of the procedure. The return will be
+    executed by jumping to the first statement after the call.</p>
+
+    <p>The overhead for this is two or three data bytes, four to six
+    instructions for the return and eight to ten instructions for the call.
+    Currently re-entrant functions and functions called indirectly cannot use
+    this pragma.</p>
+  </body>
+</topic>

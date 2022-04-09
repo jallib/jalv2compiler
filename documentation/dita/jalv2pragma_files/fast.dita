@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e354" xml:lang="en-US">
+  <title>FAST</title>
+
+  <body>
+    <p>_pic_state is *not* saved or restored. In this case, the interrupt
+    procedure should be written entirely in assembly to avoid corrupting the
+    pic_state area.</p>
+  </body>
+</topic>

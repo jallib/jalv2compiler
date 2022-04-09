@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e549" xml:lang="en-US">
+  <title>pcode</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]pcode</codeblock>
+
+    <p>show pcode in the asm file</p>
+  </body>
+</topic>

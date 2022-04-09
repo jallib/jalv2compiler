@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+  PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic xml:lang="en-US" id="d0e14"><title>Introduction</title><body><p>There are many options that can be passed to the compiler to tell it, for example, where to find library files, or where to put the output files. These options are all described here.</p><p>See the JALv2 documentation for definitions and conventions.  Any time multiple options are allowed, the default option is preceded with a '*'. An {empty} option is interpreted as the default option.</p><p>All available compiler options can be seen by passing the single options "--help" to the compiler. Use this command to also see the defaults for each option.</p></body></topic>

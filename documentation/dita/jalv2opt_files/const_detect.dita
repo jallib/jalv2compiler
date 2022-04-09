@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e333" xml:lang="en-US">
+  <title>const detect</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]const-detect</codeblock>
+
+    <p>enable/disable constant detection</p>
+
+    <p>Default: disabled</p>
+
+    <p>Purpose: Look for variables that are only assigned a single, constant
+    value and replace them with that constant value.</p>
+  </body>
+</topic>

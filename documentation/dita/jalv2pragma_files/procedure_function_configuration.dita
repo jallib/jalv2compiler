@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e308" xml:lang="en-US">
+  <title>PROCEDURE/FUNCTION Configuration</title>
+
+  <body>
+    <p>These must be used with a procedure and/or function and are only in
+    effect for the procedure/function in which they're used.</p>
+  </body>
+</topic>

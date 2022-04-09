@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e314" xml:lang="en-US">
+  <title>Optimizations</title>
+
+  <body>
+    <p>Optimizations that are enabled by default are considered safe -- they
+    have been well tested and shown to not cause any problems. Optimizations
+    that are disabled by default have not been as well tested. Using them
+    might be unsafe. Before reporting any problems with the compiler, please
+    make sure to retest with only the default optimizations and let me know
+    the outcome.</p>
+  </body>
+</topic>

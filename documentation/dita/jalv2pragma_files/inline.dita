@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e327" xml:lang="en-US">
+  <title>INLINE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA INLINE</codeblock>
+
+    <p>Used within a function or procedure, declares that this function or
+    procedure will not get a separate body, but rather will be copied directly
+    into the calling code.</p>
+
+    <p>nb: If a procedure or function marked `inline' is executed as volatile
+    parameter, it will get a body.</p>
+  </body>
+</topic>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN"
+"bookmap.dtd">
+<bookmap xml:lang="en-US">
+  <title>JALv2 Compiler Options</title>
+
+  <bookmeta>
+    <author>Kyle York &amp; Rob Jansen</author>
+
+    <critdates>
+      <created date="2018-09-19"/>
+
+      <revised modified="2022-04-09"/>
+    </critdates>
+  </bookmeta>
+
+  <frontmatter>
+    <booklists>
+      <toc/>
+    </booklists>
+  </frontmatter>
+
+  <chapter href="jalv2opt_files/introduction.dita"/>
+
+  <chapter href="jalv2opt_files/file_options.dita">
+    <topicref href="jalv2opt_files/no_asm.dita"/>
+
+    <topicref href="jalv2opt_files/no_codfile.dita"/>
+
+    <topicref href="jalv2opt_files/no_hex.dita"/>
+
+    <topicref href="jalv2opt_files/include.dita"/>
+
+    <topicref href="jalv2opt_files/include_path.dita"/>
+
+    <topicref href="jalv2opt_files/no_log.dita"/>
+
+    <topicref href="jalv2opt_files/no_lst.dita"/>
+  </chapter>
+
+  <chapter href="jalv2opt_files/miscellaneous.dita">
+    <topicref href="jalv2opt_files/clear.dita"/>
+
+    <topicref href="jalv2opt_files/fastmath.dita"/>
+
+    <topicref href="jalv2opt_files/quiet.dita"/>
+
+    <topicref href="jalv2opt_files/task.dita"/>
+  </chapter>
+
+  <chapter href="jalv2opt_files/bootloader.dita">
+    <topicref href="jalv2opt_files/bloader.dita"/>
+
+    <topicref href="jalv2opt_files/fuse.dita"/>
+
+    <topicref href="jalv2opt_files/long_start.dita"/>
+
+    <topicref href="jalv2opt_files/rickpic.dita"/>
+
+    <topicref href="jalv2opt_files/loader18.dita"/>
+  </chapter>
+
+  <chapter href="jalv2opt_files/warnings.dita">
+    <topicref href="jalv2opt_files/all.dita"/>
+
+    <topicref href="jalv2opt_files/codegen.dita"/>
+
+    <topicref href="jalv2opt_files/conversion.dita"/>
+
+    <topicref href="jalv2opt_files/directives.dita"/>
+
+    <topicref href="jalv2opt_files/misc.dita"/>
+
+    <topicref href="jalv2opt_files/range.dita"/>
+
+    <topicref href="jalv2opt_files/stack_overflow.dita"/>
+
+    <topicref href="jalv2opt_files/truncate.dita"/>
+  </chapter>
+
+  <chapter href="jalv2opt_files/optimizations.dita">
+    <topicref href="jalv2opt_files/cexpr_reduction.dita"/>
+
+    <topicref href="jalv2opt_files/const_detect.dita"/>
+
+    <topicref href="jalv2opt_files/expr_reduction.dita"/>
+
+    <topicref href="jalv2opt_files/expr_simplify.dita"/>
+
+    <topicref href="jalv2opt_files/load_reduce.dita"/>
+
+    <topicref href="jalv2opt_files/temp_reduce.dita"/>
+
+    <topicref href="jalv2opt_files/variable_frame.dita"/>
+
+    <topicref href="jalv2opt_files/variable_reduce.dita"/>
+
+    <topicref href="jalv2opt_files/variable_reuse.dita"/>
+  </chapter>
+
+  <chapter href="jalv2opt_files/compiler_debugging.dita">
+    <topicref href="jalv2opt_files/compiler_codegen.dita"/>
+
+    <topicref href="jalv2opt_files/compiler_debug.dita"/>
+
+    <topicref href="jalv2opt_files/compiler_pcode.dita"/>
+
+    <topicref href="jalv2opt_files/compiler_emu.dita"/>
+
+    <topicref href="jalv2opt_files/compiler_deadcode.dita"/>
+  </chapter>
+</bookmap>

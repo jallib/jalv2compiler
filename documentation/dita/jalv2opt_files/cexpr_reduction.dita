@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e319" xml:lang="en-US">
+  <title>cexpr reduction</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          -[no-]cexpr-reduction</codeblock>
+
+    <p>enable/disable constant expression reduction</p>
+
+    <p>Default: enabled</p>
+
+    <p>Purpose: Detect expressions or subexpressions composed completely of
+    constants, and reduce these to a single value.</p>
+  </body>
+</topic>

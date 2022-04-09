@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e198" xml:lang="en-US">
+  <title>CLEAR</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA CLEAR { YES | NO | }</codeblock>
+
+    <p>YES -- Code is generated to set all user-data to 0</p>
+
+    <p>* NO -- No such code is generated</p>
+
+    <p>nb: volatile variables, and variables explicitly placed by the user are
+    *not* set to 0.</p>
+  </body>
+</topic>

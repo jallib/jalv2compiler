@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e398" xml:lang="en-US">
+  <title>Optimization PRAGMAs</title>
+
+  <body>
+    <p>These all effect various optimizations done by the compiler. These
+    cannot be used to turn on and off optimizations for specific parts of the
+    code -- the last one parsed will be the one in effect.</p>
+
+    <p>For a complete description of each, including warnings and caveats,
+    please refer to the Optimizations chapter of the Jalv2 Compiler Options
+    document.</p>
+  </body>
+</topic>

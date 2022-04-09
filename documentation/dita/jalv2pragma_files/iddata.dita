@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e236" xml:lang="en-US">
+  <title>IDDATA</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA IDDATA expr;[','expr;1...]</codeblock>
+
+    <p>Places data into the ID area (defined with PRAGMA ID...). The first
+    time this statement is executed, the data are placed into location 0 of
+    the ID. Each time after the data are placed in consecutive locations.</p>
+  </body>
+</topic>

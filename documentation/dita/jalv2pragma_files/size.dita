@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e288" xml:lang="en-US">
+  <title>SIZE</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA SIZE</codeblock>
+
+    <p>Anything physically following this pragma will be optimized for size.
+    See notes under `PRAGMA SPEED'.</p>
+  </body>
+</topic>

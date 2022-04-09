@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e586" xml:lang="en-US">
+  <title>MISC</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA WARN MISC { YES | NO | }</codeblock>
+
+    <p>* YES -- enable misc. warnings</p>
+
+    <p>NO -- disable misc. warning</p>
+
+    <p>There are some warnings that are not categorized. This enables or
+    disables them.</p>
+  </body>
+</topic>

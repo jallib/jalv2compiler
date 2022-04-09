@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e696" xml:lang="en-US">
+  <title>FUSE_DEF</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA FUSE_DEF opt[':'<i>cexpr0</i>] <i>cexprm</i> '{'
+             tag '=' <i>cexprb</i>
+             ...
+          '}'</codeblock>
+
+    <p>Defines symbolic fuse bits so the end user needn't twiddle them
+    directly.</p>
+
+    <lq><p>opt -- a string presented to the user</p><p>[:<i>cexpr0</i>] --
+    which config word stores this entry, starting with 0</p><p><i>cexprm</i>
+    -- the fuse word is bit-wise ANDed with this before continuing</p><p>tag
+    -- the sub-tag</p><p><i>cexprb</i> -- which bit to set</p></lq>
+
+    <p>These are used by the end user with the `PRAGMA TARGET opt tags'
+    defined above. In this case the result is similar to:</p>
+
+    <codeblock>          _config = (_config &amp; <i>cexprm</i>) | <i>cexprb</i></codeblock>
+  </body>
+</topic>

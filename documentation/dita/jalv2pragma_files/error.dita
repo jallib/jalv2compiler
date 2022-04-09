@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e268" xml:lang="en-US">
+  <title>ERROR</title>
+
+  <body>
+    <p>Format:</p>
+
+    <codeblock>          PRAGMA ERROR</codeblock>
+
+    <p>Causes an error to be generated. This has been superseded with the
+    "_ERROR" command (see the JALv2 reference guide).</p>
+  </body>
+</topic>
