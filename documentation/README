@@ -1,0 +1,22 @@
+Some history
+============
+The original documentation was created by Kyle York in docbook format from which a version
+was provided in text format.
+
+The text format was later imported in MS Word and formatted by Rob Jansen. From there pdf versions
+where created. Some additions where made to this version of the compiler documentation.
+
+In order to be able to easily create documentaion in pdf and html format a conversion was needed
+as to be able to use dita for publishing this documetnation. The MS Word files where imported using 
+the XML Editor XML Mind and all documentation was reformatted by Rob Jansen.
+
+Creating pdf and html documentation using Dita
+==============================================
+Dita version 3.7.2 was used for this.
+
+A Makefile is available for creating a pdf and html version.
+
+Make all creates both version.
+
+2022-05-27
+Rob Jansen
