@@ -10,13 +10,25 @@ In order to be able to easily create documentaion in pdf and html format a conve
 as to be able to use dita for publishing this documetnation. The MS Word files where imported using 
 the XML Editor XML Mind and all documentation was reformatted by Rob Jansen.
 
+
 Creating pdf and html documentation using Dita
 ==============================================
 Dita version 3.7.2 was used for this.
 
-A Makefile is available for creating a pdf and html version.
+No customization has been done on Dita.
 
-Make all creates both version.
+A Makefile is available for creating a pdf and html version:
+- Make pdf creates the pdf versions and stores them in directory called pdf
+- Make html creates the html versions and stores them in directory called html
+- Make all creates both versions
+- Make clean deletes all created pdf and html versions
+
+Which source to use?
+===========================
+Since the last development is done using Dita and XML Mind as editor it is best to use these 
+as source for generating the output because with this as source, html can be generated too.
+
+The MS Word version are still available.
 
 2022-05-27
 Rob Jansen
