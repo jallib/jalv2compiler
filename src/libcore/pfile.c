@@ -3,14 +3,12 @@
  ** pfile.c : p-code file definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **               2020-2021, Rob Jansen
+ **               2020-2023, Rob Jansen
  **
  ** All rights reserved
  **
  ************************************************************/
-/* RJ jalv25r6 for uintptr_t */
 #include <stdint.h>
-
 #include <stdarg.h>
 #include <string.h>
 #include <errno.h>
@@ -3118,15 +3116,26 @@ void pfile_cmd_dump(pfile_t *pf, const char *prog_name,
     }
 #endif
     if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_PCODE)) {
-      if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
-        pfile_write(pf, pfile_write_lst, "; c(%lu) l(%u)", cmd_id_get(cmd),
-          cmd_line_get(cmd));
-      } else {
-        pfile_write(pf, pfile_write_lst, ";      ");
-      }
-      if (!pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
-        pfile_write(pf, pfile_write_lst, " %lu", cmd_id_get(cmd));
-      }
+        /* RJ Jalv25r7 simplifying this piece of code.
+          if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
+            pfile_write(pf, pfile_write_lst, "; c(%lu) l(%u)", cmd_id_get(cmd),
+              cmd_line_get(cmd));
+          } else {
+            pfile_write(pf, pfile_write_lst, ";      ");
+          }
+         if (!pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
+            pfile_write(pf, pfile_write_lst, " %lu", cmd_id_get(cmd));
+          }
+         */
+         /* RJ To this. */
+       if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
+            pfile_write(pf, pfile_write_lst, "; c(%lu) l(%u)", cmd_id_get(cmd),
+                cmd_line_get(cmd));
+       }
+       else {
+            pfile_write(pf, pfile_write_lst, " %lu", cmd_id_get(cmd));
+       }
+
       pfile_write(pf, pfile_write_lst, "{%c%c} ", 
         (cmd_flag_test(cmd, CMD_FLAG_USER)) ? 'u' : '-',
         (cmd_flag_test(cmd, CMD_FLAG_INTERRUPT)) ? 'i' : '-');
@@ -3204,11 +3213,13 @@ static void pfile_label_list_dump(pfile_t *pf, lbllist_t *lst, const char *name)
   for (lbl = label_list_head(lst);
        lbl;
        lbl = label_next_get(lbl)) {
-    pfile_write(pf, pfile_write_lst, ";%lx:%s(use=%u:ref=%u:pc=%04x)", 
-        /* RJ jalv25r6 org code removed to prevent -Werror: (ulong) lbl, */
-        (ulong)(uintptr_t) lbl,
-        label_ref_ct_get(lbl), label_pc_get(lbl));
-    pfile_write(pf, pfile_write_lst, "\n");
+      /* RJ jalv25r7 Fixed error (removed one line too many in jalv25r6)
+         causing problems in debug mode. */
+      pfile_write(pf, pfile_write_lst, ";%lx:%s(use=%u:ref=%u:pc=%04x)",
+          (ulong)(uintptr_t)lbl,
+          label_name_get(lbl), label_usage_get(lbl),
+          label_ref_ct_get(lbl), label_pc_get(lbl));
+      pfile_write(pf, pfile_write_lst, "\n");
   }
 }
 

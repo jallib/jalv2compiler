@@ -3,7 +3,7 @@
  ** pic.c : pic code generation definitions
  **
  ** Copyright (c) 2004-2007, Kyle A. York
- **               2018-2020, Rob Jansen
+ **               2018-2023, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -2702,26 +2702,53 @@ void pic_cmd_dump(pfile_t *pf, const cmd_t cmd, boolean_t first)
           pic_blist_total);
       pfile_log(pf, PFILE_LOG_INFO, PIC_MSG_STACK_AVAIL, (ulong) pic_stk_sz);
 
+      /* RJ jalv25r7: This code checks for a stack_depth of >= 15 but there
+                      are PICs with a bigger stack size than 15. */
+                      /* New code jalv25r7. */
       stack_sz = pfile_value_find(pf, PFILE_LOG_NONE, "_stack_size");
-      if (stack_depth >= 15) {
-        pfile_log(pf, PFILE_LOG_INFO, "Hardware stack depth INFINITE");
-      } else {
-        pfile_log(pf, PFILE_LOG_INFO, "Hardware stack depth %u of %u",
-            stack_depth, (unsigned) value_const_get(stack_sz));
-      }
       if (!stack_sz) {
+          if (pfile_flag_test(pf, PFILE_FLAG_WARN_BACKEND)) {
+              pfile_log(pf, PFILE_LOG_WARN, "stack size not set");
+          }
+      }
+      else if (stack_depth > value_const_get(stack_sz)) {
+          pfile_log(pf,
+              pfile_flag_test(pf, PFILE_FLAG_WARN_STACK_OVERFLOW)
+              ? PFILE_LOG_WARN
+              : PFILE_LOG_ERR,
+              "Hardware stack overflow!");
+      }
+      else {
+          pfile_log(pf, PFILE_LOG_INFO, "Hardware stack depth %u of %u",
+              stack_depth, (unsigned)value_const_get(stack_sz));
+      }
+      value_release(stack_sz);
+    }
+#if 0
+    /* Original code (disabled). */
+    stack_sz = pfile_value_find(pf, PFILE_LOG_NONE, "_stack_size");
+    if (stack_depth >= 15) {
+        pfile_log(pf, PFILE_LOG_INFO, "Hardware stack depth INFINITE");
+    }
+    else {
+        pfile_log(pf, PFILE_LOG_INFO, "Hardware stack depth %u of %u",
+            stack_depth, (unsigned)value_const_get(stack_sz));
+    }
+    if (!stack_sz) {
         if (pfile_flag_test(pf, PFILE_FLAG_WARN_BACKEND)) {
-          pfile_log(pf, PFILE_LOG_WARN, "stack size not set");
+            pfile_log(pf, PFILE_LOG_WARN, "stack size not set");
         }
-      } else if (stack_depth > value_const_get(stack_sz)) {
+    }
+    else if (stack_depth > value_const_get(stack_sz)) {
         pfile_log(pf,
             pfile_flag_test(pf, PFILE_FLAG_WARN_STACK_OVERFLOW)
             ? PFILE_LOG_WARN
             : PFILE_LOG_ERR,
             "Hardware stack overflow!");
-      }
-      value_release(stack_sz);
     }
+    value_release(stack_sz);
+  }
+#endif
   }
 }
 

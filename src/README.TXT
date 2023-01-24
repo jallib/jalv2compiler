@@ -4,7 +4,7 @@ Remarks for building the JALV2 compilers
 Building the JALV2 compilers for Windows
 ========================================
 There are 2 ways to build the JAL compiler under Windows:
-1) Using Visual Studio (2019) to build the solution provided in jal (jal.sln)
+1) Using Visual Studio to build the solution provided in jal (jal.sln)
 2) Using a separate compiler like the TDM-GCC compiler 
 
 Using Visual Studio
@@ -37,7 +37,7 @@ The batch files are in the same location where the make scripts for Linux are st
 Building the JALV2 compiler for Linux
 =====================================
 For this the available cc compiler in Linux Mint was used. Linux Mint 64-bit was running from a Virtual Box.
-The compiler can also be created using other Linux OS-es like Ubuntu.
+The compiler can also be created using other Linux OS-es like Ubuntu. 
 
 Standard you can make the project with 'make project jal'. This will make the native
 version of the JAL compiler (jalv2-native), depending on your OS.
