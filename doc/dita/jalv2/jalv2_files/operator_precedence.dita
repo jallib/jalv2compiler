@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+"topic.dtd">
+<topic id="d0e370" xml:lang="en-US">
+  <title>Operator Precedence</title>
+
+  <body>
+    <p>JAL uses the following operator precedence.</p>
+
+    <simpletable>
+      <strow>
+        <stentry>1</stentry>
+
+        <stentry>() []</stentry>
+
+        <stentry>Function call, array/member access</stentry>
+      </strow>
+
+      <strow>
+        <stentry>2</stentry>
+
+        <stentry>! - + COUNT type cast</stentry>
+
+        <stentry>Unary operations, COUNT, type cast</stentry>
+      </strow>
+
+      <strow>
+        <stentry>3</stentry>
+
+        <stentry>* / %</stentry>
+
+        <stentry>Multiplication, division, modulo</stentry>
+      </strow>
+
+      <strow>
+        <stentry>4</stentry>
+
+        <stentry>+ -</stentry>
+
+        <stentry>Addition and subtraction</stentry>
+      </strow>
+
+      <strow>
+        <stentry>5</stentry>
+
+        <stentry>&lt;&lt; &gt;&gt;</stentry>
+
+        <stentry>Bitwise shift left, shift right</stentry>
+      </strow>
+
+      <strow>
+        <stentry>6</stentry>
+
+        <stentry>&lt; &lt;= &gt; &gt;=</stentry>
+
+        <stentry>Comparison: less-than, greater-than</stentry>
+      </strow>
+
+      <strow>
+        <stentry>7</stentry>
+
+        <stentry>== !=</stentry>
+
+        <stentry>Comparison: equal, not equal</stentry>
+      </strow>
+
+      <strow>
+        <stentry>8</stentry>
+
+        <stentry>&amp;</stentry>
+
+        <stentry>Binary AND</stentry>
+      </strow>
+
+      <strow>
+        <stentry>9</stentry>
+
+        <stentry>^</stentry>
+
+        <stentry>Binary exclusive OR (XOR)</stentry>
+      </strow>
+
+      <strow>
+        <stentry>10</stentry>
+
+        <stentry>|</stentry>
+
+        <stentry>Binary inclusive (normal) OR</stentry>
+      </strow>
+
+      <strow>
+        <stentry>11</stentry>
+
+        <stentry>=</stentry>
+
+        <stentry>Assignment</stentry>
+      </strow>
+    </simpletable>
+  </body>
+</topic>

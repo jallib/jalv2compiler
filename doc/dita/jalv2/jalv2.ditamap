@@ -110,5 +110,7 @@
     <topicref href="jalv2_files/_usec_delay.dita"/>
   </chapter>
 
+  <chapter href="jalv2_files/operator_precedence.dita"/>
+
   <chapter href="jalv2_files/limitations_issues.dita"/>
 </bookmap>

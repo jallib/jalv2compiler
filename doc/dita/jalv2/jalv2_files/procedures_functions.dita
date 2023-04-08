@@ -77,7 +77,7 @@
                 n = n - ix
                 result = result + 1
                 ix = ix + 2
-             END WHILE
+             END LOOP
              RETURN result
 
           END FUNCTION
