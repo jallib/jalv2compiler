@@ -1,2 +1,2 @@
-#define JAL_BUILD 20230129
-#define JAL_VERSION_STR "jalv25r7"
+#define JAL_BUILD 20230519
+#define JAL_VERSION_STR "jalv25r8"

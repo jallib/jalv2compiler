@@ -3,7 +3,7 @@
  ** pic_opfn.c : PIC built-in function generation
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **               2020-2020, Rob Jansen
+ **               2020-2023, Rob Jansen
  **
  ** All rights reserved
  **
@@ -1027,6 +1027,10 @@ static void pic_task_suspend_create(pfile_t *pf)
  *   1 0 : eeprom
  *   1 1 : flash
  */
+/* jalv25r8 issue#30: Here the bits are set that should be removed since it
+   limits the code size for lookup tables. It seems that by default
+   all code is geneated also code that is not needed later on. It
+   is assumed that this code is removed later by the optimization. */
 static void pic_pointer_read_create(pfile_t *pf)
 {
   value_t  ptr;
@@ -1076,7 +1080,9 @@ static void pic_pointer_read_create(pfile_t *pf)
       pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, ii, PIC_OPDST_W);
       if (2 == ii) {
         /* mask off the high two bits */
-        pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~0xc0) & 0xff);
+        /* RJ issue#30: The clearing of the 2 msb must be removed here.
+              Original code
+        pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~0xc0) & 0xff); */
       }
       pic_instr_append_f(pf, PIC_OPCODE_MOVWF, tmp, ii);
     }
@@ -1093,7 +1099,9 @@ static void pic_pointer_read_create(pfile_t *pf)
     pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 0, PIC_OPDST_W);
     pic_instr_append_f(pf, PIC_OPCODE_MOVWF, pic_sign, 0);
     pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 1, PIC_OPDST_W);
-    pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~(0x80 | 0x40)) & 0xff);
+    /* RJ issue#30: The clearing of the 2 msb must be removed here. 
+       Original code.
+    pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~(0x80 | 0x40)) & 0xff); */
     pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_pic_indirect);
   }
   /* _pic_pointer points to either EEPROM or FLASH (not supported yet) */

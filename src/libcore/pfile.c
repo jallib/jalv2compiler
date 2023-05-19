@@ -3116,19 +3116,7 @@ void pfile_cmd_dump(pfile_t *pf, const char *prog_name,
     }
 #endif
     if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_PCODE)) {
-        /* RJ Jalv25r7 simplifying this piece of code.
-          if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
-            pfile_write(pf, pfile_write_lst, "; c(%lu) l(%u)", cmd_id_get(cmd),
-              cmd_line_get(cmd));
-          } else {
-            pfile_write(pf, pfile_write_lst, ";      ");
-          }
-         if (!pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
-            pfile_write(pf, pfile_write_lst, " %lu", cmd_id_get(cmd));
-          }
-         */
-         /* RJ To this. */
-       if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
+        if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
             pfile_write(pf, pfile_write_lst, "; c(%lu) l(%u)", cmd_id_get(cmd),
                 cmd_line_get(cmd));
        }
@@ -3213,9 +3201,7 @@ static void pfile_label_list_dump(pfile_t *pf, lbllist_t *lst, const char *name)
   for (lbl = label_list_head(lst);
        lbl;
        lbl = label_next_get(lbl)) {
-      /* RJ jalv25r7 Fixed error (removed one line too many in jalv25r6)
-         causing problems in debug mode. */
-      pfile_write(pf, pfile_write_lst, ";%lx:%s(use=%u:ref=%u:pc=%04x)",
+       pfile_write(pf, pfile_write_lst, ";%lx:%s(use=%u:ref=%u:pc=%04x)",
           (ulong)(uintptr_t)lbl,
           label_name_get(lbl), label_usage_get(lbl),
           label_ref_ct_get(lbl), label_pc_get(lbl));

@@ -3,7 +3,7 @@
  ** pic_op.c : PIC operator generation definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **           (c) 2020-2020, Rob Jansen
+ **           (c) 2020-2023, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -1175,7 +1175,10 @@ static void pic_assign_from_const(pfile_t *pf, value_t dst, value_t src)
   /* If data is NULL, neither offset nor limit matter./ */
   if (data) {
     if (value_baseofs_get(src)) {
-      ofs = value_const_get(value_baseofs_get(src)) * src_sz;
+        /* jalv25r8 issue#31. The ofs should just be the size of the src.
+           original code:
+           ofs = value_const_get(value_baseofs_get(src)) * src_sz; */
+        ofs = value_const_get(value_baseofs_get(src));
     }
   } else {
     src_sz = 0;
@@ -1309,8 +1312,18 @@ static void pic_assign_from_lookup(pfile_t *pf, value_t dst,
         pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, tablat, 0, PIC_OPDST_W);
       } else {
         if (ii) {
-          pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, ii);
-          pic_instr_append_f_d(pf, PIC_OPCODE_ADDWF, tmp, 0, PIC_OPDST_W);
+          /* jalv25r8 issue#28. Need to pass LSB in _pic_loop, MSB in W again. */
+          if ((variable_def_member_sz_get(mbr) * variable_def_member_ct_get(mbr)
+              > 255) && (value_byte_sz_get(baseofs) > 1)) {
+              /* Since we use _pic_loop we have to increment with 1, not with ii.*/
+              pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, 1);
+              pic_instr_append_f_d(pf, PIC_OPCODE_ADDWF, tmp, 0, PIC_OPDST_F);
+              pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, baseofs, 1, PIC_OPDST_W);
+          }
+          else {
+              pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, ii);
+              pic_instr_append_f_d(pf, PIC_OPCODE_ADDWF, tmp, 0, PIC_OPDST_W);
+          }
         }
         pic_instr_append_n(pf, PIC_OPCODE_CALL, lbl);
       }
@@ -1446,8 +1459,12 @@ static void pic_assign_array_to_pointer(pfile_t *pf, value_t dst, value_t src)
     code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
     pic_code_brdst_set(code, lbl);
     pic_code_ofs_set(code, 1);
+    /* jalv25r8 issue#30: Setting bit 6 below indicates a lookup, used by
+       the function pic_assign_from_ptr(). These 2 lines must be removed
+       since it limits the size of a lookup table.
     pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x40);
-    pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, 1);
+    pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, 1); */
+
     label_release(lbl);
   } else {
     variable_base_t base;
@@ -1521,12 +1538,15 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
       code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
       pic_code_brdst_set(code, lbl);
       pic_code_ofs_set(code, ii);
-      if (ii + 1 == pic_pointer_size_get(pf)) {
+      /* jalv25r8 ssue#30. Must be removed. The whole if can be removed. */
+      /* 
+      if (ii + 1 == pic_pointer_size_get(pf)) { */
         /* This has to be forced. Previously I optimized this out
          * in some circumstances, but that lead to bad code
          */
-        pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x40);
-      }
+      /* jalv25r8 ssue#30. So this too 
+         pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x40); 
+      } */
       pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
     }
     label_release(lbl);
@@ -1626,15 +1646,21 @@ static void pic_assign_from_ptr(pfile_t *pf, value_t dst, value_t src)
       /* W holds MSB */
       variable_sz_t sz;
       variable_sz_t ipos;
+      /* jalv25r8 issue#30: Remove mask and cmask
       value_t       mask;
-      ulong         cmask;
+      ulong         cmask; */
 
       /* 
        * bit 6 of the high byte of the pointer is 1, bit 7 is 0
        * so, simply clear bit 6
        */
+      /* jalv25r8 issue#30: We have to remove the clearing of the the two
+            msb's otherwise the pointer size is limited. So
+            we remove cmask and mask. */
+      /* jalv25r8 Removed
       cmask = ~(1UL << (8 * pic_pointer_size_get(pf) - 2));
-      mask  = pfile_constant_get(pf, cmask, VARIABLE_DEF_NONE);
+      mask  = pfile_constant_get(pf, cmask, VARIABLE_DEF_NONE); */
+
       if (pic_is_16bit(pf)) {
         pic_var_pointer_release(pf, tmp);
         tmp = pfile_value_find(pf, PFILE_LOG_ERR, "_tblptr");
@@ -1644,15 +1670,18 @@ static void pic_assign_from_ptr(pfile_t *pf, value_t dst, value_t src)
        * if baseofs is zero, `OPERATOR_ADD' --> `OPERATOR_ASSIGN'
        * which brings us right back here!
        */
-      if ((VALUE_NONE != baseofs) 
-        && (!value_is_const(baseofs) || value_const_get(baseofs))) {
-        pic_op(pf, OPERATOR_ADD, tmp, src, baseofs);
-        pic_op(pf, OPERATOR_ANDB, tmp, tmp, mask);
-      } else {
-        pic_op(pf, OPERATOR_ANDB, tmp, src, mask);
+      if ((VALUE_NONE != baseofs)
+          && (!value_is_const(baseofs) || value_const_get(baseofs))) {
+          pic_op(pf, OPERATOR_ADD, tmp, src, baseofs);
       }
+        /* jalv25r8 issue#30. Remove masking. The whole else can also be removed
+        pic_op(pf, OPERATOR_ANDB, tmp, tmp, mask); 
+      } else {
+        pic_op(pf, OPERATOR_ANDB, tmp, src, mask); 
+      } */
       value_def_set(src, src_def);
-      value_release(mask);
+      /* jalv25r8 issue#30. Mask no longer used. 
+      value_release(mask); */
       pic_indirect_setup3(pf, dst, VALUE_NONE, VALUE_NONE, 0, &ipos);
       sz = pic_result_sz_get(src, VALUE_NONE, dst);
       if (pic_is_16bit(pf)) {

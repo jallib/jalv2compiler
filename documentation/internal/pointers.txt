@@ -1,6 +1,30 @@
 pointers with JALv2
 ===================
 
+2023-05-07: Update RJ
+---------------------
+See compiler issue #30. Masking off the msb's causes a problem for large
+programs (>16k). This masking has been removed from the compiler code. 
+This only seems to be a problem for PIC12/16 and not PIC18.
+
+Changed files
+--------------
+File pic_opfn.c:
+- pic_pointer_read_create(). Removed clearing of 2 higher bits of the pointer.
+
+File pic_op.c:
+- pic_assign_from_ptr(). Removed clearing of bit 6 of the pointer.
+- pic_assign_to_ptr(). Removing the setting of bit 6. 
+
+Note that despite the text given below the removal of the setting and clearing of
+the bits from the code did not result in any problems so apparently it was no
+longer used in the code. There is some setup code for EEPROM and FLASH of which
+the functionality is not implemented to this code could be removed. EEPROM and
+FLASH programming is done via separate JAL libraries. Due to the variaty of
+PIC's it would not be possible to add this to the JAL compiler.
+
+-- Original documentation of Kyle York ---
+
 Currently, the only way to declare a pointer in JALv2 is by using it in a
 parameter as follows:
 

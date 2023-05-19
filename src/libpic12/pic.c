@@ -2702,10 +2702,7 @@ void pic_cmd_dump(pfile_t *pf, const cmd_t cmd, boolean_t first)
           pic_blist_total);
       pfile_log(pf, PFILE_LOG_INFO, PIC_MSG_STACK_AVAIL, (ulong) pic_stk_sz);
 
-      /* RJ jalv25r7: This code checks for a stack_depth of >= 15 but there
-                      are PICs with a bigger stack size than 15. */
-                      /* New code jalv25r7. */
-      stack_sz = pfile_value_find(pf, PFILE_LOG_NONE, "_stack_size");
+       stack_sz = pfile_value_find(pf, PFILE_LOG_NONE, "_stack_size");
       if (!stack_sz) {
           if (pfile_flag_test(pf, PFILE_FLAG_WARN_BACKEND)) {
               pfile_log(pf, PFILE_LOG_WARN, "stack size not set");
