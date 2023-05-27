@@ -15,7 +15,7 @@ jobs:
        - name: Upload binaries to release
          uses: actions/upload-artifact@v3
          with: 
-           name: MAC Compiler
+           name: jalv2-osx
            path: jallib/jalv2compiler/bin
   
  
