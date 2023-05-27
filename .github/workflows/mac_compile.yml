@@ -12,8 +12,8 @@ jobs:
        - name: Build for MAC
          run: bash jallib/jalv2compiler/src/make_osx
 
-       - uses: actions/upload-artifact@v3
        - name: Upload binaries to release
+         uses: actions/upload-artifact@v3
          with: 
            name: MAC Compiler
            path: jallib/jalv2compiler/bin
