@@ -1,0 +1,22 @@
+name: 'MAC Compile'
+
+# Compile the JAL compiler for a MAC and save the produced executable
+# Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
+
+name: Manually create MAC compiler
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+	  - uses: actions/checkout@v3
+ 	  - name: Build for MAC
+	    run: bash jallib/jalv2compiler/src/make_osx
+    steps:
+ 	  - name: Upload binaries to release
+	    uses: actions/upload-artifact@v3
+	    with: 
+		  name: MAC Compiler
+		  path: jallib/jalv2compiler/bin
+  
+ 
