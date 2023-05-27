@@ -8,11 +8,11 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-       - name: Build for MAC
        - uses: actions/checkout@v3
+       - name: Build for MAC
          run: bash jallib/jalv2compiler/src/make_osx
-       - name: Upload binaries to release
        - uses: actions/upload-artifact@v3
+       - name: Upload binaries to release
          with: 
            name: MAC Compiler
            path: jallib/jalv2compiler/bin
