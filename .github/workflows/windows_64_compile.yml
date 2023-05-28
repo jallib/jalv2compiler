@@ -20,5 +20,5 @@ jobs:
          uses: actions/upload-artifact@v3
          with: 
            name: jalv2_64.exe
-           path: ${{ github.workspace }}\bin
+           path: ${{ github.workspace }}\bin\jalv2_64
   
