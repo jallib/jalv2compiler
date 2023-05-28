@@ -5,22 +5,23 @@ name: 'MAC Compile'
 
 on: workflow_dispatch
 jobs:
-  runs-on: unbuntu-latest
-    strategy:
-      matrix:
-        os-version: [ ubuntu-latest ]
-        compiler: [ gcc-latest ]
-    steps:
-       - uses: actions/checkout@v3
-       - name: Build for MAC
-         run:
-           cd  ${{ github.workspace }}/src
-           bash ${{ github.workspace }}/src/make_osx
+   example_matrix:
+     runs-on: unbuntu-latest
+     strategy:
+       matrix:
+         os-version: [ ubuntu-latest ]
+         compiler: [ gcc-latest ]
+     steps:
+        - uses: actions/checkout@v3
+        - name: Build for MAC
+          run:
+            cd  ${{ github.workspace }}/src
+            bash ${{ github.workspace }}/src/make_osx
 
-       - name: Upload binaries to release
-         uses: actions/upload-artifact@v3
-         with: 
-           name: jalv2-osx
-           path: ${{ github.workspace }}/bin/jalv2-osx
-  
+        - name: Upload binaries to release
+          uses: actions/upload-artifact@v3
+          with: 
+            name: jalv2-osx
+            path: ${{ github.workspace }}/bin/jalv2-osx
+ 
  
