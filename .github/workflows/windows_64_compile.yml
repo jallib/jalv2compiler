@@ -15,7 +15,7 @@ jobs:
         shell: cmd
         run: |
            cd  ${{ github.workspace }}\src
-           cmd /c "make_64.bat"
+           cmd /c "make_64_github.bat"
 
       - name: Upload binaries to release
         uses: actions/upload-artifact@v3
