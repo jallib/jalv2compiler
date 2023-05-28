@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build for Linux
-        run:
+        run: |
           cd ${{ github.workspace }}/src
           bash ${{ github.workspace }}/src/make_32
 
