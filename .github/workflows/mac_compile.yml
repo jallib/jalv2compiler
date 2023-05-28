@@ -12,7 +12,7 @@ jobs:
        - name: Build for MAC
          run:
            cd  ${{ github.workspace }}/src
-           bash make_osx
+           bash ${{ github.workspace }}/src/make_osx
 
        - name: Upload binaries to release
          uses: actions/upload-artifact@v3
