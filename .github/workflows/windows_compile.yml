@@ -12,6 +12,7 @@ jobs:
        - name: Build for Windows
          shell: cmd
          run:
+           echo ${{ github.workspace }}
            cd  ${{ github.workspace }}\src
            echo "Hello World!"
 
