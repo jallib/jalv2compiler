@@ -13,7 +13,7 @@ jobs:
          shell: cmd
          run:
            cd  ${{ github.workspace }}\src
-           cmd "make_32.bat"
+           cmd /c "make_32.bat"
 
        - name: Upload binary
          uses: actions/upload-artifact@v3
