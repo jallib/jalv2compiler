@@ -12,7 +12,7 @@ jobs:
        - name: Build for Windows
          run:
            cd  ${{ github.workspace }}\src
-           start-process "make_32.bat"
+           cmd start-process "make_32.bat"
 
        - name: Upload binaries to release
          uses: actions/upload-artifact@v3
