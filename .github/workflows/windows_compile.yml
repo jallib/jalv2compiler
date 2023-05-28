@@ -12,7 +12,7 @@ jobs:
        - name: Build for Windows
          shell: cmd
          run:
-           cd  ${{ github.workspace }}\src
+           cd  ${{ github.workspace }}/src
            cmd /c "make_32.bat"
 
        - name: Upload binary
