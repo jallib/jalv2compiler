@@ -4,6 +4,9 @@ name: 'Linux Compile 32-bit'
 # Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
 
 on: workflow_dispatch
+
+concurrency: ci
+
 jobs:
   runscript:
     name: runscript
