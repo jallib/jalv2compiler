@@ -33,6 +33,8 @@ The batch files are in the same location where the make scripts for Linux are st
 -) Make_32.bat will create the 32-bit Windows JAL compiler called jalv2-i686.exe but is renamed to jalv2.exe
 -) Make_64.bat will create the 64-bit Windows JAL compiler called jalv2-x86-64.exe but is renamed to jalv2_64.exe
 
+The is also a GitHub action to make the 64-bit Windows compiler, called: Windows Compile 64-bit. It uses
+a separate batch file called make_64_github.bat due to other compiler settings.
 
 Building the JALV2 compiler for Linux
 =====================================
