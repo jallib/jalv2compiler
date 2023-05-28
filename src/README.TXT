@@ -48,6 +48,8 @@ There are two Linux scripts used for making the two version of the JAL Linux com
 2) 'bash make_64' or './make_64' in the scr directory will create the 64-bit version of the 
     Linux compiler called jalv2-x86-64
 
+The is also a GitHub action to make the 64-bit Linux compiler, called: Linux Compile 64-bit. 
+
 Building the JALV2 compiler for MacOS
 =====================================
 For this the available cc compiler in XCode was used. MacOS Big Sur 64-bit was running from a Virtual Box.
@@ -58,6 +60,8 @@ version of the JAL compiler (jalv2-native), depending on your OS.
 There is a Linux script used for making the JAL MacOS compiler:
 -) 'bash make_osx' or ./make_osx' in the src directory will create the 64-bit version of the 
     MacOS Linux compiler called jalv2-osx
+
+The is also a GitHub action to make the 64-bit MAC compiler, called: MAC Compile.
 
 Other info
 ==========
@@ -70,6 +74,6 @@ Since compiler version jalv25r6 all -Werrors where resolved for all compiler ver
 
 All created compiler versions (Windows,  Linux and MacOS) should be stored in the 'bin' directory.
 
-2021-10-28
+2023-05-28
 Rob Jansen
 
