@@ -6,6 +6,7 @@ name: 'Linux Compile 32-bit'
 on: workflow_dispatch
 jobs:
   runscript:
+    name: runscript
     runs-on: ubunte-latest
     steps:
       - uses: actions/checkout@v3
