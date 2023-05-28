@@ -4,20 +4,22 @@ name: 'Linux Compile 64-bit'
 # Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
 
 on: workflow_dispatch
+
 jobs:
-  build:
+  runscript:
+    name: runscript
     runs-on: ubuntu-latest
     steps:
-       - uses: actions/checkout@v3
-       - name: Build for Linux
-         run:
-           cd  ${{ github.workspace }}/src
-           bash make_64
+      - uses: actions/checkout@v3
+      - name: Build for Linux
+        run: |
+          cd ${{ github.workspace }}/src
+          bash ${{ github.workspace }}/src/make_64
 
-       - name: Upload binaries to release
-         uses: actions/upload-artifact@v3
-         with: 
-           name: jalv2
-           path: ${{ github.workspace }}/bin
+      - name: Upload binaries to release
+        uses: actions/upload-artifact@v3
+        with: 
+          name: jalv2-x86-64
+          path: ${{ github.workspace }}/bin/jalv2-x86-64
   
  
