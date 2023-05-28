@@ -1,6 +1,6 @@
-name: 'Linux Compile 32-bit'
+name: 'Linux Compile 64-bit'
 
-# Compile the JAL compiler for Linux 32-bit and save the produced executable
+# Compile the JAL compiler for Linux 64-bit and save the produced executable
 # Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
 
 on: workflow_dispatch
