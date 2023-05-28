@@ -13,9 +13,9 @@ jobs:
          shell: cmd
          run:
            cd  ${{ github.workspace }}\src
-           make_32
+           cmd "make_32.bat"
 
-       - name: Upload binaries to release
+       - name: Upload binary
          uses: actions/upload-artifact@v3
          with: 
            name: jalv2
