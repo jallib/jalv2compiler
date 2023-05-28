@@ -12,6 +12,7 @@ jobs:
       - name: Build for Linux
         run:
           cd ${{ github.workspace }}/src
+          echo ${{ github.workspace }}/src
           bash ${{ github.workspace }}/src/make_32
 
       - name: Upload binaries to release
