@@ -10,7 +10,7 @@ concurrency: ci
 jobs:
   runscript:
     name: runscript
-    runs-on: ubunte-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Build for Linux
