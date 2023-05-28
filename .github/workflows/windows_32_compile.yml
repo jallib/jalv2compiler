@@ -7,7 +7,7 @@ on: workflow_dispatch
 
 jobs:
   runscript:
-    name: runscript
+    name: Run batchfile
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
