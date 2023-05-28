@@ -1,0 +1,23 @@
+name: 'Windows Compile'
+
+# Compile the JAL compiler for Windows save the produced executable
+# Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
+
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+       - uses: actions/checkout@v3
+       - name: Build for Windows
+         run:
+           cd  ${{ github.workspace }}/src
+           make_32
+
+       - name: Upload binaries to release
+         uses: actions/upload-artifact@v3
+         with: 
+           name: jalv2
+           path: ${{ github.workspace }}/bin
+  
+ 
