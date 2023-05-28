@@ -5,8 +5,11 @@ name: 'MAC Compile'
 
 on: workflow_dispatch
 jobs:
-  build:
-    runs-on: macos-latest
+  runs-on: unbuntu-latest
+    strategy:
+      matrix:
+        os-version: [ ubuntu-latest ]
+        compiler: [ gcc-latest ]
     steps:
        - uses: actions/checkout@v3
        - name: Build for MAC
