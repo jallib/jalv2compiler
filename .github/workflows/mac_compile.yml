@@ -1,4 +1,4 @@
-name: 'MAC 64-bit Compile'
+name: 'MAC Compile 64-bit'
 
 # Compile the JAL compiler for a MAC and save the produced executable
 # Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
