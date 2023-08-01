@@ -1,5 +1,5 @@
 # Title: Makefile to create jal compiler pdf and html documentation using dita
-# Author: Rob Jansen, Copyright (c) 2022..2022, all rights reserved.
+# Author: Rob Jansen, Copyright (c) 2022..2023, all rights reserved.
 # Adapted by:
 # 
 # This file is part of jallib (https://github.com/jallib/jallib)
@@ -7,7 +7,7 @@
 #
 #
 
-DITA_DIR=`pwd`/dita-ot-3.7.2
+DITA_DIR=$HOME/Tools/dita-ot-4.0.2
 PDF_DIR=`pwd`/pdf
 HTML_DIR=`pwd`/html
 SOURCE_DIR=`pwd`/dita
