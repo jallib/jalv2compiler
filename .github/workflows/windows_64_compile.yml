@@ -10,7 +10,7 @@ jobs:
     name: Run batchfile
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build for Windows
         shell: cmd
         run: |
@@ -18,7 +18,7 @@ jobs:
            cmd /c "make_64_github.bat"
 
       - name: Upload binaries to release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with: 
           name: jalv2_64.exe
           path: ${{ github.workspace }}\bin\jalv2_64.exe
