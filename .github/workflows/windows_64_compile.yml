@@ -1,7 +1,7 @@
 name: 'Windows Compile 64-bit'
 
 # Compile the JAL 64-bit compiler for Windows save the produced executable
-# Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
+# Author: Rob Jansen, copyright (c) 2023..2023, all rights reserved
 
 on: workflow_dispatch
 
