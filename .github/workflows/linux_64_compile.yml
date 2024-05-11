@@ -1,7 +1,7 @@
 name: 'Linux Compile 64-bit'
 
 # Compile the JAL compiler for Linux 64-bit and save the produced executable
-# Author: Rob Jansen, copyright (c) 2023..2023, all rights reserverd
+# Author: Rob Jansen, copyright (c) 2023..2023, all rights reserved
 
 on: workflow_dispatch
 
@@ -10,7 +10,7 @@ jobs:
     name: runscript
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build for Linux
         run: |
           cd ${{ github.workspace }}/src/jal
@@ -19,7 +19,7 @@ jobs:
           bash ${{ github.workspace }}/src/make_64
 
       - name: Upload binaries to release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with: 
           name: jalv2-x86-64
           path: ${{ github.workspace }}/bin/jalv2-x86-64
