@@ -662,10 +662,7 @@ COD_directory_t *COD_directory_read(const char *fname)
     if (dir->index[ii]) {
       dir->code[ii] = malloc(sizeof(*dir->code[ii]));
       COD_directory_block_seek(dir, dir->index[ii]);
-        /* RJ jalv25r4: Replaced (void) by if statement to get rid of -Werror. 
-                        It would be better to handle the 'else' part and also
-                        check if fread return the COD_BLOCK_SIZE instead of >0. */
-        if (fread(dir->code[ii], COD_BLOCK_SIZE, 1, dir->io) > 0) {
+         if (fread(dir->code[ii], COD_BLOCK_SIZE, 1, dir->io) > 0) {
             continue;
         }
     } else {
@@ -870,9 +867,6 @@ COD_directory_t *COD_directory_alloc(const uchar *compiler)
     static const char *months =
       "JanFebMarAprMayJun"
       "JulAugSepOctNovDec";
-    /* RJ jalv25r4: Get rid of sprintf -Wformat-overflow error for 
-                    terminating 0 at the end, changed to date[9]
-                    instead of date[8]. */
     uchar date[9];
 
     (void) time(&now);

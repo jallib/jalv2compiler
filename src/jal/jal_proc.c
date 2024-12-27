@@ -1131,7 +1131,6 @@ value_t jal_parse_call(pfile_t *pf, value_t call_val, flag_t flags)
                   ct_val = pfile_value_find(pf, PFILE_LOG_NONE, ct_name);
                   if (!ct_val) {
                     ct_val = pfile_constant_get(pf, value_ct_get(val),
- /* RJ jalv25r6                     VARIABLE_DEF_TYPE_NONE); */
                       VARIABLE_DEF_NONE);
                   }
                   parms[ii - 1] = ct_val;

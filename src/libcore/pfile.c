@@ -224,8 +224,7 @@ void pfile_close(pfile_t *pf)
     if (pfile_flag_test(pf, PFILE_FLAG_DEBUG_COMPILER)) {
         if (tag_ref_ct_get(tag) != 1) {
             fprintf(stderr, "!!! tag 0x%lx: %s(%u) ct = %u\n",
-            /* RJ jalv25r6 org code removed to prevent -Werror: (ulong)tag, tag_name_get(tag), */
-            (ulong)(uintptr_t) tag, tag_name_get(tag),
+             (ulong)(uintptr_t) tag, tag_name_get(tag),
             tag_n_get(tag), tag_ref_ct_get(tag));
       }
     }

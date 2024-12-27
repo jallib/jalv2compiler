@@ -3,7 +3,8 @@
  ** value.h : value declarations
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- ** All rights reserved
+ **           (c) 2024-2024, Rob Jansen
+** All rights reserved
  **
  ************************************************************/
 #ifndef value_h__
@@ -62,6 +63,9 @@ void          value_baseofs_set(value_t val, value_t ofs);
 
 variable_const_t value_const_get(const value_t val);
 void             value_const_set(value_t val, variable_const_t c);
+
+/* jalv25r9 */
+variable_const_t value_baseofs_const_get(const value_t val);
 
 float            value_const_float_get(const value_t val);
 void             value_const_float_set(value_t val, float c);

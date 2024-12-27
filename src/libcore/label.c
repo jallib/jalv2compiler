@@ -8,7 +8,6 @@
  ** All rights reserved
  **
  ***********************************************************/
-/* RJ jalv25r6 for uintptr_t */
 #include <stdint.h>
 
 #include "label.h"
@@ -188,7 +187,6 @@ void label_list_reset(lbllist_t *lst)
     lbl = lst->head;
     if (label_refct_get(lbl) > 1) {
       fprintf(stderr, "label leak: 0x%lx %s\n", 
-      /* RJ jalv25r6 org code removed to prevent -Werror: (ulong) lbl, label_name_get(lbl)); */
       (ulong)(uintptr_t) lbl, label_name_get(lbl));
       }
     lst->head = label_link_get(lbl);

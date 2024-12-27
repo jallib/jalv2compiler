@@ -3,7 +3,7 @@
  ** pic_opfn.c : PIC built-in function generation
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **               2020-2023, Rob Jansen
+ **               2020-2024, Rob Jansen
  **
  ** All rights reserved
  **
@@ -1024,18 +1024,14 @@ static void pic_task_suspend_create(pfile_t *pf)
  * the top two bits in the pointer are (MSB on left):
  *   0 0 : data pointer
  *   0 1 : lookup table
- *   1 0 : eeprom
- *   1 1 : flash
+ *   1 0 : eeprom <-- RJ: Was never implemented, can be removed.
+ *   1 1 : flash  <-- RJ: Was never implemented, can be removed.
  */
-/* jalv25r8 issue#30: Here the bits are set that should be removed since it
-   limits the code size for lookup tables. It seems that by default
-   all code is geneated also code that is not needed later on. It
-   is assumed that this code is removed later by the optimization. */
 static void pic_pointer_read_create(pfile_t *pf)
 {
   value_t  ptr;
   value_t  pic_sign;
-  label_t  lbl_eeprom_or_flash;
+  /* jalv25r9:label_t  lbl_eeprom_or_flash; */
   label_t  lbl_lookup;
   label_t  lbl_pic_indirect;
   value_t  ind;
@@ -1044,26 +1040,20 @@ static void pic_pointer_read_create(pfile_t *pf)
   ptr      = pic_var_pointer_get(pf);
   pic_sign = pic_var_sign_get(pf);
   ind      = pic_indirect_get(pf, PFILE_LOG_ERR, 0);
-  lbl_eeprom_or_flash = pfile_label_alloc(pf, 0);
+  /* jalv25r9: lbl_eeprom_or_flash = pfile_label_alloc(pf, 0); */
   lbl_lookup = pfile_label_alloc(pf, 0);
   lbl_pic_indirect = pic_label_find(pf, PIC_LABEL_INDIRECT, BOOLEAN_TRUE);
 
   msb = pic_pointer_size_get(pf) - 1;
 
+  /* jalv25r9: The eeprom_or_flash was never implemented and can be removed.
   pic_instr_append_f_bn(pf, PIC_OPCODE_BTFSC, ptr, msb, 7);
-  pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_eeprom_or_flash);
+  pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_eeprom_or_flash); */
+
   pic_instr_append_f_bn(pf, PIC_OPCODE_BTFSC, ptr, msb, 6);
   pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_lookup);
   /* _pic_pointer points to data */
-#if 0
-  pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 0, PIC_OPDST_W);
-  pic_instr_append_reg(pf, PIC_OPCODE_MOVWF, "_fsr");
-  pic_instr_append_reg_flag(pf, PIC_OPCODE_BCF, "_status", "_irp");
-  pic_instr_append_f_bn(pf, PIC_OPCODE_BTFSC, ptr, 1, 0);
-  pic_instr_append_reg_flag(pf, PIC_OPCODE_BSF, "_status", "_irp");
-#else
   pic_fsr_setup(pf, ptr);
-#endif
   pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ind, 0, PIC_OPDST_W);
   pic_instr_append(pf, PIC_OPCODE_RETURN);
   /* _pic_pointer points to lookup */
@@ -1078,12 +1068,6 @@ static void pic_pointer_read_create(pfile_t *pf)
     pic_stvar_tblptr_mark(pf);
     for (ii = 0; ii < 3; ii++) {
       pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, ii, PIC_OPDST_W);
-      if (2 == ii) {
-        /* mask off the high two bits */
-        /* RJ issue#30: The clearing of the 2 msb must be removed here.
-              Original code
-        pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~0xc0) & 0xff); */
-      }
       pic_instr_append_f(pf, PIC_OPCODE_MOVWF, tmp, ii);
     }
     value_release(tmp);
@@ -1099,17 +1083,15 @@ static void pic_pointer_read_create(pfile_t *pf)
     pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 0, PIC_OPDST_W);
     pic_instr_append_f(pf, PIC_OPCODE_MOVWF, pic_sign, 0);
     pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 1, PIC_OPDST_W);
-    /* RJ issue#30: The clearing of the 2 msb must be removed here. 
-       Original code.
-    pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~(0x80 | 0x40)) & 0xff); */
     pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_pic_indirect);
   }
   /* _pic_pointer points to either EEPROM or FLASH (not supported yet) */
+  /* jalv25r9: Can be removed
   pic_instr_append_label(pf, lbl_eeprom_or_flash);
-  pic_instr_append(pf, PIC_OPCODE_RETURN);
+  pic_instr_append(pf, PIC_OPCODE_RETURN); */
   label_release(lbl_pic_indirect);
   label_release(lbl_lookup);
-  label_release(lbl_eeprom_or_flash);
+  /* jalv25r9: label_release(lbl_eeprom_or_flash); */
   value_release(ind);
   pic_var_sign_release(pf, pic_sign);
   pic_var_pointer_release(pf, ptr);

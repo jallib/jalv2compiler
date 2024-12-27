@@ -37,7 +37,6 @@ static pic_code_gop_rc_t pic_code_pclath_analyze(pfile_t *pf, pic_code_t code,
     pic_code_pclath_get(code, &cpclath_state);
   } else {
     pclath = PIC_PCLATH_UNKNOWN;
-    /* RJ jalv25r4: Added initialization.*/
     cpclath_state.before = PIC_PCLATH_UNKNOWN;
     cpclath_state.action = PIC_PCLATH_UNKNOWN;
   }

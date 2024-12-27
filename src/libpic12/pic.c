@@ -3014,7 +3014,7 @@ label_t pic_lookup_label_find(pfile_t *pf, variable_t var, unsigned flags)
   label_t lbl;
   char   *name;
 
-  sz  = 19; /* '_lookup_\0' */
+  sz = 19; /* '_lookup_\0' */
   sz += strlen(variable_name_get(var));
   name = MALLOC(sz);
   lbl = LABEL_NONE;
@@ -3189,6 +3189,8 @@ static void pic_lookup_init_14bit(pfile_t *pf)
 
         lbl = pic_lookup_label_find(pf, lookup_inf.data[ii].var,
             PIC_LOOKUP_LABEL_FIND_FLAG_ALLOC);
+        /* RJ: This if statement is not needed since this check is 
+               already done before the call of this procedure. */
         if (pic_is_16bit(pf)) {
           writeit = BOOLEAN_TRUE;
           pic_instr_append_label(pf, lbl);
@@ -3218,7 +3220,7 @@ static void pic_lookup_init_14bit(pfile_t *pf)
             size_t pc_hi;
 
             pc_hi = pc + lookup_inf.data[ii].sz;
-            if (pc / 256 == pc_hi / 256) {
+            if ((pc / 256) == (pc_hi / 256)) {
               /* put in the table */
               pic_instr_append_label(pf, lbl);
               pic_instr_append_reg_d(pf, PIC_OPCODE_ADDWF, "_pcl",
@@ -3238,7 +3240,7 @@ static void pic_lookup_init_14bit(pfile_t *pf)
           if (LABEL_NONE != lbl_data) {
             pic_instr_append_label(pf, lbl_data);
             label_release(lbl_data);
-          }
+          } 
 
           for (jj = 0; jj < lookup_inf.data[ii].sz; jj++) {
             pic_instr_append_w_kn(pf, PIC_OPCODE_RETLW,
@@ -4488,6 +4490,8 @@ void pic_cmd_generate(pfile_t *pf, const cmd_t cmd)
   pic_code_databits_optimize(pf); 
   pic_code_databits_remove(pf); 
   pic_w_value_optimize1(pf);
+
+ 
 
   /* each time something is removed, we must again go through the branchbits
      optimization. otherwise the code could be larger than necessary.

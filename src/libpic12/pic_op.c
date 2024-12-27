@@ -3,7 +3,7 @@
  ** pic_op.c : PIC operator generation definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **           (c) 2020-2023, Rob Jansen
+ **           (c) 2020-2024, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -21,6 +21,8 @@
 #include "piccolst.h"
 #include "pic_inst.h"
 #include "pic_op.h"
+/* jalv25r9*/
+#include "../libcore/value.h"
 
 /*
  * general note:
@@ -1175,10 +1177,7 @@ static void pic_assign_from_const(pfile_t *pf, value_t dst, value_t src)
   /* If data is NULL, neither offset nor limit matter./ */
   if (data) {
     if (value_baseofs_get(src)) {
-        /* jalv25r8 issue#31. The ofs should just be the size of the src.
-           original code:
-           ofs = value_const_get(value_baseofs_get(src)) * src_sz; */
-        ofs = value_const_get(value_baseofs_get(src));
+         ofs = value_const_get(value_baseofs_get(src));
     }
   } else {
     src_sz = 0;
@@ -1312,8 +1311,7 @@ static void pic_assign_from_lookup(pfile_t *pf, value_t dst,
         pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, tablat, 0, PIC_OPDST_W);
       } else {
         if (ii) {
-          /* jalv25r8 issue#28. Need to pass LSB in _pic_loop, MSB in W again. */
-          if ((variable_def_member_sz_get(mbr) * variable_def_member_ct_get(mbr)
+           if ((variable_def_member_sz_get(mbr) * variable_def_member_ct_get(mbr)
               > 255) && (value_byte_sz_get(baseofs) > 1)) {
               /* Since we use _pic_loop we have to increment with 1, not with ii.*/
               pic_instr_append_w_kn(pf, PIC_OPCODE_MOVLW, 1);
@@ -1459,12 +1457,6 @@ static void pic_assign_array_to_pointer(pfile_t *pf, value_t dst, value_t src)
     code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
     pic_code_brdst_set(code, lbl);
     pic_code_ofs_set(code, 1);
-    /* jalv25r8 issue#30: Setting bit 6 below indicates a lookup, used by
-       the function pic_assign_from_ptr(). These 2 lines must be removed
-       since it limits the size of a lookup table.
-    pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x40);
-    pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, 1); */
-
     label_release(lbl);
   } else {
     variable_base_t base;
@@ -1530,6 +1522,8 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
     pic_code_t    code;
     label_t       lbl;
     variable_sz_t ii;
+    /* jalv25r9 */
+    variable_const_t offset;
 
     lbl = pic_lookup_label_find(pf, value_variable_get(src), 
         PIC_LOOKUP_LABEL_FIND_FLAG_ALLOC
@@ -1537,16 +1531,23 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
     for (ii = 0; ii < pic_pointer_size_get(pf); ii++) {
       code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
       pic_code_brdst_set(code, lbl);
-      pic_code_ofs_set(code, ii);
-      /* jalv25r8 ssue#30. Must be removed. The whole if can be removed. */
-      /* 
-      if (ii + 1 == pic_pointer_size_get(pf)) { */
-        /* This has to be forced. Previously I optimized this out
-         * in some circumstances, but that lead to bad code
-         */
-      /* jalv25r8 ssue#30. So this too 
-         pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x40); 
-      } */
+      pic_code_ofs_set(code, ii);	  
+      /* jalv25r9. Issue#36. If there is an offset to the source then
+         we should add that. This offset is created when going through
+         a subscript (see jal_parse_subscript()). This solves the issue
+         when using arrays in records. */
+      offset = value_baseofs_const_get(src);
+      if ((offset > 255) & (ii == 1)) {
+          /* We have a large offset. Pointer must also be 2 bytes. */
+          pic_instr_append_w_kn(pf, PIC_OPCODE_ADDLW, offset / 0xff);
+      }
+      else if ((offset > 0) & (ii == 0)) {
+          offset = offset & 0xff;
+          /* Do not add 0 when on the boundary of 255. */
+          if (offset != 00) {
+              pic_instr_append_w_kn(pf, PIC_OPCODE_ADDLW, offset);
+          }
+      }
       pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
     }
     label_release(lbl);
@@ -1646,21 +1647,6 @@ static void pic_assign_from_ptr(pfile_t *pf, value_t dst, value_t src)
       /* W holds MSB */
       variable_sz_t sz;
       variable_sz_t ipos;
-      /* jalv25r8 issue#30: Remove mask and cmask
-      value_t       mask;
-      ulong         cmask; */
-
-      /* 
-       * bit 6 of the high byte of the pointer is 1, bit 7 is 0
-       * so, simply clear bit 6
-       */
-      /* jalv25r8 issue#30: We have to remove the clearing of the the two
-            msb's otherwise the pointer size is limited. So
-            we remove cmask and mask. */
-      /* jalv25r8 Removed
-      cmask = ~(1UL << (8 * pic_pointer_size_get(pf) - 2));
-      mask  = pfile_constant_get(pf, cmask, VARIABLE_DEF_NONE); */
-
       if (pic_is_16bit(pf)) {
         pic_var_pointer_release(pf, tmp);
         tmp = pfile_value_find(pf, PFILE_LOG_ERR, "_tblptr");
@@ -1674,14 +1660,7 @@ static void pic_assign_from_ptr(pfile_t *pf, value_t dst, value_t src)
           && (!value_is_const(baseofs) || value_const_get(baseofs))) {
           pic_op(pf, OPERATOR_ADD, tmp, src, baseofs);
       }
-        /* jalv25r8 issue#30. Remove masking. The whole else can also be removed
-        pic_op(pf, OPERATOR_ANDB, tmp, tmp, mask); 
-      } else {
-        pic_op(pf, OPERATOR_ANDB, tmp, src, mask); 
-      } */
       value_def_set(src, src_def);
-      /* jalv25r8 issue#30. Mask no longer used. 
-      value_release(mask); */
       pic_indirect_setup3(pf, dst, VALUE_NONE, VALUE_NONE, 0, &ipos);
       sz = pic_result_sz_get(src, VALUE_NONE, dst);
       if (pic_is_16bit(pf)) {

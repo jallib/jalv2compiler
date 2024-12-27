@@ -550,10 +550,7 @@ void pic_w_value_optimize1(pfile_t *pf)
           next = pic_code_next_get(next))
         ; /* null body */
 
-      /* RJ jalv25r5: Also look one instruction further to solve issue#24. 
-             It may be that a bit is set or cleared before an
-             actual bit test and skip instruction is executed. */
-      for (next_next = pic_code_next_get(next);
+       for (next_next = pic_code_next_get(next);
                 ((pic_code_op_get(next_next) == PIC_OPCODE_BRANCHLO_SET)
               || (pic_code_op_get(next_next) == PIC_OPCODE_BRANCHLO_CLR)
               || (pic_code_op_get(next_next) == PIC_OPCODE_BRANCHLO_NOP)
