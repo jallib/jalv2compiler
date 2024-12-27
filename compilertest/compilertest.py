@@ -2,7 +2,7 @@
 """
 Title: Test the compiler output by compiling and verifying various sample programs.
 
-Author: Rob Jansen, Copyright (c) 2018..2021, all rights reserved.
+Author: Rob Jansen, Copyright (c) 2018..2024, all rights reserved.
 
 Adapted-by:
 
@@ -33,7 +33,7 @@ import subprocess
 import shutil
 import platform
 
-scriptversion   = "0.3"
+scriptversion   = "1.0"
 scriptauthor    = "Rob Jansen"
 
 platform_name = platform.system()
@@ -60,7 +60,8 @@ srcdir = os.path.join(base, "Sample")
 logdir  = os.path.join(base, "Log")
 basedir  = os.path.join(base, "Baseline")
 outdir  = os.path.join(base, "Output")
-difflog = os.path.join(logdir, "Testresults.txt")
+createlog = os.path.join(logdir, "Create_results.txt")
+verifylog = os.path.join(logdir, "Verify_results.txt")
 
 if (os.path.exists(logdir) == False):
    os.makedirs(logdir)
@@ -73,7 +74,104 @@ if (os.path.exists(outdir) == False):
 if (os.path.exists(cmpdir) == False):
    os.makedirs(cmpdir)
 
-def compare_files(basefile, newfile):
+""" 
+Compare the given asm files and store each line that does not match 
+in a logfile but skip the first few lines which contain compiler info.
+"""
+def compare_asm_files(basefile, newfile, errfile):
+    fn = open(newfile, "r")
+    fb = open(basefile, "r")
+    fe = open(errfile, "w")
+    # Skip the first 6 lines.
+    for skip in range (0, 7):
+        newl = fn.readline()
+        basel = fb.readline()
+    # If possible read a few lines since only one line could be different.
+    baselist = []
+    newlist = []
+    index = 0
+    # Read until the whole file is read.
+    while (newl != "") and (basel != ""):
+        newl = fn.readline()
+        basel = fb.readline()
+        newlist.append(newl)
+        baselist.append(basel)
+        index = index + 1
+    # Now compare where there are differences.
+    base_index = 0
+    new_index = 0
+    fe.write("For each difference five items are shown where the third item shows the item that differs.\n")
+    fe.write("------------------------------------------------------------------------------------------\n")
+    fe.write("Baseline                                                                                            New\n")
+    fe.write("========                                                                                            ===\n")
+    while (base_index < index) and (new_index < index):
+        # Compare the lines but ignore labels since the numbering may change.
+        if (newlist[new_index] != baselist[base_index]) and \
+                ("l__" not in newlist[new_index]) and ("l__" not in baselist[base_index]):
+            # Print one line before and after the mismatch.
+            if (base_index > 2):
+                base_print = base_index - 2
+            else:
+                base_print = base_index
+            if (new_index > 2):
+                new_print = new_index - 2
+            else:
+                new_print = new_index
+            if (base_index < (index - 3)):
+                end_base = base_index + 3
+            else:
+                end_base = base_index
+            if (new_index < (index - 3)):
+                end_new = new_index + 3
+            else:
+                end_new = new_index
+            while (base_print != end_base) and (new_print != end_new):
+                line = baselist[base_print]
+                line = line.rstrip()
+                # Make the line a certain length.
+                line_length = len(line)
+                while line_length < 100:
+                    line = line + " "
+                    line_length = line_length + 1
+                fe.write(line)
+                fe.write(newlist[new_print])
+                base_print = base_print + 1
+                new_print = new_print + 1
+            fe.write("\n\n")
+
+            # Try to sync again (try 10 lines), start with new.
+            sync_index = new_index
+            sync_count = 0
+            synced = False
+            while (sync_index < (index - 1)) and (sync_count < 10)\
+                    and (synced == False):
+                sync_index = sync_index + 1
+                sync_count = sync_count + 1
+                if (newlist[sync_index] == baselist[base_index]):
+                    new_index = sync_index
+                    synced = True
+
+            # If not synced, try again with base.
+            sync_index = base_index
+            sync_count = 0
+            while (sync_index < (index - 1)) and (sync_count < 10)\
+                    and (synced == False):
+                sync_index = sync_index + 1
+                sync_count = sync_count + 1
+                if (newlist[new_index] == baselist[sync_index]):
+                    base_index = sync_index
+                    synced = True
+
+        base_index = base_index + 1
+        new_index = new_index + 1
+
+    fe.close()
+    fb.close()
+    fn.close()
+
+
+# Compare two hex files and return TRUE when they are the same.
+def compare_hex_files(basefile, newfile):
     fn = open(newfile, "r")
     fb = open(basefile, "r")
     all_ok = True
@@ -98,9 +196,11 @@ def compare_files(basefile, newfile):
 
 def create_baseline():
     # Remove previous baseline.
+    for f in os.listdir(logdir):
+        os.remove(os.path.join(logdir, f))
     for f in os.listdir(basedir):
         os.remove(os.path.join(basedir, f))
-    # cmdlist = [os.path.join(cmpdir, baseline_compiler), "-no-asm", "-no-codfile", "-s", devdir]
+    fl = open(createlog, "w")
     cmdlist = [os.path.join(cmpdir, baseline_compiler), "-no-codfile", "-s", devdir]
     smpcount = 0
     errcount = 0
@@ -111,11 +211,13 @@ def create_baseline():
             asmfile = sample[:-3] + "asm"  # .jal -> .asm
             hexfile = sample[:-3] + "hex"  # .jal -> .hex
             # When the file is not a jal file do not try to compile it but remove it
+            # Sleep needed when running under Virtual Box to prevent error that file does not exist.
             if (sample[-3:] != "jal"):
                 os.remove(os.path.join(srcdir, sample))
                 continue
             try:
                 print("Compiling and baselining sample: ", smpcount, " for sample:", sample)
+                fl.write("Compiling file " + sample + "\n   --> ")
                 sample = os.path.join(srcdir, sample)
                 log = subprocess.check_output(cmdlist + [sample],
                                         stderr=subprocess.STDOUT,
@@ -125,19 +227,22 @@ def create_baseline():
                 numerrors = int(loglist[-4])    # get number of errors
                 numwarnings = int(loglist[-2])  # and warnings
                 if ((numerrors == 0) and (numwarnings == 0)):
+                    fl.write("OK \n")
                     smpcount += 1
                     if (os.path.exists(os.path.join(srcdir, hexfile))):
                         shutil.copy2(os.path.join(srcdir, hexfile), os.path.join(basedir, hexfile))
                         os.remove(os.path.join(srcdir, hexfile))
-                        # Also copy the create asm file for later comparison.
+                        # Also copy the created asm file for later comparison.
                         shutil.copy2(os.path.join(srcdir, asmfile), os.path.join(basedir, asmfile))
                         os.remove(os.path.join(srcdir, asmfile))
                 else:
                     errcount += 1  # issue
                     print(sample, numerrors, "errors", numwarnings, "warnings")
+                    fl.write("Error. Compiler reports " + str(numerrors) + " errors and " + str(numwarnings) + " warnings.\n")
             except subprocess.CalledProcessError as e:  # compilation failure
                 errcount += 1  # error(s)
-                print("Compiler reports returncode", e.returncode, "with sample", sample)
+                print("Compiler reports return code", e.returncode, "with sample", sample)
+                fl.write("Error. Compiler reports return code" + str(e.returncode) + ".\n")
         if (smpcount== 0):
             print("No samples available to create baseline.")
         else:
@@ -148,6 +253,7 @@ def create_baseline():
                 os.remove(os.path.join(srcdir, hexfile))
     else:
         print("No baseline compiler found.")
+    fl.close()
 
 def verify_baseline():
     # Erase previous content.
@@ -155,14 +261,13 @@ def verify_baseline():
         os.remove(os.path.join(logdir, f))
     for f in os.listdir(outdir):
         os.remove(os.path.join(outdir, f))
-    fl = open(difflog, "w")
+    fl = open(verifylog, "w")
     smpcount = 0
     errcount = 0
     # Compile all samples with various compilers and compare the output with the baseline. Exclude the
     # baseline compiler.
     for compiler in os.listdir(cmpdir):
         if (compiler != baseline_compiler):
-#            cmdlist = [os.path.join(cmpdir, compiler), "-no-asm", "-no-codfile", "-s", devdir]
             cmdlist = [os.path.join(cmpdir, compiler), "-no-codfile", "-s", devdir]
             print("Compiling for", compiler)
             fl.write("Compiler results for " + compiler + "\n")
@@ -171,8 +276,9 @@ def verify_baseline():
                 flog = sample[:-4] + "_" + compiler + ".txt"         # Add compiler name to the log textfile.
                 hexfile = sample[:-3] + "hex"                        # .jal -> .hex
                 asmfile = sample[:-3] + "asm"                        # .jal -> .asm
-                newhexfile = sample[:-4] + "_" + compiler + ".hex"      # Add compiler name to the hexfile.
-                newasmfile = sample[:-4] + "_" + compiler + ".asm"       # Add compiler name to the hex
+                newhexfile = sample[:-4] + "_" + compiler + ".hex"   # Add compiler name to the hexfile.
+                newasmfile = sample[:-4] + "_" + compiler + ".asm"   # Add compiler name to the hex
+                errfile = sample[:-3] + "txt"                        # In case we need to report an error.
                 # When the file is not a jal file do not try to compile it but remove it
                 if (sample[-3:] != "jal"):
                     os.remove(os.path.join(srcdir, sample))
@@ -199,10 +305,13 @@ def verify_baseline():
                                 newasmfile = os.path.join(outdir, newasmfile)
                                 shutil.copy(os.path.join(srcdir, asmfile), newasmfile)
                                 fl.write("File: " + newhexfile + "\n")
-                                if (compare_files(os.path.join(basedir, hexfile), newhexfile) == False):
+                                if (compare_hex_files(os.path.join(basedir, hexfile), newhexfile) == False):
                                     fl.write("   --> Error, hex files do not match. \n")
                                     print("   --> Error, hex files do not match.")
                                     errcount += 1
+                                    # Show where the differences are.
+                                    compare_asm_files(os.path.join(basedir, asmfile), newasmfile,
+                                                      os.path.join(logdir, errfile))
                                 else:
                                     fl.write("   --> OK. \n")
                                     print("   --> OK.")
@@ -212,15 +321,15 @@ def verify_baseline():
                             errcount += 1                                   # issue
                             with open(os.path.join(logdir,flog), "w") as fp:
                                 fp.write(log)                                # store compiler output
-                            fl.write("Error compiling: "+ newfile + "\n")
+                            fl.write("Error compiling: " + sample + "\n")
                             print(sample, numerrors, "errors", numwarnings, "warnings")
                             print("See", flog, "for compiler output")
                     except subprocess.CalledProcessError as e:            # compilation failure
                         errcount += 1                                      # error(s)
                         with open(os.path.join(logdir,flog), "w") as fp:
                             fp.write(e.output)                              # store compiler output
-                        fl.write("Error compiling: " + newfile + "\n")
-                        print("Compiler reports returncode", e.returncode, "with sample", sample)
+                        fl.write("Error compiling: " + sample + "\n")
+                        print("Compiler reports return code", e.returncode, "with sample", sample)
                         print("See", flog, "for details")
                         fl.write("\n")
                         print("")
@@ -243,21 +352,23 @@ if (__name__ == "__main__"):
     if (len(sys.argv) > 1):
        runtype = sys.argv[1].upper()
     else:
-       print("Specify CREATE or VERIFY as first argument")
+       print("Specify CREATE or VERIFY as first argument.")
        sys.exit(1)
 
-    print("Output will be in the Output directory")
-    print("Results will be logged in the file Testresults.txt in the Log directory ")
+    print("Compiler results (.asm and .hex) will be in the Output directory.")
     if (runtype == "CREATE"):
-        print("Creating baseline ASM and HEX files")
+        print("Creating baseline ASM and HEX files, stored in the Baseline directory.")
+        print("Overall create results will be logged in the file Create_results.txt in the Log directory.")
         create_baseline()
         sys.exit(1)
     elif (runtype == "VERIFY"):
         print("Creating new ASM and HEX files and verifying HEX files with the baseline.")
+        print("Overall create results will be logged in the file Verify_results.txt in the Log directory.")
+        print("Differences in files (5 lines per difference)) will be stored as text file in the Log directory.")
         verify_baseline()
         sys.exit(1)
     else:
-       print("Specify CREATE or VERIFY as first argument")
+       print("Specify CREATE or VERIFY as first argument.")
 
 
 
