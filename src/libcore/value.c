@@ -321,10 +321,10 @@ variable_const_t value_baseofs_const_get(const value_t val)
     }
     else {
         variable_const_t pos;
-        /* RJ: Changed this part but not sure if this is OK. */
+        /* RJ: Removed this part since it is not yet OK.
         if (ptr->baseofs && !value_is_const(ptr->baseofs)) {
             assert(value_is_lookup(val) && !value_assign_ct_get(val));
-        }
+        } */
         pos = value_baseofs_const_get(ptr->baseofs);
         ptr = value_element_seek(val, BOOLEAN_FALSE);
         if (!ptr->baseofs) {
