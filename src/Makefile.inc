@@ -33,10 +33,10 @@ else ifeq ($(ARCH),i686)
    LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) $(MARCH) -march=$(ARCH) -lm -static -fPIC
 else ifeq ($(ARCH),osx)
    #Darwin (MacOS), 64-bit
-   # -Werror removed since MAC compiler on GitHub states that a variable is defined but not used but that is incorrect.
+   # -Werror and  -static removed since MAC compiler on GitHub states that a variable is defined but not used but that is incorrect.
    # CFLAGS=-O2 -Werror -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -arch x86_64 $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
    CFLAGS=-O2 -ansi -pedantic -W -Wall -Wshadow -Wcast-qual -arch x86_64 $(DEBUG) $(PROFILE) $(COVERAGE) -fPIC
-   LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) -arch x86_64 -lm -static -fPIC
+   LFLAGS=$(DEBUG) $(PROFILE) $(COVERAGE) -arch x86_64 -lm -fPIC
 else
    # Native
    ARCH = native
