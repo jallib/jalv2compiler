@@ -1031,7 +1031,6 @@ static void pic_pointer_read_create(pfile_t *pf)
 {
   value_t  ptr;
   value_t  pic_sign;
-  /* jalv25r9:label_t  lbl_eeprom_or_flash; */
   label_t  lbl_lookup;
   label_t  lbl_pic_indirect;
   value_t  ind;
@@ -1040,16 +1039,10 @@ static void pic_pointer_read_create(pfile_t *pf)
   ptr      = pic_var_pointer_get(pf);
   pic_sign = pic_var_sign_get(pf);
   ind      = pic_indirect_get(pf, PFILE_LOG_ERR, 0);
-  /* jalv25r9: lbl_eeprom_or_flash = pfile_label_alloc(pf, 0); */
   lbl_lookup = pfile_label_alloc(pf, 0);
   lbl_pic_indirect = pic_label_find(pf, PIC_LABEL_INDIRECT, BOOLEAN_TRUE);
 
   msb = pic_pointer_size_get(pf) - 1;
-
-  /* jalv25r9: The eeprom_or_flash was never implemented and can be removed.
-  pic_instr_append_f_bn(pf, PIC_OPCODE_BTFSC, ptr, msb, 7);
-  pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_eeprom_or_flash); */
-
   pic_instr_append_f_bn(pf, PIC_OPCODE_BTFSC, ptr, msb, 6);
   pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_lookup);
   /* _pic_pointer points to data */
@@ -1085,13 +1078,8 @@ static void pic_pointer_read_create(pfile_t *pf)
     pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 1, PIC_OPDST_W);
     pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_pic_indirect);
   }
-  /* _pic_pointer points to either EEPROM or FLASH (not supported yet) */
-  /* jalv25r9: Can be removed
-  pic_instr_append_label(pf, lbl_eeprom_or_flash);
-  pic_instr_append(pf, PIC_OPCODE_RETURN); */
   label_release(lbl_pic_indirect);
   label_release(lbl_lookup);
-  /* jalv25r9: label_release(lbl_eeprom_or_flash); */
   value_release(ind);
   pic_var_sign_release(pf, pic_sign);
   pic_var_pointer_release(pf, ptr);

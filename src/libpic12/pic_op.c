@@ -21,7 +21,6 @@
 #include "piccolst.h"
 #include "pic_inst.h"
 #include "pic_op.h"
-/* jalv25r9*/
 #include "../libcore/value.h"
 
 /*
@@ -1522,7 +1521,6 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
     pic_code_t    code;
     label_t       lbl;
     variable_sz_t ii;
-    /* jalv25r9 */
     variable_const_t offset;
 
     lbl = pic_lookup_label_find(pf, value_variable_get(src), 
@@ -1532,9 +1530,9 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
       code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
       pic_code_brdst_set(code, lbl);
       pic_code_ofs_set(code, ii);	  
-      /* jalv25r9. Issue#36. If there is an offset to the source then
-         we should add that. This offset is created when going through
-         a subscript (see jal_parse_subscript()). This solves the issue
+      /* If there is an offset to the source then we should add that.
+         This offset is created when going througha subscript
+         (see jal_parse_subscript()). This solves the issue
          when using arrays in records. */
       offset = value_baseofs_const_get(src);
       if ((offset > 255) & (ii == 1)) {

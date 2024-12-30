@@ -302,8 +302,7 @@ variable_const_t value_const_get(const value_t val)
   return n;
 }
 
-/* jalv25r9. 
-   This function returns the base offset of the parameter 'val' which can
+/* This function returns the base offset of the parameter 'val' which can
    can be derived from ptr->baseofs->var->data. 'Data' is a string of  
    characters (see struct variable_) which is converted to a constant value. 
    This function is based on value_const_get() and was added to the
@@ -321,7 +320,7 @@ variable_const_t value_baseofs_const_get(const value_t val)
     }
     else {
         variable_const_t pos;
-        /* RJ: Removed this part since it is not yet OK.
+        /* RJ TODO: Removed this part since it is not yet OK.
         if (ptr->baseofs && !value_is_const(ptr->baseofs)) {
             assert(value_is_lookup(val) && !value_assign_ct_get(val));
         } */
