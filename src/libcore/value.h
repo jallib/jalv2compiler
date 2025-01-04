@@ -64,8 +64,11 @@ void          value_baseofs_set(value_t val, value_t ofs);
 variable_const_t value_const_get(const value_t val);
 void             value_const_set(value_t val, variable_const_t c);
 
-/* jalv25r9 */
+/*  RJ: This code was added to solve issue#36 but introduced another problem
+with printing strings from both const and var arrays so removed for now. */
+#if 0
 variable_const_t value_baseofs_const_get(const value_t val);
+#endif 
 
 float            value_const_float_get(const value_t val);
 void             value_const_float_set(value_t val, float c);

@@ -302,6 +302,9 @@ variable_const_t value_const_get(const value_t val)
   return n;
 }
 
+/*  RJ: This code was added to solve issue#36 but introduced another problem
+with printing strings from both const and var arrays so removed for now. */
+#if 0
 /* This function returns the base offset of the parameter 'val' which can
    can be derived from ptr->baseofs->var->data. 'Data' is a string of  
    characters (see struct variable_) which is converted to a constant value. 
@@ -337,7 +340,7 @@ variable_const_t value_baseofs_const_get(const value_t val)
     }
     return n;
 }
-
+#endif
 
 void value_const_set(value_t val, variable_const_t c)
 {

@@ -21,7 +21,11 @@
 #include "piccolst.h"
 #include "pic_inst.h"
 #include "pic_op.h"
+ /* RJ: This code was added to solve issue#36 but introduced another problem
+     with printing strings from both const and var arrays so removed for now. */
+#if 0
 #include "../libcore/value.h"
+#endif
 
 /*
  * general note:
@@ -1527,26 +1531,49 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
         PIC_LOOKUP_LABEL_FIND_FLAG_ALLOC
         | PIC_LOOKUP_LABEL_FIND_FLAG_DATA);
     for (ii = 0; ii < pic_pointer_size_get(pf); ii++) {
-      code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
-      pic_code_brdst_set(code, lbl);
-      pic_code_ofs_set(code, ii);	  
-      /* If there is an offset to the source then we should add that.
-         This offset is created when going througha subscript
-         (see jal_parse_subscript()). This solves the issue
-         when using arrays in records. */
-      offset = value_baseofs_const_get(src);
-      if ((offset > 255) & (ii == 1)) {
-          /* We have a large offset. Pointer must also be 2 bytes. */
-          pic_instr_append_w_kn(pf, PIC_OPCODE_ADDLW, offset / 0xff);
-      }
-      else if ((offset > 0) & (ii == 0)) {
-          offset = offset & 0xff;
-          /* Do not add 0 when on the boundary of 255. */
-          if (offset != 00) {
-              pic_instr_append_w_kn(pf, PIC_OPCODE_ADDLW, offset);
-          }
-      }
-      pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
+        code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
+        pic_code_brdst_set(code, lbl);
+        pic_code_ofs_set(code, ii);
+
+#if 0
+        /* RJ: This code was added to solve issue#36 but introduced another problem
+           with printing strings from both const and var arrays so removed for now. */
+
+           /* If there is an offset to the source then we should add that.
+              This offset is created when going througha subscript
+              (see jal_parse_subscript()). This solves the issue
+              when using arrays in records. */
+        offset = value_baseofs_const_get(src);
+        if ((offset > 255) & (ii == 1)) {
+            /* We have a large offset. Pointer must also be 2 bytes. */
+            pic_instr_append_w_kn(pf, PIC_OPCODE_ADDLW, offset / 0xff);
+        }
+        else if ((offset > 0) & (ii == 0)) {
+            offset = offset & 0xff;
+            /* Do not add 0 when on the boundary of 255. */
+            if (offset != 00) {
+                pic_instr_append_w_kn(pf, PIC_OPCODE_ADDLW, offset);
+            }
+        }
+        pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
+    }
+#else
+        /* RJ: Original code. */
+
+        /* If the offset is > 0 we have to add that to the label address. */
+        offset = value_const_get(value_baseofs_get(src));
+        if ((ii == 0) && (offset != 0)) {
+            pic_instr_append_w_kn(pf, PIC_OPCODE_ADDLW, offset);
+        }
+
+        if (ii + 1 == pic_pointer_size_get(pf)) {
+            /* This has to be forced. Previously I optimized this out
+             * in some circumstances, but that lead to bad code
+             */
+            pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x40);
+        }
+        pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
+#endif
     }
     label_release(lbl);
   } else if (value_is_array(src)) {
