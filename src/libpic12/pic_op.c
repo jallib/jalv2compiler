@@ -3,7 +3,7 @@
  ** pic_op.c : PIC operator generation definitions
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **           (c) 2020-2024, Rob Jansen
+ **           (c) 2020-2025, Rob Jansen
  ** All rights reserved
  **
  ************************************************************/
@@ -1460,6 +1460,9 @@ static void pic_assign_array_to_pointer(pfile_t *pf, value_t dst, value_t src)
     code = pic_instr_append(pf, PIC_OPCODE_MOVLW);
     pic_code_brdst_set(code, lbl);
     pic_code_ofs_set(code, 1);
+    /* jalv25r9: We use bit 7 instead of bit 6 to solve issue#30. */
+    pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x80);
+    pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, 1);
     label_release(lbl);
   } else {
     variable_base_t base;
@@ -1559,7 +1562,6 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
     }
 #else
         /* RJ: Original code. */
-
         /* If the offset is > 0 we have to add that to the label address. */
         offset = value_const_get(value_baseofs_get(src));
         if ((ii == 0) && (offset != 0)) {
@@ -1570,7 +1572,8 @@ static void pic_assign_to_ptr(pfile_t *pf, value_t dst, value_t src)
             /* This has to be forced. Previously I optimized this out
              * in some circumstances, but that lead to bad code
              */
-            pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x40);
+             /* jalv25r9 :We will use bit 7 instead of bit 6 to solve issue #30. */
+            pic_instr_append_w_kn(pf, PIC_OPCODE_IORLW, 0x80);
         }
         pic_instr_append_f(pf, PIC_OPCODE_MOVWF, dst, ii);
 #endif
@@ -1672,6 +1675,16 @@ static void pic_assign_from_ptr(pfile_t *pf, value_t dst, value_t src)
       /* W holds MSB */
       variable_sz_t sz;
       variable_sz_t ipos;
+      value_t       mask;
+      ulong         cmask;
+
+      /*
+       * bit 6 of the high byte of the pointer is 1, bit 7 is 0
+       * so, simply clear bit 6
+       */
+      /* jalv25r9: We should mask off only bit 7, not bit 6 to address issue#30. */
+      cmask = ~(1UL << (8 * pic_pointer_size_get(pf) - 1));
+      mask = pfile_constant_get(pf, cmask, VARIABLE_DEF_NONE);
       if (pic_is_16bit(pf)) {
         pic_var_pointer_release(pf, tmp);
         tmp = pfile_value_find(pf, PFILE_LOG_ERR, "_tblptr");
@@ -1684,8 +1697,12 @@ static void pic_assign_from_ptr(pfile_t *pf, value_t dst, value_t src)
       if ((VALUE_NONE != baseofs)
           && (!value_is_const(baseofs) || value_const_get(baseofs))) {
           pic_op(pf, OPERATOR_ADD, tmp, src, baseofs);
+          pic_op(pf, OPERATOR_ANDB, tmp, tmp, mask);
+      } else {
+          pic_op(pf, OPERATOR_ANDB, tmp, src, mask);
       }
       value_def_set(src, src_def);
+      value_release(mask);
       pic_indirect_setup3(pf, dst, VALUE_NONE, VALUE_NONE, 0, &ipos);
       sz = pic_result_sz_get(src, VALUE_NONE, dst);
       if (pic_is_16bit(pf)) {

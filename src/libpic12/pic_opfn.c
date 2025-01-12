@@ -3,7 +3,7 @@
  ** pic_opfn.c : PIC built-in function generation
  **
  ** Copyright (c) 2004-2005, Kyle A. York
- **               2020-2024, Rob Jansen
+ **               2020-2025, Rob Jansen
  **
  ** All rights reserved
  **
@@ -1023,9 +1023,10 @@ static void pic_task_suspend_create(pfile_t *pf)
  *   on exit, W holds the result (_pic_pointer is unchanged)
  * the top two bits in the pointer are (MSB on left):
  *   0 0 : data pointer
- *   0 1 : lookup table
- *   1 0 : eeprom <-- RJ: Was never implemented, can be removed.
- *   1 1 : flash  <-- RJ: Was never implemented, can be removed.
+ *   0 1 : lookup table RJ: Moved from bit 6 to bit 7.
+ *   1 0 : eeprom       RJ: Was not implemented. This has now been used to
+ *   1 1 : flash            solve issue#30 by using bit 7 instead of bit 6.
+ *                          so that a lookup table is not limited to 16k.
  */
 static void pic_pointer_read_create(pfile_t *pf)
 {
@@ -1043,7 +1044,8 @@ static void pic_pointer_read_create(pfile_t *pf)
   lbl_pic_indirect = pic_label_find(pf, PIC_LABEL_INDIRECT, BOOLEAN_TRUE);
 
   msb = pic_pointer_size_get(pf) - 1;
-  pic_instr_append_f_bn(pf, PIC_OPCODE_BTFSC, ptr, msb, 6);
+  /* jalv25r9: We will used bit 7 instead of bit 6 which solves issue#30. */
+  pic_instr_append_f_bn(pf, PIC_OPCODE_BTFSC, ptr, msb, 7);
   pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_lookup);
   /* _pic_pointer points to data */
   pic_fsr_setup(pf, ptr);
@@ -1061,6 +1063,13 @@ static void pic_pointer_read_create(pfile_t *pf)
     pic_stvar_tblptr_mark(pf);
     for (ii = 0; ii < 3; ii++) {
       pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, ii, PIC_OPDST_W);
+
+      if (2 == ii) {
+          /* mask off the high bit */
+          /* jalv25r9: Mask off only bit 7, not bit 6 (issue#30). */
+          pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~0x80) & 0xff);
+      }
+
       pic_instr_append_f(pf, PIC_OPCODE_MOVWF, tmp, ii);
     }
     value_release(tmp);
@@ -1076,6 +1085,9 @@ static void pic_pointer_read_create(pfile_t *pf)
     pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 0, PIC_OPDST_W);
     pic_instr_append_f(pf, PIC_OPCODE_MOVWF, pic_sign, 0);
     pic_instr_append_f_d(pf, PIC_OPCODE_MOVF, ptr, 1, PIC_OPDST_W);
+    /* jalv25r9: Mask off only bit 7, not bit 6 (issue#30). */
+    pic_instr_append_w_kn(pf, PIC_OPCODE_ANDLW, (~0x80 & 0xff));
+
     pic_instr_append_n(pf, PIC_OPCODE_GOTO, lbl_pic_indirect);
   }
   label_release(lbl_pic_indirect);
