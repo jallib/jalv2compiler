@@ -261,13 +261,14 @@
 
       <li>A variable will return the DATA address of the variable.</li>
 
-      <li>A simple constant will generate an error.</li>
+      <li>A simple constant or an unused constant array will generate an
+      error.</li>
 
       <li>A constant array depends upon the processor family:<ul>
           <li>16-bit: returns the CODE address of the data.</li>
 
-          <li>non-16 bit: returns a compiler error since constant arrays are
-          not stored as individual bytes for these types of processors.</li>
+          <li>non-16 bit: returns the CODE address of the entry point to the
+          lookup function.</li>
         </ul></li>
     </ul>
   </body>
