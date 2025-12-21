@@ -10,7 +10,7 @@
     <critdates>
       <created date="2020-11-27"/>
 
-      <revised modified="2022-04-02"/>
+      <revised modified="2025-12-21"/>
     </critdates>
   </bookmeta>
 
@@ -20,97 +20,97 @@
     </booklists>
   </frontmatter>
 
-  <chapter href="jalv2_files/introduction.dita"/>
+  <chapter href="introduction.dita"/>
 
-  <chapter href="jalv2_files/definitions_conventions.dita">
-    <topicref href="jalv2_files/definitions.dita"/>
+  <chapter href="definitions_conventions.dita">
+    <topicref href="definitions.dita"/>
 
-    <topicref href="jalv2_files/conventions.dita"/>
+    <topicref href="conventions.dita"/>
   </chapter>
 
-  <chapter href="jalv2_files/variables_constants_aliases.dita">
-    <topicref href="jalv2_files/types.dita"/>
+  <chapter href="variables_constants_aliases.dita">
+    <topicref href="types.dita"/>
 
-    <topicref href="jalv2_files/arrays.dita"/>
+    <topicref href="arrays.dita"/>
 
-    <topicref href="jalv2_files/records.dita"/>
+    <topicref href="records.dita"/>
 
-    <topicref href="jalv2_files/variables.dita"/>
+    <topicref href="variables.dita"/>
 
-    <topicref href="jalv2_files/constants.dita">
-      <topicref href="jalv2_files/unnamed_constants.dita"/>
+    <topicref href="constants.dita">
+      <topicref href="unnamed_constants.dita"/>
 
-      <topicref href="jalv2_files/named_constants.dita"/>
+      <topicref href="named_constants.dita"/>
 
-      <topicref href="jalv2_files/string_literals.dita"/>
+      <topicref href="string_literals.dita"/>
     </topicref>
 
-    <topicref href="jalv2_files/aliases.dita"/>
+    <topicref href="aliases.dita"/>
   </chapter>
 
-  <chapter href="jalv2_files/operators_casting_expressions.dita">
-    <topicref href="jalv2_files/operators.dita"/>
+  <chapter href="operators_casting_expressions.dita">
+    <topicref href="operators.dita"/>
 
-    <topicref href="jalv2_files/casting.dita"/>
+    <topicref href="casting.dita"/>
 
-    <topicref href="jalv2_files/expressions.dita"/>
+    <topicref href="expressions.dita"/>
   </chapter>
 
-  <chapter href="jalv2_files/flow_control.dita">
-    <topicref href="jalv2_files/block.dita"/>
+  <chapter href="flow_control.dita">
+    <topicref href="block.dita"/>
 
-    <topicref href="jalv2_files/case.dita"/>
+    <topicref href="case.dita"/>
 
-    <topicref href="jalv2_files/for.dita"/>
+    <topicref href="for.dita"/>
 
-    <topicref href="jalv2_files/forever.dita"/>
+    <topicref href="forever.dita"/>
 
-    <topicref href="jalv2_files/if.dita"/>
+    <topicref href="if.dita"/>
 
-    <topicref href="jalv2_files/repeat.dita"/>
+    <topicref href="repeat.dita"/>
 
-    <topicref href="jalv2_files/while.dita"/>
+    <topicref href="while.dita"/>
   </chapter>
 
-  <chapter href="jalv2_files/other_keywords.dita">
-    <topicref href="jalv2_files/assert.dita"/>
+  <chapter href="other_keywords.dita">
+    <topicref href="assert.dita"/>
 
-    <topicref href="jalv2_files/include.dita"/>
+    <topicref href="include.dita"/>
 
-    <topicref href="jalv2_files/message_generating.dita">
-      <topicref href="jalv2_files/_debug.dita"/>
+    <topicref href="message_generating.dita">
+      <topicref href="_debug.dita"/>
 
-      <topicref href="jalv2_files/_error.dita"/>
+      <topicref href="_error.dita"/>
 
-      <topicref href="jalv2_files/_warn.dita"/>
+      <topicref href="_warn.dita"/>
     </topicref>
   </chapter>
 
-  <chapter href="jalv2_files/procedures_functions.dita"/>
+  <chapter href="procedures_functions.dita"/>
 
-  <chapter href="jalv2_files/pseudo_variables.dita"/>
+  <chapter href="pseudo_variables.dita"/>
 
-  <chapter href="jalv2_files/interrupts.dita"/>
+  <chapter href="interrupts.dita"/>
 
-  <chapter href="jalv2_files/tasks.dita"/>
+  <chapter href="tasks.dita"/>
 
-  <chapter href="jalv2_files/assembly.dita">
-    <topicref href="jalv2_files/available_opcodes.dita"/>
+  <chapter href="assembly.dita">
+    <topicref href="available_opcodes.dita"/>
 
-    <topicref href="jalv2_files/common_macros.dita"/>
+    <topicref href="common_macros.dita"/>
 
-    <topicref href="jalv2_files/data_directives.dita"/>
+    <topicref href="data_directives.dita"/>
   </chapter>
 
-  <chapter href="jalv2_files/built_in_functions.dita">
-    <topicref href="jalv2_files/mutiplication_division_modulus.dita"/>
+  <chapter href="built_in_functions.dita">
+    <topicref href="mutiplication_division_modulus.dita"/>
 
-    <topicref href="jalv2_files/floating_point_operations.dita"/>
+    <topicref href="floating_point_operations.dita"/>
 
-    <topicref href="jalv2_files/_usec_delay.dita"/>
+    <topicref href="_usec_delay.dita"/>
   </chapter>
 
-  <chapter href="jalv2_files/operator_precedence.dita"/>
+  <chapter href="operator_precedence.dita"/>
 
-  <chapter href="jalv2_files/limitations_issues.dita"/>
+  <chapter href="limitations_issues.dita"/>
 </bookmap>

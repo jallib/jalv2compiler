@@ -20,93 +20,93 @@
     </booklists>
   </frontmatter>
 
-  <chapter href="jalv2opt_files/introduction.dita"/>
+  <chapter href="introduction.dita"/>
 
-  <chapter href="jalv2opt_files/file_options.dita">
-    <topicref href="jalv2opt_files/no_asm.dita"/>
+  <chapter href="file_options.dita">
+    <topicref href="no_asm.dita"/>
 
-    <topicref href="jalv2opt_files/no_codfile.dita"/>
+    <topicref href="no_codfile.dita"/>
 
-    <topicref href="jalv2opt_files/no_hex.dita"/>
+    <topicref href="no_hex.dita"/>
 
-    <topicref href="jalv2opt_files/include.dita"/>
+    <topicref href="include.dita"/>
 
-    <topicref href="jalv2opt_files/include_path.dita"/>
+    <topicref href="include_path.dita"/>
 
-    <topicref href="jalv2opt_files/no_log.dita"/>
+    <topicref href="no_log.dita"/>
 
-    <topicref href="jalv2opt_files/no_lst.dita"/>
+    <topicref href="no_lst.dita"/>
   </chapter>
 
-  <chapter href="jalv2opt_files/miscellaneous.dita">
-    <topicref href="jalv2opt_files/clear.dita"/>
+  <chapter href="miscellaneous.dita">
+    <topicref href="clear.dita"/>
 
-    <topicref href="jalv2opt_files/fastmath.dita"/>
+    <topicref href="fastmath.dita"/>
 
-    <topicref href="jalv2opt_files/quiet.dita"/>
+    <topicref href="quiet.dita"/>
 
-    <topicref href="jalv2opt_files/task.dita"/>
+    <topicref href="task.dita"/>
   </chapter>
 
-  <chapter href="jalv2opt_files/bootloader.dita">
-    <topicref href="jalv2opt_files/bloader.dita"/>
+  <chapter href="bootloader.dita">
+    <topicref href="bloader.dita"/>
 
-    <topicref href="jalv2opt_files/fuse.dita"/>
+    <topicref href="fuse.dita"/>
 
-    <topicref href="jalv2opt_files/long_start.dita"/>
+    <topicref href="long_start.dita"/>
 
-    <topicref href="jalv2opt_files/rickpic.dita"/>
+    <topicref href="rickpic.dita"/>
 
-    <topicref href="jalv2opt_files/loader18.dita"/>
+    <topicref href="loader18.dita"/>
   </chapter>
 
-  <chapter href="jalv2opt_files/warnings.dita">
-    <topicref href="jalv2opt_files/all.dita"/>
+  <chapter href="warnings.dita">
+    <topicref href="all.dita"/>
 
-    <topicref href="jalv2opt_files/codegen.dita"/>
+    <topicref href="codegen.dita"/>
 
-    <topicref href="jalv2opt_files/conversion.dita"/>
+    <topicref href="conversion.dita"/>
 
-    <topicref href="jalv2opt_files/directives.dita"/>
+    <topicref href="directives.dita"/>
 
-    <topicref href="jalv2opt_files/misc.dita"/>
+    <topicref href="misc.dita"/>
 
-    <topicref href="jalv2opt_files/range.dita"/>
+    <topicref href="range.dita"/>
 
-    <topicref href="jalv2opt_files/stack_overflow.dita"/>
+    <topicref href="stack_overflow.dita"/>
 
-    <topicref href="jalv2opt_files/truncate.dita"/>
+    <topicref href="truncate.dita"/>
   </chapter>
 
-  <chapter href="jalv2opt_files/optimizations.dita">
-    <topicref href="jalv2opt_files/cexpr_reduction.dita"/>
+  <chapter href="optimizations.dita">
+    <topicref href="cexpr_reduction.dita"/>
 
-    <topicref href="jalv2opt_files/const_detect.dita"/>
+    <topicref href="const_detect.dita"/>
 
-    <topicref href="jalv2opt_files/expr_reduction.dita"/>
+    <topicref href="expr_reduction.dita"/>
 
-    <topicref href="jalv2opt_files/expr_simplify.dita"/>
+    <topicref href="expr_simplify.dita"/>
 
-    <topicref href="jalv2opt_files/load_reduce.dita"/>
+    <topicref href="load_reduce.dita"/>
 
-    <topicref href="jalv2opt_files/temp_reduce.dita"/>
+    <topicref href="temp_reduce.dita"/>
 
-    <topicref href="jalv2opt_files/variable_frame.dita"/>
+    <topicref href="variable_frame.dita"/>
 
-    <topicref href="jalv2opt_files/variable_reduce.dita"/>
+    <topicref href="variable_reduce.dita"/>
 
-    <topicref href="jalv2opt_files/variable_reuse.dita"/>
+    <topicref href="variable_reuse.dita"/>
   </chapter>
 
-  <chapter href="jalv2opt_files/compiler_debugging.dita">
-    <topicref href="jalv2opt_files/compiler_codegen.dita"/>
+  <chapter href="compiler_debugging.dita">
+    <topicref href="compiler_codegen.dita"/>
 
-    <topicref href="jalv2opt_files/compiler_debug.dita"/>
+    <topicref href="compiler_debug.dita"/>
 
-    <topicref href="jalv2opt_files/compiler_pcode.dita"/>
+    <topicref href="compiler_pcode.dita"/>
 
-    <topicref href="jalv2opt_files/compiler_emu.dita"/>
+    <topicref href="compiler_emu.dita"/>
 
-    <topicref href="jalv2opt_files/compiler_deadcode.dita"/>
+    <topicref href="compiler_deadcode.dita"/>
   </chapter>
 </bookmap>

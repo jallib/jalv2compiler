@@ -266,8 +266,8 @@
       <li>A constant array depends upon the processor family:<ul>
           <li>16-bit: returns the CODE address of the data.</li>
 
-          <li>non-16 bit: returns the CODE address of the entry point to the
-          lookup function.</li>
+          <li>non-16 bit: returns a compiler error since constant arrays are
+          not stored as individual bytes for these types of processors.</li>
         </ul></li>
     </ul>
   </body>

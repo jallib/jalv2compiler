@@ -20,129 +20,129 @@
     </booklists>
   </frontmatter>
 
-  <chapter href="jalv2pragma_files/introduction.dita"/>
+  <chapter href="introduction.dita"/>
 
-  <chapter href="jalv2pragma_files/chip_configuration.dita">
-    <topicref href="jalv2pragma_files/target_chip.dita"/>
+  <chapter href="chip_configuration.dita">
+    <topicref href="target_chip.dita"/>
 
-    <topicref href="jalv2pragma_files/target_clock.dita"/>
+    <topicref href="target_clock.dita"/>
 
-    <topicref href="jalv2pragma_files/target_fuses.dita"/>
+    <topicref href="target_fuses.dita"/>
 
-    <topicref href="jalv2pragma_files/target_opt_tags.dita"/>
+    <topicref href="target_opt_tags.dita"/>
   </chapter>
 
-  <chapter href="jalv2pragma_files/compiler_configuration.dita">
-    <topicref href="jalv2pragma_files/bootloader.dita">
-      <topicref href="jalv2pragma_files/bloader.dita"/>
+  <chapter href="compiler_configuration.dita">
+    <topicref href="bootloader.dita">
+      <topicref href="bloader.dita"/>
 
-      <topicref href="jalv2pragma_files/loader18.dita"/>
+      <topicref href="loader18.dita"/>
 
-      <topicref href="jalv2pragma_files/long_start.dita"/>
+      <topicref href="long_start.dita"/>
 
-      <topicref href="jalv2pragma_files/rickpic.dita"/>
+      <topicref href="rickpic.dita"/>
     </topicref>
 
-    <topicref href="jalv2pragma_files/clear.dita"/>
+    <topicref href="clear.dita"/>
 
-    <topicref href="jalv2pragma_files/eedata.dita"/>
+    <topicref href="eedata.dita"/>
 
-    <topicref href="jalv2pragma_files/fuse.dita"/>
+    <topicref href="fuse.dita"/>
 
-    <topicref href="jalv2pragma_files/iddata.dita"/>
+    <topicref href="iddata.dita"/>
 
-    <topicref href="jalv2pragma_files/task.dita"/>
+    <topicref href="task.dita"/>
   </chapter>
 
-  <chapter href="jalv2pragma_files/global_configuration.dita">
-    <topicref href="jalv2pragma_files/error.dita"/>
+  <chapter href="global_configuration.dita">
+    <topicref href="error.dita"/>
 
-    <topicref href="jalv2pragma_files/name.dita"/>
+    <topicref href="name.dita"/>
 
-    <topicref href="jalv2pragma_files/size.dita"/>
+    <topicref href="size.dita"/>
 
-    <topicref href="jalv2pragma_files/speed.dita"/>
+    <topicref href="speed.dita"/>
   </chapter>
 
-  <chapter href="jalv2pragma_files/procedure_function_configuration.dita">
-    <topicref href="jalv2pragma_files/frame.dita"/>
+  <chapter href="procedure_function_configuration.dita">
+    <topicref href="frame.dita"/>
 
-    <topicref href="jalv2pragma_files/inline.dita"/>
+    <topicref href="inline.dita"/>
 
-    <topicref href="jalv2pragma_files/interrupt.dita">
-      <topicref href="jalv2pragma_files/normal.dita"/>
+    <topicref href="interrupt.dita">
+      <topicref href="normal.dita"/>
 
-      <topicref href="jalv2pragma_files/fast.dita"/>
+      <topicref href="fast.dita"/>
 
-      <topicref href="jalv2pragma_files/raw.dita"/>
+      <topicref href="raw.dita"/>
     </topicref>
 
-    <topicref href="jalv2pragma_files/jump_table.dita"/>
+    <topicref href="jump_table.dita"/>
 
-    <topicref href="jalv2pragma_files/keep.dita"/>
+    <topicref href="keep.dita"/>
 
-    <topicref href="jalv2pragma_files/nostack.dita"/>
+    <topicref href="nostack.dita"/>
   </chapter>
 
-  <chapter href="jalv2pragma_files/optimization_pragmas.dita">
-    <topicref href="jalv2pragma_files/expr_reduce.dita"/>
+  <chapter href="optimization_pragmas.dita">
+    <topicref href="expr_reduce.dita"/>
 
-    <topicref href="jalv2pragma_files/cexpr_reduce.dita"/>
+    <topicref href="cexpr_reduce.dita"/>
 
-    <topicref href="jalv2pragma_files/const_detect.dita"/>
+    <topicref href="const_detect.dita"/>
 
-    <topicref href="jalv2pragma_files/load_reduce.dita"/>
+    <topicref href="load_reduce.dita"/>
 
-    <topicref href="jalv2pragma_files/temp_reduce.dita"/>
+    <topicref href="temp_reduce.dita"/>
 
-    <topicref href="jalv2pragma_files/variable_frame.dita"/>
+    <topicref href="variable_frame.dita"/>
 
-    <topicref href="jalv2pragma_files/variable_reuse.dita"/>
+    <topicref href="variable_reuse.dita"/>
   </chapter>
 
-  <chapter href="jalv2pragma_files/warning.dita">
-    <topicref href="jalv2pragma_files/all.dita"/>
+  <chapter href="warning.dita">
+    <topicref href="all.dita"/>
 
-    <topicref href="jalv2pragma_files/backend.dita"/>
+    <topicref href="backend.dita"/>
 
-    <topicref href="jalv2pragma_files/conversion.dita"/>
+    <topicref href="conversion.dita"/>
 
-    <topicref href="jalv2pragma_files/directives.dita"/>
+    <topicref href="directives.dita"/>
 
-    <topicref href="jalv2pragma_files/misc.dita"/>
+    <topicref href="misc.dita"/>
 
-    <topicref href="jalv2pragma_files/range.dita"/>
+    <topicref href="range.dita"/>
 
-    <topicref href="jalv2pragma_files/stack_overflow.dita"/>
+    <topicref href="stack_overflow.dita"/>
 
-    <topicref href="jalv2pragma_files/truncate.dita"/>
+    <topicref href="truncate.dita"/>
   </chapter>
 
-  <chapter href="jalv2pragma_files/chip_specification.dita">
-    <topicref href="jalv2pragma_files/code.dita"/>
+  <chapter href="chip_specification.dita">
+    <topicref href="code.dita"/>
 
-    <topicref href="jalv2pragma_files/data.dita"/>
+    <topicref href="data.dita"/>
 
-    <topicref href="jalv2pragma_files/eeprom.dita"/>
+    <topicref href="eeprom.dita"/>
 
-    <topicref href="jalv2pragma_files/fuse_def.dita"/>
+    <topicref href="fuse_def.dita"/>
 
-    <topicref href="jalv2pragma_files/id.dita"/>
+    <topicref href="id.dita"/>
 
-    <topicref href="jalv2pragma_files/stack.dita"/>
+    <topicref href="stack.dita"/>
 
-    <topicref href="jalv2pragma_files/target_cpu.dita"/>
+    <topicref href="target_cpu.dita"/>
 
-    <topicref href="jalv2pragma_files/target_bank.dita"/>
+    <topicref href="target_bank.dita"/>
 
-    <topicref href="jalv2pragma_files/target_page.dita"/>
+    <topicref href="target_page.dita"/>
 
-    <topicref href="jalv2pragma_files/target_inst.dita"/>
+    <topicref href="target_inst.dita"/>
   </chapter>
 
-  <chapter href="jalv2pragma_files/debugging.dita">
-    <topicref href="jalv2pragma_files/codegen.dita"/>
+  <chapter href="debugging.dita">
+    <topicref href="codegen.dita"/>
 
-    <topicref href="jalv2pragma_files/pcode.dita"/>
+    <topicref href="pcode.dita"/>
   </chapter>
 </bookmap>
