@@ -1,4 +1,0 @@
-#!/bin/bash
-# Create pdf documentatipn and html documentation
-env DITA_HOME=/home/rob/Tools/dita-ot-4.3.4 make doc
-
